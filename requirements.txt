@@ -1,5 +1,1 @@
 discord
-discord.ext
-datetime
-asyncio
-time
