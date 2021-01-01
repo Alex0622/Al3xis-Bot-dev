@@ -42,8 +42,12 @@ async def help(ctx, arg = None):
         embed.add_field(name='Commands: ', value='```ban, kick, mute, purge, unban, unmute ``` ')
         await ctx.send(embed=embed)
     if arg == 'utility':
-        embed = discord.Embed(title='Bot Commands', description='Commands related to the bot and utility commands!', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+        embed = discord.Embed(title='Utility Commands.', description='Commands related to the bot and utility commands!', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
         embed.add_field(name='Commands: ', value='```avatar, id, invite, suggest```')
+        await ctx.send(embed=embed)
+    if arg == 'owner':
+        embed = discord.Embed(title='Bot owner commands.', description='These commands are only available for the bot owner!', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+        embed.add_field(name='Commands: ', value='```save, say```')
         await ctx.send(embed=embed)
     if arg == None:
         embed = discord.Embed(title=f'Help Command | Prefix: `{ctx.prefix}`', description= 'Get a list of all available commands here!', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
