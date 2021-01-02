@@ -103,7 +103,7 @@ async def suggest_error(ctx, error):
 
 
 
-@bot.command(name='id')
+@bot.command(name='id', aliases=['ID'])
 async def id(ctx, member: discord.Member = None):
     if member == None:
         member = ctx.author
@@ -111,7 +111,7 @@ async def id(ctx, member: discord.Member = None):
 
 
 
-@bot.command(name='invite')
+@bot.command(name='invite', aliases=['inv'])
 async def invite(ctx):
     embed = discord.Embed(title='Invite the bot to your server!', colour=config.Colors.darkGreen)
     embed.add_field(name='Invite links.', value='[Admin permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8)')
