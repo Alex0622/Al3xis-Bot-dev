@@ -131,7 +131,7 @@ async def invite(ctx):
 async def kick(ctx, member : discord.Member, *, reason=None):
     guild = ctx.guild
     if reason == None:
-        reason = 'No reason provided.'
+        reason = 'No reason provided'
     if member != ctx.author:
         if member != ctx.me:
             if not member.guild_permissions.kick_members:
@@ -146,7 +146,7 @@ async def kick(ctx, member : discord.Member, *, reason=None):
                     logEmbed.add_field(name='User', value=member.mention)
                     logEmbed.add_field(name='Reason', value=reason) 
                     logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                    logChannel=bot.get_channel(config.Channels.logChannel)
+                    logChannel=guild.get_channel(name='logs')
                     await logChannel.send(embed=logEmbed)       
                 except Exception:
                     await ctx.send('An error ocurred while runnining the command.') 
