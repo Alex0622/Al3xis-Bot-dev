@@ -146,7 +146,7 @@ async def kick(ctx, member : discord.Member, *, reason=None):
                     logEmbed.add_field(name='User', value=member.mention)
                     logEmbed.add_field(name='Reason', value=reason) 
                     logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                    logChannel=guild.get_channel(name='logs')
+                    logChannel = bot.get_channel(config.Channels.logChannel)
                     await logChannel.send(embed=logEmbed)       
                 except Exception:
                     await ctx.send('An error ocurred while runnining the command.') 
