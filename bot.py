@@ -53,6 +53,7 @@ async def help(ctx, arg = None):
         embed = discord.Embed(title=f'Help Command | Prefix: `{ctx.prefix}`', description= 'Get a list of all available commands here!', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
         embed.add_field(name='Utility Commands ', value=f'Use `{ctx.prefix}help utility` to get the list of utility  commands')
         embed.add_field(name='Moderation Commands ', value=f'Use `{ctx.prefix}help moderation` to get the list of Moderation commands', inline=False)
+        embed.add_field(name='Owner Commands ', value=f'`{ctx.prefix}help owner` | Only owners can use them.')
         await ctx.message.channel.send(embed=embed)
     else:
         embed = discord.Embed(title=f'Command: `{arg}` | Aliases: `{ctx.command.aliases}` ', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
