@@ -1,11 +1,4 @@
 
-class Channels:
-    suggestionsChannel = 793989328602791946
-    botChannel = 793990563682582567
-    logChannel = 793990292213727262
-    ownerChannel = 793989996494192692
-
-
 class InfoCommands:
     av = 'Get and post the avatar of the user/ID mentioned.'
     avatar = 'Get and post the avatar of the user/ID mentioned.'
@@ -35,6 +28,13 @@ class UsageCommands:
     unmute = 'a!unmute @user/ID reason'
 
 
+class Channels:
+    suggestionsChannel = 793989328602791946
+    botChannel = 793990563682582567
+    logChannel = 793990292213727262
+    ownerChannel = 793989996494192692
+
+
 
 class Colors:
     red = 0xde0707
@@ -58,7 +58,7 @@ class Emojis:
 
 
 # User does not have permissions = blue
-# User not found = blue
+# User not found = green
 # Missing argument = orange
 # Command not found = orange
 # Help command = yellow
@@ -67,4 +67,5 @@ class Emojis:
 # Reaction commands = ligthBlue
 # Announce commands = lightBlue
 # Invite command = darkGreen
-# Save command = green
+# Save command = blue
+# Say command = blue
