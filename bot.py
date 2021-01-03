@@ -3,7 +3,7 @@ from discord.ext import commands
 import datetime
 import asyncio
 import config, os
-import time
+import time, random
     
 #Bot (our bot)
 bot = commands.Bot(command_prefix=['a!', 'A!']) #Set the prefix of the bot and removes the default help command.
@@ -448,9 +448,11 @@ async def save(ctx,*, new_msg=None):
 @bot.command(name='say')
 @commands.is_owner()
 async def say(ctx):
-    embed = discord.Embed(title='Hi!', description=savedMessage, colour=config.Colors.blue)
+    randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+    embed = discord.Embed(title='Hi!', description=savedMessage, colour=random.choice(randomColors))
     await ctx.send(embed=embed)
     await ctx.message.delete()
+################################
 ####################################################################################################
 ####################################################################################################
 #Run the bot on the server
