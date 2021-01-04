@@ -186,30 +186,33 @@ async def ban(ctx, member : discord.Member, *, reason=None):
     if reason == None:
         reason = 'No reason provided.'
     if member != ctx.author:
-        if member != ctx.me:
-            if not member.guild_permissions.ban_members:
-                try:
-                    time.sleep(0.5)    
-                    await ctx.send(f'User {member.mention} was banned | `{reason}`.')
-                    await member.send(f'You were banned from {guild.name} | `{reason}`.')
-                    await member.ban(reason=reason)
-                    print(f'User {ctx.author} banned {member} | {reason}')
-                    logEmbed = discord.Embed(title=f'Command: {ctx.command}', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                    logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                    logEmbed.add_field(name='User', value=member.mention)
-                    logEmbed.add_field(name='Reason', value=reason) 
-                    logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                    logChannel=bot.get_channel(config.Channels.logChannel)
-                    await logChannel.send(embed=logEmbed)     
-                except Exception:
-                    await ctx.send('An error ocurred while runnining the command.')
+        if not member.bot:
+            if member != ctx.me:
+                if not member.guild_permissions.ban_members:
+                    try:
+                        time.sleep(0.5)    
+                        await ctx.send(f'User {member.mention} was banned | `{reason}`.')
+                        await member.send(f'You were banned from {guild.name} | `{reason}`.')
+                        await member.ban(reason=reason)
+                        print(f'User {ctx.author} banned {member} | {reason}')
+                        logEmbed = discord.Embed(title=f'Command: {ctx.command}', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                        logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                        logEmbed.add_field(name='User', value=member.mention)
+                        logEmbed.add_field(name='Reason', value=reason) 
+                        logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                        logChannel=bot.get_channel(config.Channels.logChannel)
+                        await logChannel.send(embed=logEmbed)     
+                    except Exception:
+                        await ctx.send('An error ocurred while runnining the command.')
+                        return
+                else:
+                    await ctx.send(f"{ctx.author.mention} You don't have permissions to ban **{member}**!")
                     return
-            else:
-                await ctx.send(f"{ctx.author.mention} You don't have permissions to ban **{member}**!")
+            else: 
+                await ctx.send(f"{ctx.author.mention} You don't have permissions to ban me!")
                 return
-        else: 
-            await ctx.send(f"{ctx.author.mention} You don't have permissions to ban me!")
-            return
+        else:
+            await ctx.send('You are not allowed to ban bots!')
     else:
         await ctx.send(f"{ctx.author.mention} You can't ban yourself!")
         return
