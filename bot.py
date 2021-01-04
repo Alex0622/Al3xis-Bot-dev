@@ -387,7 +387,7 @@ async def unmute_error(ctx, error):
 
 
 
-@bot.command()
+@bot.command(name='purge', aliases=['clear'])
 @commands.has_permissions(manage_messages = True)
 async def purge(ctx, amount = 0):
     guild = ctx.guild
