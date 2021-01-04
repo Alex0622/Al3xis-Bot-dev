@@ -1,6 +1,5 @@
 
 class InfoCommands:
-    av = 'Get and post the avatar of the user/ID mentioned.'
     avatar = 'Get and post the avatar of the user/ID mentioned.'
     ban = 'Ban a user given in the command. | At the moment the command is a permanent ban.'
     id = 'Get the ID of the user given.'
@@ -17,7 +16,6 @@ class InfoCommands:
 
 
 class UsageCommands:
-    av = 'a!av @user'
     avatar = 'a!avatar @user'
     ban = 'a!ban @user/ID reason'
     id = 'a!id @user'
@@ -30,7 +28,24 @@ class UsageCommands:
     suggest = 'a!suggest (suggestion)'
     unban = 'a!unban ID reason'
     unmute = 'a!unmute @user/ID reason'
+    
+    
+    
+class AliasesCommands:
+    avatar = ['av']
+    ban = ['No aliases']
+    id = ['ID']
+    invite = ['inv']
+    kick = ['No aliases']
+    purge = ['clear']
+    mute = ['No aliases']
+    save = ['No aliases']
+    say = ['No aliases']
+    suggest = ['No aliases']
+    unban = ['No aliases']
+    unmute = ['No aliases']
 
+    
 
 class Channels:
     suggestionsChannel = 793989328602791946
