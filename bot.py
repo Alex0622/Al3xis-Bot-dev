@@ -43,7 +43,7 @@ async def help(ctx, arg = None):
         await ctx.send(embed=embed)
     if arg == 'utility':
         embed = discord.Embed(title='Utility Commands.', description='Commands related to the bot and utility commands!', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        embed.add_field(name='Commands: ', value='```avatar, id, invite, suggest```')
+        embed.add_field(name='Commands: ', value='```avatar, id, invite, ping, suggest```')
         await ctx.send(embed=embed)
     if arg == 'owner':
         embed = discord.Embed(title='Bot owner commands.', description='These commands are only available for the bot owner!', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
@@ -56,7 +56,7 @@ async def help(ctx, arg = None):
         embed.add_field(name='Owner Commands ', value=f'`{ctx.prefix}help owner` | Only owners can use them.')
         await ctx.message.channel.send(embed=embed)
     else:
-        embed = discord.Embed(title=f'Command: `{arg}`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+        embed = discord.Embed(title=f'Command: `{arg}` | Aliases: `{getattr(config.AliasesCommands, arg)}`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
         embed.add_field(name=f'Information', value=getattr(config.InfoCommands, arg), inline=False)
         embed.add_field(name='Usage', value=getattr(config.UsageCommands, arg), inline=False)
         await ctx.send(embed=embed)
@@ -117,6 +117,17 @@ async def invite(ctx):
     embed.add_field(name='Invite links.', value='[Admin permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8)')
     embed.add_field(name='Join our Discord server!', value='[Al3xis Bot Server](https://discord.gg/AAJPHqNXUy)', inline=False)
     await ctx.send(embed=embed)
+
+
+
+@bot.command(name='ping', aliases=['pong', 'latency'])
+async def ping (ctx):
+    before = time.monotonic()
+    message = await ctx.send("Pong!")
+    time.sleep(2)
+    ping = (time.monotonic() - before) * 1000
+    await message.edit(content=f"_Bot's ping:_  `{int(ping)}ms`")
+    print(f'Ping {int(ping)}ms')
 
 
 
