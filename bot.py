@@ -155,7 +155,7 @@ async def kick(ctx, member : discord.Member, *, reason=None):
                     await ctx.send(f"{ctx.author.mention} You don't have permissions to kick **{member}**!")
                     return
             else:
-                await ctx.send('You are not allowed to kick bots!')
+                await ctx.send(f'{ctx.author.mention} You are not allowed to kick bots!')
                 return
         else: 
             await ctx.send(f"{ctx.author.mention} You are not allowed to kick me!")
@@ -210,7 +210,7 @@ async def ban(ctx, member : discord.Member, *, reason=None):
                     return
             
             else:
-                await ctx.send('You are not allowed to ban bots!')
+                await ctx.send(f'{ctx.author.mention} You are not allowed to ban bots!')
                 return
         else: 
             await ctx.send(f"{ctx.author.mention} You are not allowed to ban me!")
@@ -261,7 +261,7 @@ async def unban(ctx, UserID: int, *, reason=None):
                     await ctx.send('An error ocurred while running the command.')
                     return
             else:
-                ctx.send(f'{ctx.author.mention} You are not allowed to unban bots!')
+                await ctx.send(f'{ctx.author.mention} You are not allowed to unban bots!')
                 return
         else:
             await ctx.send(f"{ctx.author.mention} I'm not banned!")
@@ -385,7 +385,7 @@ async def unmute(ctx, member: discord.Member, *, reason=None):
                 await ctx.send(f"{ctx.author.mention} I'm not muted!")
                 return
         else:
-            await ctx.send("You are not muted!")
+            await ctx.send(f"{ctx.author.mention} You are not muted!")
             return
     else:
         await ctx.send("This server doesn't have a muted role so nobody is muted.")
