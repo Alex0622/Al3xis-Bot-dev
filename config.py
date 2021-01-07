@@ -34,19 +34,19 @@ class UsageCommands:
     
     
 class AliasesCommands:
-    avatar = ['av']
-    ban = ['No aliases']
-    id = ['ID']
-    invite = ['inv']
-    kick = ['No aliases']
-    mute = ['No aliases']
-    ping = ['pong', 'latency']
-    purge = ['clear']
-    save = ['No aliases']
-    say = ['No aliases']
-    suggest = ['No aliases']
-    unban = ['No aliases']
-    unmute = ['No aliases']
+    avatar = 'av'
+    ban = 'No aliases'
+    id = 'ID'
+    invite = 'inv'
+    kick = 'No aliases'
+    mute = 'No aliases'
+    ping = 'pong', 'latency'
+    purge = 'clear'
+    save = 'No aliases'
+    say = 'No aliases'
+    suggest = 'No aliases'
+    unban = 'No aliases'
+    unmute = 'No aliases'
 
     
 
