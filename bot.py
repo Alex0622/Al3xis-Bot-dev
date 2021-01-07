@@ -43,7 +43,7 @@ async def help(ctx, arg = None):
         await ctx.send(embed=embed)
     if arg == 'utility':
         embed = discord.Embed(title='Utility Commands.', description='Commands related to the bot and utility commands!', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        embed.add_field(name='Commands: ', value='```avatar, id, invite, suggest```')
+        embed.add_field(name='Commands: ', value='```avatar, id, invite, ping, suggest```')
         await ctx.send(embed=embed)
     if arg == 'owner':
         embed = discord.Embed(title='Bot owner commands.', description='These commands are only available for the bot owner!', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
@@ -126,7 +126,7 @@ async def ping (ctx):
     message = await ctx.send("Pong!")
     time.sleep(2)
     ping = (time.monotonic() - before) * 1000
-    await message.edit(content=f"Pong!  `{int(ping)}ms`")
+    await message.edit(content=f"_Bot's ping:_  `{int(ping)}ms`")
     print(f'Ping {int(ping)}ms')
 
 
