@@ -133,8 +133,8 @@ async def kick(ctx, member : discord.Member, *, reason=None):
     if reason == None:
         reason = 'No reason provided'
     if member != ctx.author:
-        if not member.bot:
-            if member != ctx.me:
+        if member != ctx.me:
+            if not member.bot:
                 if not member.guild_permissions.kick_members:
                     try:
                         time.sleep(0.5)
@@ -154,11 +154,11 @@ async def kick(ctx, member : discord.Member, *, reason=None):
                 else:
                     await ctx.send(f"{ctx.author.mention} You don't have permissions to kick **{member}**!")
                     return
-            else: 
-                await ctx.send(f"{ctx.author.mention} You don't have permissions to kick me!")
+            else:
+                await ctx.send('You are not allowed to kick bots!')
                 return
-        else:
-            await ctx.send('You are not allowed to kick bots!')
+        else: 
+            await ctx.send(f"{ctx.author.mention} You are not allowed to kick me!")
             return
     else:
         await ctx.send(f"{ctx.author.mention} You can't kick yourself!")
@@ -186,8 +186,8 @@ async def ban(ctx, member : discord.Member, *, reason=None):
     if reason == None:
         reason = 'No reason provided.'
     if member != ctx.author:
-        if not member.bot:
-            if member != ctx.me:
+        if member != ctx.me:
+            if not member.bot:
                 if not member.guild_permissions.ban_members:
                     try:
                         time.sleep(0.5)    
@@ -208,11 +208,13 @@ async def ban(ctx, member : discord.Member, *, reason=None):
                 else:
                     await ctx.send(f"{ctx.author.mention} You don't have permissions to ban **{member}**!")
                     return
-            else: 
-                await ctx.send(f"{ctx.author.mention} You don't have permissions to ban me!")
+            
+            else:
+                await ctx.send('You are not allowed to ban bots!')
                 return
-        else:
-            await ctx.send('You are not allowed to ban bots!')
+        else: 
+            await ctx.send(f"{ctx.author.mention} You are not allowed to ban me!")
+            return
     else:
         await ctx.send(f"{ctx.author.mention} You can't ban yourself!")
         return
@@ -241,24 +243,28 @@ async def unban(ctx, UserID: int, *, reason=None):
     member = await bot.fetch_user(UserID)
     if member != ctx.author:
         if member != ctx.me:
-            try:
-                time.sleep(0.5)
-                await ctx.guild.unban(member)
-                await ctx.send(f'User {member.mention} was unbanned | `{reason}`.')
-                await member.send(f'You were unbanned from {guild.name} | `{reason}`.')
-                print(f'User {ctx.author} unbanned {member} from {guild.name} | {reason}')
-                logEmbed = discord.Embed(title=f'Command: {ctx.command}', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                logEmbed.add_field(name='User', value=member.mention)
-                logEmbed.add_field(name='Reason', value=reason) 
-                logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                logChannel=bot.get_channel(config.Channels.logChannel)
-                await logChannel.send(embed=logEmbed)     
-            except Exception:
-                await ctx.send('An error ocurred while running the command.')
+            if not member.bot:
+                try:
+                    time.sleep(0.5)
+                    await ctx.guild.unban(member)
+                    await ctx.send(f'User {member.mention} was unbanned | `{reason}`.')
+                    await member.send(f'You were unbanned from {guild.name} | `{reason}`.')
+                    print(f'User {ctx.author} unbanned {member} from {guild.name} | {reason}')
+                    logEmbed = discord.Embed(title=f'Command: {ctx.command}', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                    logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                    logEmbed.add_field(name='User', value=member.mention)
+                    logEmbed.add_field(name='Reason', value=reason) 
+                    logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                    logChannel=bot.get_channel(config.Channels.logChannel)
+                    await logChannel.send(embed=logEmbed)     
+                except Exception:
+                    await ctx.send('An error ocurred while running the command.')
+                    return
+            else:
+                ctx.send(f'{ctx.author.mention} You are not allowed to unban bots!')
                 return
         else:
-            await ctx.send(f"{ctx.author.mention} You can't unban me if I'm not banned!")
+            await ctx.send(f"{ctx.author.mention} I'm not banned!")
             return
     else:
         await ctx.send(f"{ctx.author.mention} You are not banned!")
@@ -290,30 +296,33 @@ async def mute(ctx, member: discord.Member, *, reason=None):
     if mutedRole:
         if member != ctx.author:
             if member != ctx.me:
-                if not member.guild_permissions.kick_members:
-                    if not mutedRole in member.roles:
-                        try:
-                            time.sleep(0.5)
-                            await member.add_roles(mutedRole, reason= reason)
-                            await ctx.send(f'{member.mention} was muted | `{reason}`')
-                            await member.send(f'You were muted in {guild.name} | `{reason}`')
-                            print(f'User {ctx.author} muted {member} in server {guild.name} | {reason}')
-                            logEmbed = discord.Embed(title=f'Command: {ctx.command}', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                            logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                            logEmbed.add_field(name='User', value=member.mention)
-                            logEmbed.add_field(name='Reason', value=reason) 
-                            logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                            logChannel=bot.get_channel(config.Channels.logChannel)
-                            await logChannel.send(embed=logEmbed)     
-                        except Exception:
-                            await ctx.send('An error ocurred while running the command.')
+                if not member.bot:
+                    if not member.guild_permissions.kick_members:
+                        if not mutedRole in member.roles:
+                            try:
+                                time.sleep(0.5)
+                                await member.add_roles(mutedRole, reason= reason)
+                                await ctx.send(f'{member.mention} was muted | `{reason}`')
+                                await member.send(f'You were muted in {guild.name} | `{reason}`')
+                                print(f'User {ctx.author} muted {member} in server {guild.name} | {reason}')
+                                logEmbed = discord.Embed(title=f'Command: {ctx.command}', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                                logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                                logEmbed.add_field(name='User', value=member.mention)
+                                logEmbed.add_field(name='Reason', value=reason) 
+                                logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                                logChannel=bot.get_channel(config.Channels.logChannel)
+                                await logChannel.send(embed=logEmbed)     
+                            except Exception:
+                                await ctx.send('An error ocurred while running the command.')
+                                return
+                        else:
+                            await ctx.send(f"**{member}** is already muted!")
                             return
                     else:
-                        await ctx.send(f"**{member}** is already muted!")
+                        await ctx.send(f"{ctx.author.mention} You don't have permissions to mute **{member}**!")
                         return
                 else:
-                    await ctx.send(f"{ctx.author.mention} You don't have permissions to mute **{member}**!")
-                    return
+                    await ctx.send(f'{ctx.author.mention} You are not allowed to mute bots!')
             else:
                 await ctx.send(f"{ctx.author.mention} You can't mute me!")
                 return
@@ -349,26 +358,29 @@ async def unmute(ctx, member: discord.Member, *, reason=None):
     if mutedRole:
         if member != ctx.author:
             if member != ctx.me:
-                if mutedRole in member.roles:
-                    try:
-                        time.sleep(0.5)
-                        await member.remove_roles(mutedRole)
-                        await ctx.send(f'{member.mention} was unmuted | `{reason}`')
-                        await member.send(f'You were unmuted in {guild.name} | `{reason}`')
-                        print(f'User {ctx.author} unmuted {member} in server {guild.name} | {reason}')
-                        logEmbed = discord.Embed(title=f'Command: {ctx.command}', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                        logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                        logEmbed.add_field(name='User', value=member.mention)
-                        logEmbed.add_field(name='Reason', value=reason) 
-                        logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                        logChannel=bot.get_channel(config.Channels.logChannel)
-                        await logChannel.send(embed=logEmbed)     
-                    except Exception:
-                        await ctx.send('An error ocurred while running the command.')
+                if not member.bot:
+                    if mutedRole in member.roles:
+                        try:
+                            time.sleep(0.5)
+                            await member.remove_roles(mutedRole)
+                            await ctx.send(f'{member.mention} was unmuted | `{reason}`')
+                            await member.send(f'You were unmuted in {guild.name} | `{reason}`')
+                            print(f'User {ctx.author} unmuted {member} in server {guild.name} | {reason}')
+                            logEmbed = discord.Embed(title=f'Command: {ctx.command}', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                            logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                            logEmbed.add_field(name='User', value=member.mention)
+                            logEmbed.add_field(name='Reason', value=reason) 
+                            logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                            logChannel=bot.get_channel(config.Channels.logChannel)
+                            await logChannel.send(embed=logEmbed)     
+                        except Exception:
+                            await ctx.send('An error ocurred while running the command.')
+                            return
+                    else:
+                        await ctx.send(f"**{member}** is not muted!")
                         return
                 else:
-                    await ctx.send(f"**{member}** is not muted!")
-                    return
+                    await ctx.send(f'{ctx.author.mention} You are not allowed to unmute bots!')
             else:
                 await ctx.send(f"{ctx.author.mention} I'm not muted!")
                 return
