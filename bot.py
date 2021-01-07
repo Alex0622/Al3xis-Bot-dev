@@ -88,7 +88,7 @@ async def suggest(ctx, *, new_suggestion):
         suggestion =  new_suggestion
         description = suggestion 
         msg = await ctx.send('Submiting suggestion...')
-        await ctx.author.message.add_reaction(config.Emojis.octagonalSign)
+
         time.sleep(2)
         embed = discord.Embed(title=f'New suggestion made by {ctx.author}!', description = f'Suggestion: **{description}** \nUser ID: {ctx.author.id} ', colour=config.Colors.green, timestamp=ctx.message.created_at)
         suggestions_channel = bot.get_channel(config.Channels.suggestionsChannel)
@@ -97,7 +97,6 @@ async def suggest(ctx, *, new_suggestion):
         await message.add_reaction(config.Emojis.x)
         print('New suggestions | ' + suggestion)
 
-        await ctx.author.message.Reaction.remove
         await ctx.author.message.add_reaction(config.Emojis.whiteCheckMark)
         await msg.edit(content=f'**{ctx.author}**, your suggestion **`{suggestion}`** has been submited!')
     except Exception:
