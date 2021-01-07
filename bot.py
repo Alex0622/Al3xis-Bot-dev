@@ -98,7 +98,7 @@ async def suggest(ctx, *, new_suggestion):
         print('New suggestions | ' + suggestion)
 
         await ctx.author.message.add_reaction(config.Emojis.whiteCheckMark)
-        await msg.edit(content=f'**{ctx.author}**, your suggestion **`{suggestion}`** has been submited!')
+        await msg.edit(content=f"**{ctx.author}**, your suggestion **`{suggestion}`** has been submited!")
     except Exception:
         await ctx.send('An error ocurred while running the command.')
         return
