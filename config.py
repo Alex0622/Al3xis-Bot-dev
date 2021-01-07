@@ -76,6 +76,7 @@ class Emojis:
     warning = '⚠️'
     noEntry = '⛔'
     whiteCheckMark = '✅'
+    octagonalSign = '🛑'
 
 
 
