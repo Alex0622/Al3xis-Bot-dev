@@ -261,7 +261,7 @@ async def unban(ctx, UserID: int, *, reason=None):
                     await ctx.send('An error ocurred while running the command.')
                     return
             else:
-                ctx.send(f'{ctx.author.mention} You are not allowed to unban bots!')
+                await ctx.send(f'{ctx.author.mention} You are not allowed to unban bots!')
                 return
         else:
             await ctx.send(f"{ctx.author.mention} I'm not banned!")
