@@ -120,6 +120,16 @@ async def invite(ctx):
 
 
 
+@bot.command(name='ping', aliases=['pong', 'latency'])
+async def ping (ctx):
+    before = time.monotonic()
+    message = await ctx.send("Pong!")
+    ping = (time.monotonic() - before) * 1000
+    await message.edit(content=f"Pong!  `{int(ping)}ms`")
+    print(f'Ping {int(ping)}ms')
+
+
+
 
 ####################################################################################################
 ####################################################################################################

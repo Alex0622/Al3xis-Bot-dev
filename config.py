@@ -6,6 +6,7 @@ class InfoCommands:
     invite = 'Invite the bot to your server.'
     kick = 'Kick a user from the server. they are still able to join again with an invite though.'
     mute = 'Mute users so they cannot send messages or join VC channels.'
+    ping = "Shows the bot's latency/ping."
     purge = 'Delete an amount of messages. | The limit of the bot that can be deleted at a time is 500 messages.'
     save = 'Save messages so the bot can send them in an embed with the `a!say` command.'
     say = 'Send the latest saved message in an embed.' 
@@ -21,8 +22,9 @@ class UsageCommands:
     id = 'a!id @user'
     invite = 'a!invite'
     kick = 'a!kick @user/ID reason'
-    purge = 'a!purge (amount of messages that will be purged)'
     mute = 'a!mute @user/ID reason'
+    ping = 'a!ping'
+    purge = 'a!purge (amount of messages that will be purged)'
     save = 'a!save (your message)' 
     say = 'a!say' 
     suggest = 'a!suggest (suggestion)'
