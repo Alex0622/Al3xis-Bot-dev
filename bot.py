@@ -56,7 +56,7 @@ async def help(ctx, arg = None):
         embed.add_field(name='Owner Commands ', value=f'`{ctx.prefix}help owner` | Only owners can use them.')
         await ctx.message.channel.send(embed=embed)
     else:
-        embed = discord.Embed(title=f'Command: `{arg}`' + getattr(config.AliasesCommands, arg), colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+        embed = discord.Embed(title=f'Command: `{arg} | Aliases: {getattr(config.AliasesCommands, arg)}', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
         embed.add_field(name=f'Information', value=getattr(config.InfoCommands, arg), inline=False)
         embed.add_field(name='Usage', value=getattr(config.UsageCommands, arg), inline=False)
         await ctx.send(embed=embed)
