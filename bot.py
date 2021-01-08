@@ -126,7 +126,7 @@ async def ping (ctx):
     message = await ctx.send("Pong!")
     time.sleep(2)
     ping = (time.monotonic() - before) * 1000
-    await message.edit(content=f"_Bot's ping:_  `{int(ping)}ms`")
+    await message.edit(content=f"**Bot's ping:**  `{int(ping)}ms`")
     print(f'Ping {int(ping)}ms')
 
 
