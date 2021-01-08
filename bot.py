@@ -87,7 +87,6 @@ async def suggest(ctx, *, new_suggestion):
         global suggestion
         suggestion =  new_suggestion
         description = suggestion 
-        await ctx.message.add_reaction(config.Emojis.octagonalSign)
         msg = await ctx.send('Submiting suggestion...')
 
         time.sleep(2)
@@ -97,8 +96,7 @@ async def suggest(ctx, *, new_suggestion):
         await message.add_reaction(config.Emojis.ballotBoxWithCheck)
         await message.add_reaction(config.Emojis.x)
         print('New suggestions | ' + suggestion)
-
-        await ctx.message.Reaction.remove(config.Emojis.octagonalSign)
+        
         await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
         await msg.edit(content=f"**{ctx.author}**, your suggestion **`{suggestion}`** has been submited!")
     except Exception:
