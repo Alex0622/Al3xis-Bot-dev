@@ -470,12 +470,12 @@ async def save(ctx,*, saveMsg=None):
     else:
         try:
             firstMessage = await ctx.send('Saving message...')
+            await ctx.message.delete()
             time.sleep(3)
             embed = discord.Embed(title=f'{ctx.author} saved a new message.', description=savedMessageSave, colour=config.Colors.green, timestamp=ctx.message.created_at)
             embed.set_footer(text=f'Guild: {ctx.guild}')
             savedMessagesChannel = bot.get_channel(config.Channels.ownerChannel)
             await savedMessagesChannel.send(embed=embed)
-            await ctx.message.delete()
             print(f'New message saved sent by {ctx.author} | {savedMessageSave}')
             await firstMessage.edit(content=f'**{ctx.author}** Your message has been saved!')
         except Exception:
