@@ -458,24 +458,26 @@ async def purge_error(ctx, error):
 ####################################################################################################
 ####################################################################################################
 ##Bot Owner
-savedMessage = ''
+savedMessageSave = ''
 @bot.command(name='save')
 @commands.is_owner()
-async def save(ctx,*, new_msg=None):
-    global savedMessage
-    savedMessage = new_msg
-    if new_msg == None:
+async def save(ctx,*, saveMsg=None):
+    global savedMessageSave
+    savedMessageSave = saveMsg
+    if saveMsg == None:
         await ctx.send('Please provide a message to save!')
         return
     else:
         try:
-            await ctx.send(f'**{ctx.author}** Your message has been saved!')
-            embed = discord.Embed(title=f'{ctx.author} saved a new message.', description=savedMessage, colour=config.Colors.green, timestamp=ctx.message.created_at)
+            firstMessage = await ctx.send('Saving message...')
+            await ctx.message.delete()
+            time.sleep(3)
+            embed = discord.Embed(title=f'{ctx.author} saved a new message.', description=savedMessageSave, colour=config.Colors.green, timestamp=ctx.message.created_at)
             embed.set_footer(text=f'Guild: {ctx.guild}')
             savedMessagesChannel = bot.get_channel(config.Channels.ownerChannel)
             await savedMessagesChannel.send(embed=embed)
-            await ctx.message.delete()
-            print(f'New message saved sent by {ctx.author} | {savedMessage}')
+            print(f'New message saved sent by {ctx.author} | {savedMessageSave}')
+            await firstMessage.edit(content=f'**{ctx.author}** Your message has been saved!')
         except Exception:
             await ctx.send('An error ocurred while running the command.')
             return
@@ -484,11 +486,19 @@ async def save(ctx,*, new_msg=None):
 
 @bot.command(name='say')
 @commands.is_owner()
-async def say(ctx):
+async def say(ctx, *, sayMsg=None):
     randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
-    embed = discord.Embed(title='Hi!', description=savedMessage, colour=random.choice(randomColors))
-    await ctx.send(embed=embed)
-    await ctx.message.delete()
+    if sayMsg == None:
+        embed = discord.Embed(title='Hi!', description=savedMessageSave, colour=random.choice(randomColors))
+        await ctx.send(embed=embed)
+        await ctx.message.delete()
+        return
+    else:
+        embed = discord.Embed(title='Hi!', description=sayMsg, colour=random.choice(randomColors))
+        await ctx.send(embed=embed)
+        await ctx.message.delete()
+        return
+
 ################################
 ####################################################################################################
 ####################################################################################################
