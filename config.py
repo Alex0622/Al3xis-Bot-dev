@@ -6,6 +6,7 @@ class InfoCommands:
     invite = 'Invite the bot to your server.'
     kick = 'Kick a user from the server. they are still able to join again with an invite though.'
     mute = 'Mute users so they cannot send messages or join VC channels.'
+    ping = "Shows the bot's latency"
     purge = 'Delete an amount of messages. | The limit of the bot that can be deleted at a time is 500 messages.'
     save = 'Save messages so the bot can send them in an embed with the `a!say` command.'
     say = 'Send the latest saved message in an embed.' 
@@ -16,18 +17,19 @@ class InfoCommands:
 
 
 class UsageCommands:
-    avatar = 'a!avatar @user'
-    ban = 'a!ban @user/ID reason'
-    id = 'a!id @user'
-    invite = 'a!invite'
-    kick = 'a!kick @user/ID reason'
-    purge = 'a!purge (amount of messages that will be purged)'
-    mute = 'a!mute @user/ID reason'
-    save = 'a!save (your message)' 
-    say = 'a!say' 
-    suggest = 'a!suggest (suggestion)'
-    unban = 'a!unban ID reason'
-    unmute = 'a!unmute @user/ID reason'
+    avatar = '`a!avatar @mention/ID` or `a!avatar`'
+    ban = '`a!ban @mention/ID reason`'
+    id = '`a!id @mention`'
+    invite = '`a!invite`'
+    kick = '`a!kick @mention/ID reason`'
+    ping = '`a!ping`'
+    purge = '`a!purge (amount of messages that will be purged)`'
+    mute = '`a!mute @mention/ID reason`'
+    save = '`a!save (your message)`' 
+    say = '`a!say` or `a!say (your message)`' 
+    suggest = '`a!suggest (suggestion)`'
+    unban = '`a!unban ID reason`'
+    unmute = '`a!unmute @mention/ID reason`'
     
     
     
@@ -87,4 +89,4 @@ class Emojis:
 # Announce commands = lightBlue
 # Invite command = darkGreen
 # Save command = blue
-# Say command = blue
+# Say command = random
