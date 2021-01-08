@@ -83,18 +83,25 @@ suggestion = ''
 listSuggestions = ''
 @bot.command(name='suggest')
 async def suggest(ctx, *, new_suggestion):  
-    global suggestion
-    suggestion =  new_suggestion
-    description = suggestion 
-    embed = discord.Embed(title=f'New suggestion made by {ctx.author}!', description = f'Suggestion: **{description}** \nUser ID: {ctx.author.id} ', colour=config.Colors.green, timestamp=ctx.message.created_at)
-    await ctx.send(f'**{ctx.author}**, your suggestion **`{suggestion}`** has been submited!')
+    try:
+        global suggestion
+        suggestion =  new_suggestion
+        description = suggestion 
+        msg = await ctx.send('Submiting suggestion...')
 
-    suggestions_channel = bot.get_channel(config.Channels.suggestionsChannel)
-    message = await suggestions_channel.send(embed=embed)
-    await message.add_reaction(config.Emojis.ballotBoxWithCheck)
-    await message.add_reaction(config.Emojis.x)
-    print('New suggestions | ' + suggestion)
-
+        time.sleep(2)
+        embed = discord.Embed(title=f'New suggestion made by {ctx.author}!', description = f'Suggestion: **{description}** \nUser ID: {ctx.author.id} ', colour=config.Colors.green, timestamp=ctx.message.created_at)
+        suggestions_channel = bot.get_channel(config.Channels.suggestionsChannel)
+        message = await suggestions_channel.send(embed=embed)
+        await message.add_reaction(config.Emojis.ballotBoxWithCheck)
+        await message.add_reaction(config.Emojis.x)
+        print('New suggestions | ' + suggestion)
+        
+        await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
+        await msg.edit(content=f"**{ctx.author}**, your suggestion **`{suggestion}`** has been submited!")
+    except Exception:
+        await ctx.send('An error ocurred while running the command.')
+        return
 
 @suggest.error
 async def suggest_error(ctx, error):
