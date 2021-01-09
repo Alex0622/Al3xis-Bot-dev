@@ -28,8 +28,14 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.NotOwner):
         await ctx.send(f'{config.Emojis.warning} Only bot owners can use the `{ctx.command}` command {config.Emojis.warning}')
         return
-    
+        
 
+@bot.event
+async def on_message_delete(message):
+    embed = discord.Embed(title=f"{message.author.name}#{message.author.discriminator}'s message was deleted in `#{message.channel.name}`", description=message.content, colour=config.Colors.red, timestamp=message.created_at)
+    embed.set_footer(icon_url=message.author.avatar_url, text=message.author.id)
+    LogChannel = bot.get_channel(config.Channels.logChannel)
+    await LogChannel.send(embed=embed)
 
 ####################################################################################################
 ####################################################################################################
