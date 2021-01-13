@@ -108,6 +108,7 @@ async def suggest(ctx, *, new_suggestion):
         await msg.edit(content=f"**{ctx.author}**, your suggestion **`{suggestion}`** has been submited!")
     except Exception:
         await ctx.send('An error ocurred while running the command.')
+        await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
         return
 
 @suggest.error
@@ -176,6 +177,8 @@ async def kick(ctx, member : discord.Member, *, reason=None):
                         await logChannel.send(embed=logEmbed)       
                     except Exception:
                         await ctx.send('An error ocurred while runnining the command.') 
+                        await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
+                        return
                 else:
                     await ctx.send(f"{ctx.author.mention} You don't have permissions to kick **{member}**!")
                     return
@@ -229,6 +232,7 @@ async def ban(ctx, member : discord.Member, *, reason=None):
                         await logChannel.send(embed=logEmbed)     
                     except Exception:
                         await ctx.send('An error ocurred while runnining the command.')
+                        await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
                         return
                 else:
                     await ctx.send(f"{ctx.author.mention} You don't have permissions to ban **{member}**!")
@@ -284,6 +288,7 @@ async def unban(ctx, UserID: int, *, reason=None):
                     await logChannel.send(embed=logEmbed)     
                 except Exception:
                     await ctx.send('An error ocurred while running the command.')
+                    await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
                     return
             else:
                 await ctx.send(f'{ctx.author.mention} You are not allowed to unban bots!')
@@ -339,6 +344,7 @@ async def mute(ctx, member: discord.Member, *, reason=None):
                                 await logChannel.send(embed=logEmbed)     
                             except Exception:
                                 await ctx.send('An error ocurred while running the command.')
+                                await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
                                 return
                         else:
                             await ctx.send(f"**{member}** is already muted!")
@@ -400,6 +406,7 @@ async def unmute(ctx, member: discord.Member, *, reason=None):
                             await logChannel.send(embed=logEmbed)     
                         except Exception:
                             await ctx.send('An error ocurred while running the command.')
+                            await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
                             return
                     else:
                         await ctx.send(f"**{member}** is not muted!")
@@ -487,6 +494,7 @@ async def save(ctx,*, saveMsg=None):
             await firstMessage.edit(content=f'**{ctx.author}** Your message has been saved!')
         except Exception:
             await ctx.send('An error ocurred while running the command.')
+            await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
             return
 
 
