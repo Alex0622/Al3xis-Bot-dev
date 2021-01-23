@@ -317,7 +317,7 @@ async def unban_error(ctx, error):
 
 @bot.command(name='mute')
 @commands.has_permissions(ban_members=True)
-async def mute(ctx, member: discord.Member, *, reason=None):
+async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
     guild = ctx.guild
     if reason == None:
         reason = 'No reason provided'
@@ -332,16 +332,32 @@ async def mute(ctx, member: discord.Member, *, reason=None):
                             try:
                                 time.sleep(0.5)
                                 await member.add_roles(mutedRole, reason= reason)
-                                await ctx.send(f'{member.mention} was muted | `{reason}`')
-                                await member.send(f'You were muted in {guild.name} | `{reason}`')
-                                print(f'User {ctx.author} muted {member} in server {guild.name} | {reason}')
+                                await ctx.send(f'{member.mention} was muted for {duration} seconds | `{reason}`')
+                                await member.send(f'You were muted in {guild.name} for {duration} seconds | `{reason}`')
+                                print(f'User {ctx.author} muted {member} in server {guild.name} for {duration} seconds | {reason}')
                                 logEmbed = discord.Embed(title=f'Case: `mute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                                 logEmbed.add_field(name='Moderator', value=ctx.author.mention)
                                 logEmbed.add_field(name='User', value=member.mention)
                                 logEmbed.add_field(name='Reason', value=reason) 
+                                logEmbed.add_field(name='Duration', value=f'{duration} seconds')
                                 logEmbed.set_footer(text=f'Guild: {ctx.guild}')
                                 logChannel=bot.get_channel(config.Channels.logChannel)
-                                await logChannel.send(embed=logEmbed)     
+                                await logChannel.send(embed=logEmbed)   
+
+                                time.sleep(duration)
+                                await member.remove_roles(mutedRole)
+                                reason = 'Temporary mute completed!'
+                                await member.send(f'You were unmuted in {guild.name} | `{reason}`')
+                                print(f'User {ctx.me} unmuted {member} in server {guild.name} | {reason}')
+                                logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                                logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                                logEmbed.add_field(name='User', value=ctx.me.mention)
+                                logEmbed.add_field(name='Reason', value=reason) 
+                                logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                                logChannel=bot.get_channel(config.Channels.logChannel)
+                                await logChannel.send(embed=logEmbed)
+                                return
+
                             except Exception:
                                 await ctx.send('An error ocurred while running the command.')
                                 await ctx.message.add_reaction(config.Emojis.noEntry)
@@ -373,11 +389,11 @@ async def mute_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention} You do not have permissions to use the `{ctx.command}` command!')
         return
-    if isinstance(error, commands.BadArgument):
+    if isinstance(error, commands.UserNotFound):
         await ctx.send('I cannot find that user!')
         return
 
-
+ 
 
 @bot.command(name='unmute')
 @commands.has_permissions(ban_members=True)
@@ -422,7 +438,7 @@ async def unmute(ctx, member: discord.Member, *, reason=None):
     else:
         await ctx.send("This server doesn't have a muted role so nobody is muted.")
         return
-
+ 
 
 @unmute.error
 async def unmute_error(ctx, error):
