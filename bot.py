@@ -344,7 +344,7 @@ async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
                                 logChannel=bot.get_channel(config.Channels.logChannel)
                                 await logChannel.send(embed=logEmbed)   
 
-                                asyncio.sleep(duration) 
+                                await asyncio.sleep(duration) 
                                 await member.remove_roles(mutedRole)
                                 reason = 'Temporary mute completed!'
                                 await member.send(f'You were unmuted in {guild.name} | `{reason}`')
