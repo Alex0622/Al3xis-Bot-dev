@@ -344,14 +344,13 @@ async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
                                 logChannel=bot.get_channel(config.Channels.logChannel)
                                 await logChannel.send(embed=logEmbed)   
 
-                                time.sleep(duration)
+                                await asyncio.sleep(duration) 
                                 await member.remove_roles(mutedRole)
                                 reason = 'Temporary mute completed!'
                                 await member.send(f'You were unmuted in {guild.name} | `{reason}`')
-                                print(f'User {ctx.me} unmuted {member} in server {guild.name} | {reason}')
+                                print(f'User {member} was unmuted in server {guild.name} | {reason}')
                                 logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                                logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                                logEmbed.add_field(name='User', value=ctx.me.mention)
+                                logEmbed.add_field(name='User', value=member.mention)
                                 logEmbed.add_field(name='Reason', value=reason) 
                                 logEmbed.set_footer(text=f'Guild: {ctx.guild}')
                                 logChannel=bot.get_channel(config.Channels.logChannel)
