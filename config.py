@@ -1,16 +1,17 @@
 
 class InfoCommands:
+    announce = 'Make announcements.'
     avatar = 'Get and post the avatar of the user/ID mentioned.'
     ban = 'Ban the user mentioned in the command. |Permanent ban.'
     id = 'Get the ID of the user given.'
     invite = 'Invite the bot to your server.'
     help = 'Display the list of commands'
     kick = 'Kick a user from the server.'
-    mute = 'Mute users so they cannot send messages or join VC channels | duration: seconds'
+    mute = 'Mute users so they cannot send messages or join VC channels. | duration: seconds'
     ping = "Shows the bot's latency/ping."
-    pmute = 'Mute a user permanently'
+    pmute = 'Mute a user permanently.'
     purge = 'Delete an amount of messages. | Limit of messages deleted per command: `500`.'
-    save = 'Save messages so the bot can send them in an embed with the `a!say` command.'
+    save = 'Save messages to a channel.'
     say = 'Send the latest saved message in an embed.' 
     suggest = 'Make a new suggestion.'
     unban = 'Remove ban from user.'
@@ -19,25 +20,27 @@ class InfoCommands:
 
 
 class UsageCommands:
-    avatar = 'a!avatar @user/ID'
-    ban = 'a!ban @user/ID "reason"'
-    id = 'a!id @user'
-    invite = 'a!invite'
-    help = 'a!help "command" | If you do not add a command, it will show the general help command'
-    kick = 'a!kick @user/ID "reason"'
-    mute = 'a!mute @user/ID duration "reason"'
-    ping = 'a!ping'
-    pmute = 'a!pmute @user/ID reason'
-    purge = 'a!purge (amount of messages that will be purged)'
-    save = 'a!save (your message)' 
-    say = 'a!say' 
-    suggest = 'a!suggest (suggestion)'
-    unban = 'a!unban ID "reason"'
-    unmute = 'a!unmute @user/ID "reason"'
+    announce = '`a!announce #channel` | after this you will send the title and then description in a new channel.'
+    avatar = '`a!avatar @user/ID`'
+    ban = '`a!ban @user/ID (reason)`'
+    id = '`a!id @user`'
+    invite = '`a!invite`'
+    help = '`a!help "command"` | If you do not add a command, it will show the general help command.'
+    kick = '`a!kick @user/ID (reason)`'
+    mute = '`a!mute @user/ID duration (reason)`'
+    ping = '`a!ping`'
+    pmute = '`a!pmute @user/ID (reason)`'
+    purge = '`a!purge (amount of messages that will be purged)`'
+    save = '`a!save (message)`' 
+    say = '`a!say (message)` | if there is no message, it will send the latest messaged saved.' 
+    suggest = '`a!suggest (suggestion)`'
+    unban = '`a!unban ID `(reason)`'
+    unmute = '`a!unmute @user/ID (reason)`'
     
     
     
 class AliasesCommands:
+    announce = 'announcement', 'ann'
     avatar = 'av'
     ban = 'No aliases'
     id = 'ID'
@@ -99,3 +102,4 @@ class Emojis:
 # Invite command = darkGreen
 # Save command = blue
 # Say command = blue
+
