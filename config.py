@@ -1,13 +1,15 @@
 
 class InfoCommands:
     avatar = 'Get and post the avatar of the user/ID mentioned.'
-    ban = 'Ban a user given in the command. | At the moment the command is a permanent ban.'
+    ban = 'Ban the user mentioned in the command. |Permanent ban.'
     id = 'Get the ID of the user given.'
     invite = 'Invite the bot to your server.'
-    kick = 'Kick a user from the server. they are still able to join again with an invite though.'
-    mute = 'Mute users so they cannot send messages or join VC channels.'
+    help = 'Display the list of commands'
+    kick = 'Kick a user from the server.'
+    mute = 'Mute users so they cannot send messages or join VC channels | duration: seconds'
     ping = "Shows the bot's latency/ping."
-    purge = 'Delete an amount of messages. | The limit of the bot that can be deleted at a time is 500 messages.'
+    pmute = 'Mute a user permanently'
+    purge = 'Delete an amount of messages. | Limit of messages deleted per command: `500`.'
     save = 'Save messages so the bot can send them in an embed with the `a!say` command.'
     say = 'Send the latest saved message in an embed.' 
     suggest = 'Make a new suggestion.'
@@ -17,19 +19,21 @@ class InfoCommands:
 
 
 class UsageCommands:
-    avatar = 'a!avatar @user'
-    ban = 'a!ban @user/ID reason'
+    avatar = 'a!avatar @user/ID'
+    ban = 'a!ban @user/ID "reason"'
     id = 'a!id @user'
     invite = 'a!invite'
-    kick = 'a!kick @user/ID reason'
-    mute = 'a!mute @user/ID reason'
+    help = 'a!help "command" | If you do not add a command, it will show the general help command'
+    kick = 'a!kick @user/ID "reason"'
+    mute = 'a!mute @user/ID duration "reason"'
     ping = 'a!ping'
+    pmute = 'a!pmute @user/ID reason'
     purge = 'a!purge (amount of messages that will be purged)'
     save = 'a!save (your message)' 
     say = 'a!say' 
     suggest = 'a!suggest (suggestion)'
-    unban = 'a!unban ID reason'
-    unmute = 'a!unmute @user/ID reason'
+    unban = 'a!unban ID "reason"'
+    unmute = 'a!unmute @user/ID "reason"'
     
     
     
@@ -38,13 +42,15 @@ class AliasesCommands:
     ban = 'No aliases'
     id = 'ID'
     invite = 'inv'
+    help = 'h'
     kick = 'No aliases'
     mute = 'No aliases'
     ping = 'pong', 'latency'
+    pmute = 'p-mute', 'pm'
     purge = 'clear'
     save = 'No aliases'
     say = 'No aliases'
-    suggest = 'No aliases'
+    suggest = 'sug'
     unban = 'No aliases'
     unmute = 'No aliases'
 
@@ -77,6 +83,7 @@ class Emojis:
     noEntry = '⛔'
     whiteCheckMark = '✅'
     octagonalSign = '🛑'
+    eyes = '👀'
 
 
 
