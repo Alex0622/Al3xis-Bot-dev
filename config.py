@@ -20,7 +20,7 @@ class InfoCommands:
 
 
 class UsageCommands:
-    announce = '`a!announce #channel` | after this you will send the title and then description in a new channel.'
+    announce = '`a!announce #channel` | after this you will send the title and then description in a new message.'
     avatar = '`a!avatar @user/ID`'
     ban = '`a!ban @user/ID (reason)`'
     id = '`a!id @user`'
