@@ -17,11 +17,16 @@ async def on_ready():
     general_channel = bot.get_channel(config.Channels.botChannel)
     await general_channel.send('Hi, I am online again.')
     #Status
-    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name='a!help for help :p', emoji=None, type=discord.ActivityType.listening))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name='a!help', emoji=None, type=discord.ActivityType.listening))
 
 
-    
-    
+
+
+
+
+
+
+
 ####################################################################################################
 ####################################################################################################
 ##Normal Commands
@@ -43,8 +48,9 @@ async def announce(ctx, channelA: discord.TextChannel=None):
             newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=120)
             await newContent.delete()
             await botMsg.edit(content='Preparing to make the announcement')
-                    
-            aEmbed = discord.Embed(title=newTitle.content, description=newContent.content, colour=config.Colors.green) 
+            
+            randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+            aEmbed = discord.Embed(title=newTitle.content, description=newContent.content, colour=random.choice(randomColors)) 
             print(f'Preparing announcement... Title: {newTitle.content}, Description: {newContent.content}, Channel: {channelA.id}')
             aChannel = bot.get_channel(channelA.id)
             await aChannel.send(embed=aEmbed)
@@ -146,7 +152,7 @@ async def suggest(ctx, *, new_suggestion):
         print('New suggestions | ' + suggestion)
         
         await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
-        await msg.edit(content=f'**{ctx.author}**, your suggestion "__**{suggestion}**__" has been submited!')
+        await msg.edit(content=f'**{ctx.author}**, your suggestion has been submited! \n Suggestion: **{suggestion}**')
     except Exception:
         await ctx.send('An error ocurred while running the command.')
         await ctx.message.add_reaction(config.Emojis.noEntry)
@@ -163,7 +169,6 @@ async def suggest_error(ctx, error):
 ####################################################################################################
 ####################################################################################################
 ##Moderation commands
-
 
 
 @bot.command(name='ban')
@@ -576,9 +581,6 @@ async def unmute_error(ctx, error):
 ####################################################################################################
 ####################################################################################################
 ##Owner commands
-
-
-
 savedMessageSave = ''
 @bot.command(name='save')
 @commands.is_owner()
