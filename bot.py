@@ -4,9 +4,10 @@ import datetime
 import asyncio
 import config, os
 import time, random
+
     
 #Bot (our bot)
-bot = commands.Bot(command_prefix=['a!', 'A!']) #Set the prefix of the bot and removes the default help command.
+bot = commands.Bot(command_prefix=commands.when_mentioned_or('a!', 'A!')) #Set the prefix of the bot and removes the default help command.
 bot.remove_command(name='help')
 
 
@@ -18,11 +19,6 @@ async def on_ready():
     await general_channel.send('Hi, I am online again.')
     #Status
     await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name='a!help', emoji=None, type=discord.ActivityType.listening))
-
-
-
-
-
 
 
 
@@ -47,12 +43,13 @@ async def announce(ctx, channelA: discord.TextChannel=None):
 
             newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=120)
             await newContent.delete()
-            await botMsg.edit(content='Preparing to make the announcement')
+            await botMsg.edit(content='Preparing to make the announcement...')
             
             randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
             aEmbed = discord.Embed(title=newTitle.content, description=newContent.content, colour=random.choice(randomColors)) 
             print(f'Preparing announcement... Title: {newTitle.content}, Description: {newContent.content}, Channel: {channelA.id}')
             aChannel = bot.get_channel(channelA.id)
+            await asyncio.sleep(2)
             await aChannel.send(embed=aEmbed)
             await botMsg.edit(content='Announcement sent succesfully.')
             await botMsg.add_reaction(config.Emojis.whiteCheckMark)
@@ -72,7 +69,7 @@ async def announce_error(ctx, error):
         await ctx.send("I can't find that channel!")
         return
     if isinstance(error,commands.MissingPermissions):
-        await ctx.send('Only administrators of this server can use that command')
+        await ctx.send('Only administrators of this server can use that command!')
         return
 
 
@@ -86,20 +83,29 @@ async def avatar(ctx, member: discord.Member = None):
     await ctx.send(embed=embed)
 
 
+@avatar.error
+async def avatar_error(ctx, error):
+    if isinstance(error, commands.MemberNotFound):
+        await ctx.send('I was unable to find that user!')
+        return
+
+
 
 @bot.command(name='help', aliases=['h'])
 async def help(ctx, arg = None):
     if arg == None:
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        helpEmbed.add_field(name='Normal commands', value='`announce`, `avatar`, `help`, `id`, `invite`, `ping`, `suggest`')
+        helpEmbed.add_field(name='Normal commands', value='`announce`, `avatar`, `help`, `id`, `info`, `invite`, `ping`, `suggest`')
         helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
         helpEmbed.add_field(name='Owner commands', value='`save`, `say`')
+        helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.channel.send(embed=helpEmbed)
         return
     else:
         embed = discord.Embed(title=f'Command: `{arg}` | Aliases: `{getattr(config.AliasesCommands, arg)}`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
         embed.add_field(name=f'Information', value=getattr(config.InfoCommands, arg), inline=False)
         embed.add_field(name='Usage', value=getattr(config.UsageCommands, arg), inline=False)
+        embed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
         return
 
@@ -113,11 +119,29 @@ async def id(ctx, member: discord.Member = None):
 
 
 
+@bot.command(name='info')
+async def info(ctx):
+    embedI = discord.Embed(title=f'Information about Al3xis#4614', colour=config.Colors.blue, timestamp=ctx.message.created_at)
+    embedI.set_author(name='Al3xis')
+    embedI.add_field(name='Owner', value='`Alex22#7756`')
+    embedI.add_field(name='Current Version', value='`1.2`')
+    embedI.add_field(name='Guilds', value=f'`{len(bot.guilds)}`')
+    embedI.add_field(name='Prefix', value='`a!`, `A!`')
+    embedI.add_field(name='Developed since', value='`11/30/2020`')
+    embedI.add_field(name='Developed with', value='`Python`')
+    embedI.add_field(name='Important', value='Use `a!help` to get the list of available commands and `a!invite` to invite the bot or join our Discord server.', inline=False)
+    embedI.set_thumbnail(url=ctx.me.avatar_url)
+    embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
+    await ctx.send(embed=embedI)
+
+
+
 @bot.command(name='invite', aliases=['inv'])
 async def invite(ctx):
-    embed = discord.Embed(title='Invite the bot to your server!', colour=config.Colors.darkGreen)
-    embed.add_field(name='Invite links.', value='[Admin permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8)')
+    embed = discord.Embed(title='Links', colour=config.Colors.darkGreen, timestamp=ctx.message.created_at)
+    embed.add_field(name='Invite the bot to your server!', value='[Admin permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8)')
     embed.add_field(name='Join our Discord server!', value='[Al3xis Bot Server](https://discord.gg/AAJPHqNXUy)', inline=False)
+    embed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
     await ctx.send(embed=embed)
 
 
@@ -288,7 +312,7 @@ async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
     guild = ctx.guild
     if reason == None:
         reason = 'No reason provided'
-    mutedRole = discord.utils.get(guild.roles,name='Muted')
+    mutedRole = discord.utils.get(guild.roles, id=819690088639627264)
     
     if mutedRole:
         if member != ctx.author:
@@ -331,7 +355,7 @@ async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
                                     await ctx.message.add_reaction(config.Emojis.noEntry)
                                     return
                             else:
-                                await ctx.send(f'{ctx.author.mention} Please specify an amount of time or use the `pmute` command')
+                                await ctx.send(f'{ctx.author.mention} Please specify an amount of time or use the `{ctx.command}` command!')
                         else:
                             await ctx.send(f"**{member}** is already muted!")
                             return
@@ -460,7 +484,7 @@ async def purge(ctx, amount = 0):
 @purge.error
 async def purge_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} You need the permission `manage_messages` purge messages!')
+        await ctx.send(f'{ctx.author.mention} You need the permission `manage_messages` to purge messages!')
         return
 
 
@@ -581,6 +605,9 @@ async def unmute_error(ctx, error):
 ####################################################################################################
 ####################################################################################################
 ##Owner commands
+
+
+
 savedMessageSave = ''
 @bot.command(name='save')
 @commands.is_owner()
@@ -607,6 +634,13 @@ async def save(ctx,*, saveMsg=None):
             return
 
 
+@save.error
+async def save_error(ctx, error):
+    if isinstance(error, commands.NotOwner):
+        await ctx.send(f'{ctx.author.mention} Only the owner of the bot can use `{ctx.prefix}{ctx.command}`.')
+        return
+
+
 
 @bot.command(name='say')
 @commands.is_owner()
@@ -621,6 +655,13 @@ async def say(ctx, *, sayMsg=None):
         embed = discord.Embed(title='Hi!',description=sayMsg, colour=random.choice(randomColors))
         await ctx.send(embed=embed)
         await ctx.message.delete()
+        return
+
+
+@say.error
+async def say_error(ctx, error):
+    if isinstance(error, commands.NotOwner):
+        await ctx.send(f'{ctx.author.mention} Only the owner of the bot can use `{ctx.prefix}{ctx.command}`.')
         return
 
 
