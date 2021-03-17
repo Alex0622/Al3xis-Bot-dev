@@ -499,7 +499,6 @@ async def purge_error(ctx, error):
 
 
 
-
 @bot.command(name='unban') 
 @commands.has_permissions(ban_members=True)
 async def unban(ctx, UserID: int, *, reason=None):
@@ -510,8 +509,8 @@ async def unban(ctx, UserID: int, *, reason=None):
     if member != ctx.author:
         if member != ctx.me:
             if not member.bot:
-                bannedUsers = await guild.bans()
-                if not member in bannedUsers:
+                try:
+                    await ctx.guild.fetch_ban(discord.Object(id=member.id))
                     try:
                         time.sleep(0.5)
                         await ctx.guild.unban(member)
@@ -529,9 +528,9 @@ async def unban(ctx, UserID: int, *, reason=None):
                         await ctx.send('An error ocurred while running the command.')
                         await ctx.message.add_reaction(config.Emojis.noEntry)
                         return
-                else:
-                    await ctx.send('That user is not banned!')
-                    return
+                except discord.NotFound:
+                    await ctx.send('User is not banned here.')
+                
             else:
                 await ctx.send(f'{ctx.author.mention} You are not allowed to unban bots!')
                 return
@@ -551,9 +550,7 @@ async def unban_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention} You need the permission `ban_members` to use the `{ctx.command}` command!')
         return
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.send('I cannot find that user!')
-        return
+
 
 
 
@@ -571,7 +568,7 @@ async def unmute(ctx, member: discord.Member, *, reason=None):
                     if mutedRole in member.roles:
                         try:
                             time.sleep(0.5)
-                            await member.remove_roles(mutedRole)
+                            await member.remove_roles(mutedRole, reason=reason)
                             await ctx.send(f'{member.mention} was unmuted | `{reason}`')
                             await member.send(f'You were unmuted in {guild.name} | `{reason}`')
                             print(f'User {ctx.author} unmuted {member} in server {guild.name} | {reason}')
