@@ -34,7 +34,7 @@ class UsageCommands:
     save = '`a!save (message)`' 
     say = '`a!say (message)` | if there is no message, it will send the latest messaged saved.' 
     suggest = '`a!suggest (suggestion)`'
-    unban = '`a!unban ID `(reason)`'
+    unban = '`a!unban ID (reason)`'
     unmute = '`a!unmute @user/ID (reason)`'
     
     
