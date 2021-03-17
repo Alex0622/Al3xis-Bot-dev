@@ -6,8 +6,9 @@ I use [heroku](https://www.heroku.com/) to host this bot which in my opinion, is
 
 You can join my Discord server if you have any question.
 # Discord Server:
-Discord Server: [press here](https://discord.gg/AAJPHqNXUy)
+Discord invite: [press here](https://discord.gg/AAJPHqNXUy)
 
 # If you want to invite the bot to your server use the following links:
 Administrator permission: [press here](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8)
+
 Required permissions: [press here](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=2147479543)
