@@ -139,6 +139,7 @@ async def info(ctx):
     embedI.add_field(name='Prefix', value='`a!`, `A!`')
     embedI.add_field(name='Developed since', value='`11/30/2020`')
     embedI.add_field(name='Developed with', value='`Python`')
+    embedI.add_field(name='GitHub link', value='[here](https://github.com/Alex0622/Al3xis-Bot-dev/0)')
     embedI.add_field(name='Important', value='Use `a!help` to get the list of available commands and `a!invite` to invite the bot or join our Discord server.', inline=False)
     embedI.set_thumbnail(url=ctx.me.avatar_url)
     embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
