@@ -1,7 +1,8 @@
 # Al3xis-Bot-dev
 
-Al3xis is a bot developed by **Alex22#7756** (Discord username). This bot has some moderation and common commands. 
-If you have some suggestion for our bot you can use the command a!suggest. This is a public bot but will not be online all the time (at least not yet).
+Al3xis is a bot developed by **Alex22#7756** (Discord username). This bot has some moderation and common commands, use `a!help` and `a!info` for more information about the bot.
+If you have some suggestion for my bot you can use the command `a!suggest`. 
+This is a public bot but will not be online all the time (at least not yet).
 I use [heroku](https://www.heroku.com/) to host this bot which in my opinion, is a good free host for Discord bots.
 
 You can join my Discord server if you have any question.
