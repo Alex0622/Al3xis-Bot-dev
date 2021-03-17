@@ -88,18 +88,3 @@ class Emojis:
     octagonalSign = '🛑'
     eyes = '👀'
 
-
-
-# User does not have permissions = blue
-# User not found = green
-# Missing argument = orange
-# Command not found = orange
-# Help command = yellow
-# Avatar command = purple
-# Suggestions = green
-# Reaction commands = ligthBlue
-# Announce commands = lightBlue
-# Invite command = darkGreen
-# Save command = blue
-# Say command = blue
-
