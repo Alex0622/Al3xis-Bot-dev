@@ -37,11 +37,11 @@ async def announce(ctx, channelA: discord.TextChannel=None):
             botMsg = await ctx.send('Please provide the title for your announcement!')
             await ctx.message.delete()
 
-            newTitle = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=80)
+            newTitle = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=120)
             await newTitle.delete()
             await botMsg.edit(content='Now provide the message or description of your announcement!')
 
-            newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=120)
+            newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=200)
             await newContent.delete()
             await botMsg.edit(content='Preparing to make the announcement...')
             
@@ -53,6 +53,10 @@ async def announce(ctx, channelA: discord.TextChannel=None):
             await aChannel.send(embed=aEmbed)
             await botMsg.edit(content='Announcement sent succesfully.')
             await botMsg.add_reaction(config.Emojis.whiteCheckMark)
+        except asyncio.TimeoutError:
+            print('Timeout in announce command')
+            await botMsg.edit(content="You didn't send your message in time, please try again!")
+            return
         
         except Exception:
             await botMsg.edit(content='An error ocurred while running the command.')
@@ -118,13 +122,19 @@ async def id(ctx, member: discord.Member = None):
     await ctx.send(member.id)
 
 
+@id.error
+async def id_error(ctx, error):
+    if isinstance(error, commands.MemberNotFound):
+        await ctx.send("I can't find that user!")
+
+
 
 @bot.command(name='info')
 async def info(ctx):
     embedI = discord.Embed(title=f'Information about Al3xis#4614', colour=config.Colors.blue, timestamp=ctx.message.created_at)
     embedI.set_author(name='Al3xis')
     embedI.add_field(name='Owner', value='`Alex22#7756`')
-    embedI.add_field(name='Current Version', value='`1.2`')
+    embedI.add_field(name='Current Version', value='`1.3`')
     embedI.add_field(name='Guilds', value=f'`{len(bot.guilds)}`')
     embedI.add_field(name='Prefix', value='`a!`, `A!`')
     embedI.add_field(name='Developed since', value='`11/30/2020`')
@@ -245,7 +255,7 @@ async def ban_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention} You need the permission `ban_members` in this server to use `{ctx.command}` command!')
         return
-    if isinstance(error, commands.UserNotFound):
+    if isinstance(error, commands.MemberNotFound):
         await ctx.send('I cannot find that user!')
         return
 
@@ -300,7 +310,7 @@ async def kick_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f"{ctx.author.mention} You need the permission `kick_members` to use the `{ctx.command}` command!")
         return
-    if isinstance(error, commands.UserNotFound):
+    if isinstance(error, commands.MemberNotFound):
         await ctx.send('I cannot find that user!')
         return
 
@@ -312,7 +322,7 @@ async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
     guild = ctx.guild
     if reason == None:
         reason = 'No reason provided'
-    mutedRole = discord.utils.get(guild.roles, id=819690088639627264)
+    mutedRole = discord.utils.get(guild.roles, name='Muted')
     
     if mutedRole:
         if member != ctx.author:
@@ -383,7 +393,7 @@ async def mute_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention} You need the permission `kick_members` to use the `{ctx.command}` command!')
         return
-    if isinstance(error, commands.UserNotFound):
+    if isinstance(error, commands.MemberNotFound):
         await ctx.send('I cannot find that user!')
         return
 
@@ -452,7 +462,7 @@ async def pmute_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention} You need the permission `kick_members` to use the `{ctx.command}` command!')
         return
-    if isinstance(error, commands.UserNotFound):
+    if isinstance(error, commands.MemberNotFound):
         await ctx.send('I cannot find that user!')
         return
 
@@ -500,22 +510,27 @@ async def unban(ctx, UserID: int, *, reason=None):
     if member != ctx.author:
         if member != ctx.me:
             if not member.bot:
-                try:
-                    time.sleep(0.5)
-                    await ctx.guild.unban(member)
-                    await ctx.send(f'User {member.mention} was unbanned | `{reason}`.')
-                    await member.send(f'You were unbanned from {guild.name} | `{reason}`.')
-                    print(f'User {ctx.author} unbanned {member} from {guild.name} | {reason}')
-                    logEmbed = discord.Embed(title=f'Case: `unban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                    logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                    logEmbed.add_field(name='User', value=member.mention)
-                    logEmbed.add_field(name='Reason', value=reason) 
-                    logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                    logChannel=bot.get_channel(config.Channels.logChannel)
-                    await logChannel.send(embed=logEmbed)     
-                except Exception:
-                    await ctx.send('An error ocurred while running the command.')
-                    await ctx.message.add_reaction(config.Emojis.noEntry)
+                bannedUsers = await guild.bans()
+                if not member in bannedUsers:
+                    try:
+                        time.sleep(0.5)
+                        await ctx.guild.unban(member)
+                        await ctx.send(f'User {member.mention} was unbanned | `{reason}`.')
+                        await member.send(f'You were unbanned from {guild.name} | `{reason}`.')
+                        print(f'User {ctx.author} unbanned {member} from {guild.name} | {reason}')
+                        logEmbed = discord.Embed(title=f'Case: `unban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                        logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                        logEmbed.add_field(name='User', value=member.mention)
+                        logEmbed.add_field(name='Reason', value=reason) 
+                        logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                        logChannel=bot.get_channel(config.Channels.logChannel)
+                        await logChannel.send(embed=logEmbed)     
+                    except Exception:
+                        await ctx.send('An error ocurred while running the command.')
+                        await ctx.message.add_reaction(config.Emojis.noEntry)
+                        return
+                else:
+                    await ctx.send('That user is not banned!')
                     return
             else:
                 await ctx.send(f'{ctx.author.mention} You are not allowed to unban bots!')
@@ -536,7 +551,7 @@ async def unban_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention} You need the permission `ban_members` to use the `{ctx.command}` command!')
         return
-    if isinstance(error, commands.UserNotFound):
+    if isinstance(error, commands.MemberNotFound):
         await ctx.send('I cannot find that user!')
         return
 
@@ -595,7 +610,7 @@ async def unmute_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention} You need the permission `kick_members` to use the `{ctx.command}` command!')
         return
-    if isinstance(error, commands.UserNotFound):
+    if isinstance(error, commands.MemberNotFound):
         await ctx.send('I cannot find that user!')
         return
 
