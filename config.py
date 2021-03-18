@@ -4,6 +4,7 @@ class InfoCommands:
     avatar = 'Get and post the avatar of the user/ID mentioned.'
     ban = 'Ban the user mentioned in the command. |Permanent ban.'
     id = 'Get the ID of the user given.'
+    info = 'Get information about the bot.'
     invite = 'Invite the bot to your server.'
     help = 'Display the list of commands'
     kick = 'Kick a user from the server.'
@@ -24,6 +25,7 @@ class UsageCommands:
     avatar = '`a!avatar @user/ID`'
     ban = '`a!ban @user/ID (reason)`'
     id = '`a!id @user`'
+    info = '`a!info`'
     invite = '`a!invite`'
     help = '`a!help "command"` | If you do not add a command, it will show the general help command.'
     kick = '`a!kick @user/ID (reason)`'
@@ -44,6 +46,7 @@ class AliasesCommands:
     avatar = 'av'
     ban = 'No aliases'
     id = 'ID'
+    info = 'No aliases'
     invite = 'inv'
     help = 'h'
     kick = 'No aliases'
@@ -61,7 +64,7 @@ class AliasesCommands:
 
 class Channels:
     suggestionsChannel = 793989328602791946
-    botChannel = 793990563682582567
+    botChannel = 793989024879476767
     logChannel = 793990292213727262
     ownerChannel = 793989996494192692
 
@@ -87,4 +90,5 @@ class Emojis:
     whiteCheckMark = '✅'
     octagonalSign = '🛑'
     eyes = '👀'
-
+    
+    
