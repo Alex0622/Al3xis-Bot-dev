@@ -679,14 +679,14 @@ async def say_error(ctx, error):
         return
 
 
-@bot.event
-async def on_command_error(ctx, err)
+@bot.event 
+async def on_command_error(ctx, err):
     if isinstance(err, commands.CommandNotFound):
         pass
     else:
-        embed = discord.Embed(description=str(err), color=discord.Color.red())
+        embed = discord.Embed(description=str(err), color=discord.Color.red()) 
         await ctx.send(embed=embed)
-    
+
 ################################
 ####################################################################################################
 ####################################################################################################
