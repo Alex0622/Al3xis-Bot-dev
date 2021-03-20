@@ -59,6 +59,27 @@ class AliasesCommands:
     suggest = 'sug'
     unban = 'No aliases'
     unmute = 'No aliases'
+    
+    
+    
+class RequiredPermissions:
+    announce = 'ADMINISTRATOR'
+    avatar = 'NO REQUIRED PERMISSION'
+    ban = 'BAN MEMBERS'
+    id = 'NO REQUIRED PERMISSION'
+    info = 'NO REQUIRED PERMISSION'
+    invite = 'NO REQUIRED PERMISSION'
+    help = 'NO REQUIRED PERMISSION'
+    kick = 'KICK MEMBERS'
+    mute = 'KICK MEMBERS'
+    ping = 'NO REQUIRED PERMISSION'
+    pmute = 'KICK MEMBERS'
+    purge = 'MANAGE MESSAGES'
+    save = "BOT'S OWNER"
+    say = "BOT'S OWNER"
+    suggest = 'NO REQUIRED PERMISSION'
+    unban = 'BAN USERS'
+    unmute = 'KICK USERS'
 
     
 
