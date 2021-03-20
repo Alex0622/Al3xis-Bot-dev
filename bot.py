@@ -20,6 +20,13 @@ async def on_ready():
     #Status
     await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name='a!help', emoji=None, type=discord.ActivityType.listening))
 
+    
+@bot.event 
+async def on_command_error(ctx, err):
+    if isinstance(err, commands.CommandNotFound):
+        embed = discord.Embed(description='**Error!** '+str(err) + '.', color=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
 
 
 
