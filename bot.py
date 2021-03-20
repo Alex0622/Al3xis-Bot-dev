@@ -159,8 +159,7 @@ async def info(ctx):
 async def invite(ctx):
     embed = discord.Embed(title='Links', colour=config.Colors.darkGreen, timestamp=ctx.message.created_at)
     embed.add_field(name='Join our Discord server!', value='[Al3xis Bot Server](https://discord.gg/AAJPHqNXUy)', inline=False)
-    embed.add_field(name='Invite the bot to your server', value='[Admin permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8)')
-    embed.add_field(name='!', value='[Required permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=2147479543)')
+    embed.add_field(name='Invite the bot to your server', value='[Admin permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8) \n[Required permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=2147479543)')
     embed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
     await ctx.send(embed=embed)
 
