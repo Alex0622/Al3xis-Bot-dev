@@ -116,6 +116,7 @@ async def help(ctx, arg = None):
         embed = discord.Embed(title=f'Command: `{arg}` | Aliases: `{getattr(config.AliasesCommands, arg)}`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
         embed.add_field(name=f'Information', value=getattr(config.InfoCommands, arg), inline=False)
         embed.add_field(name='Usage', value=getattr(config.UsageCommands, arg), inline=False)
+        embed.add_field(name='Required permissions', value='`'+getattr(config.RequiredPermissions, arg)+'`', inline=False)
         embed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
         return
