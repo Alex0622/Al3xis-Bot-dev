@@ -515,6 +515,10 @@ async def purge(ctx, amount = 0):
     if amount <= 500:
         if amount >=1:
             await ctx.channel.purge(limit=amount)
+            e = discord.Embed(description=f'Deleted {amount} messages {config.Emojis.loading}', colour=config.Colors.red)
+            botMsg = await ctx.send(embed=e)
+            await asyncio.sleep(5)
+            await botMsg.delete()
             logEmbed = discord.Embed(title=f'Case: `purge`', colour=config.Colors.orange, timestamp=ctx.message.created_at)
             logEmbed.add_field(name='Moderator', value=ctx.author.mention)
             logEmbed.add_field(name='Channel', value=ctx.message.channel.mention)
