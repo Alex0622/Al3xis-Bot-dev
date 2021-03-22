@@ -195,14 +195,14 @@ async def reminder(ctx, time:int =None, *, msg=None):
             ctx.send('Please provide a message for your reminder!')
             return
     else:
-        await ctx.send('Please provide a period of time in minutes!')
+        await ctx.send('Please provide a period of time! (use `a!help reminder`)')
         return
 
 
 @reminder.error
 async def reminder_error(ctx, error):
     if isinstance(error, commands.BadArgument):
-        await ctx.send('Time must only include numbers.')
+        await ctx.send('`Time` must only include numbers.')
         return
 
 
