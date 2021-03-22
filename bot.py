@@ -106,7 +106,7 @@ async def avatar_error(ctx, error):
 async def help(ctx, arg = None):
     if arg == None:
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        helpEmbed.add_field(name='Normal commands', value='`announce`, `avatar`, `help`, `id`, `info`, `invite`, `ping`, `suggest`')
+        helpEmbed.add_field(name='Normal commands', value='`announce`, `avatar`, `help`, `id`, `info`, `invite`, `ping`,`reminder`, `suggest`')
         helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
         helpEmbed.add_field(name='Owner commands', value='`save`, `say`')
         helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
@@ -173,6 +173,37 @@ async def ping (ctx):
     ping = (time.monotonic() - before) * 1000
     await message.edit(content=f"**Bot's ping:**  `{int(ping)}ms`")
     print(f'Ping {int(ping)}ms')
+
+    
+
+@bot.command(name='reminder', aliases=['remind'])
+async def reminder(ctx, time:int =None, *, msg=None):
+    if time != None:
+        if msg != None:
+            try:
+                await asyncio.sleep(0.5)
+                await ctx.send(f'I have set a reminder for **{time} minutes** with the message: \n**{msg}**')
+                newTime = time * 60
+                await asyncio.sleep(newTime)
+                randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+                embed = discord.Embed(title='Reminder!', description=msg, colour=random.choice(randomColors), timestamp=ctx.message.created_at)
+                embed.set_footer(text='Reminder set ')
+                await ctx.author.send(embed=embed)
+            except Exception:
+                await ctx.send('An error ocurred while running the command.')
+        else: 
+            ctx.send('Please provide a message for your reminder!')
+            return
+    else:
+        await ctx.send('Please provide a period of time! (use `a!help reminder`)')
+        return
+
+
+@reminder.error
+async def reminder_error(ctx, error):
+    if isinstance(error, commands.BadArgument):
+        await ctx.send('`Time` must only include numbers.')
+        return
 
 
 
@@ -484,6 +515,10 @@ async def purge(ctx, amount = 0):
     if amount <= 500:
         if amount >=1:
             await ctx.channel.purge(limit=amount)
+            e = discord.Embed(description=f'Deleted {amount} messages {config.Emojis.loading}', colour=config.Colors.red)
+            botMsg = await ctx.send(embed=e)
+            await asyncio.sleep(5)
+            await botMsg.delete()
             logEmbed = discord.Embed(title=f'Case: `purge`', colour=config.Colors.orange, timestamp=ctx.message.created_at)
             logEmbed.add_field(name='Moderator', value=ctx.author.mention)
             logEmbed.add_field(name='Channel', value=ctx.message.channel.mention)

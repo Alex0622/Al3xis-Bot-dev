@@ -2,16 +2,17 @@
 class InfoCommands:
     announce = 'Make announcements.'
     avatar = 'Get and post the avatar of the user/ID mentioned.'
-    ban = 'Ban the user mentioned in the command. |Permanent ban.'
+    ban = 'Ban the user mentioned in the command. | Permanent ban.'
     id = 'Get the ID of the user given.'
     info = 'Get information about the bot.'
     invite = 'Invite the bot to your server.'
     help = 'Display the list of commands'
     kick = 'Kick a user from the server.'
-    mute = 'Mute users so they cannot send messages or join VC channels. | duration: seconds'
+    mute = 'Mute users so they cannot send messages or join VC channels. | Duration: seconds.'
     ping = "Shows the bot's latency/ping."
     pmute = 'Mute a user permanently.'
     purge = 'Delete an amount of messages. | Limit of messages deleted per command: `500`.'
+    reminder = 'Set a reminder. | Duration: minutes.'
     save = 'Save messages to a channel.'
     say = 'Send the latest saved message in an embed.' 
     suggest = 'Make a new suggestion.'
@@ -21,7 +22,7 @@ class InfoCommands:
 
 
 class UsageCommands:
-    announce = '`a!announce #channel` | after this you will send the title and then description in a new message.'
+    announce = '`a!announce #channel` | After this you will send the title and then description in a new message.'
     avatar = '`a!avatar @user/ID`'
     ban = '`a!ban @user/ID (reason)`'
     id = '`a!id @user`'
@@ -33,6 +34,7 @@ class UsageCommands:
     ping = '`a!ping`'
     pmute = '`a!pmute @user/ID (reason)`'
     purge = '`a!purge (amount of messages that will be purged)`'
+    reminder = 'a!reminder (time) (message)'
     save = '`a!save (message)`' 
     say = '`a!say (message)` | if there is no message, it will send the latest messaged saved.' 
     suggest = '`a!suggest (suggestion)`'
@@ -54,14 +56,15 @@ class AliasesCommands:
     ping = 'pong', 'latency'
     pmute = 'p-mute', 'pm'
     purge = 'clear'
+    reminder = 'remind'
     save = 'No aliases'
     say = 'No aliases'
     suggest = 'sug'
     unban = 'No aliases'
     unmute = 'No aliases'
-    
-    
-    
+
+
+
 class RequiredPermissions:
     announce = 'ADMINISTRATOR'
     avatar = 'NO REQUIRED PERMISSION'
@@ -75,14 +78,15 @@ class RequiredPermissions:
     ping = 'NO REQUIRED PERMISSION'
     pmute = 'KICK MEMBERS'
     purge = 'MANAGE MESSAGES'
+    reminder = 'NO REQUIRED PERMISSION'
     save = "BOT'S OWNER"
     say = "BOT'S OWNER"
     suggest = 'NO REQUIRED PERMISSION'
     unban = 'BAN USERS'
     unmute = 'KICK USERS'
 
-    
 
+    
 class Channels:
     suggestionsChannel = 793989328602791946
     botChannel = 793989024879476767
@@ -111,5 +115,6 @@ class Emojis:
     whiteCheckMark = '✅'
     octagonalSign = '🛑'
     eyes = '👀'
-    
+    loading = '<a:loading:823701755946074142>'
+
     
