@@ -20,15 +20,15 @@ async def on_ready():
     #Status
     await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name='a!help', emoji=None, type=discord.ActivityType.listening))
 
-    
+
 @bot.event 
-async def on_command_error(ctx, err):
-    if isinstance(err, commands.CommandNotFound):
-        embed = discord.Embed(description='**Error!** '+str(err) + '.', color=config.Colors.red)
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.errors.MissingPermissions) or isinstance(error, commands.CommandNotFound) or isinstance(error, commands.MissingRequiredArgument):
+        pass
+    else:
+        embed = discord.Embed(description='**Error!** '+str(error), colour=config.Colors.red)
         await ctx.send(embed=embed)
-        return
-
-
+    
 
 ####################################################################################################
 ####################################################################################################
@@ -43,23 +43,39 @@ async def announce(ctx, channelA: discord.TextChannel=None):
         try:
             botMsg = await ctx.send('Please provide the title for your announcement!')
             await ctx.message.delete()
-
             newTitle = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=120)
             await newTitle.delete()
-            await botMsg.edit(content='Now provide the message or description of your announcement!')
 
-            newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=200)
-            await newContent.delete()
-            await botMsg.edit(content='Preparing to make the announcement...')
-            
-            randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
-            aEmbed = discord.Embed(title=newTitle.content, description=newContent.content, colour=random.choice(randomColors)) 
-            print(f'Preparing announcement... Title: {newTitle.content}, Description: {newContent.content}, Channel: {channelA.id}')
-            aChannel = bot.get_channel(channelA.id)
-            await asyncio.sleep(2)
-            await aChannel.send(embed=aEmbed)
-            await botMsg.edit(content='Announcement sent succesfully.')
-            await botMsg.add_reaction(config.Emojis.whiteCheckMark)
+            if newTitle.content == 'None':
+                await botMsg.edit(content='Now provide the message or description of your announcement!')
+
+                newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=200)
+                await newContent.delete()
+                await botMsg.edit(content='Preparing to make the announcement...')
+                
+                randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+                aEmbed = discord.Embed(description=newContent.content, colour=random.choice(randomColors)) 
+                print(f'Preparing announcement... Description: {newContent.content}, Channel: {channelA.id}')
+                aChannel = bot.get_channel(channelA.id)
+                await asyncio.sleep(2)
+                await aChannel.send(embed=aEmbed)
+                await botMsg.edit(content='Announcement sent succesfully.')
+                await botMsg.add_reaction(config.Emojis.whiteCheckMark)
+            if newTitle.content != 'None':      
+                await botMsg.edit(content='Now provide the message or description of your announcement!')
+
+                newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=200)
+                await newContent.delete()
+                await botMsg.edit(content='Preparing to make the announcement...')
+                
+                randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+                aEmbed = discord.Embed(title=newTitle.content, description=newContent.content, colour=random.choice(randomColors)) 
+                print(f'Preparing announcement... Title: {newTitle.content}, Description: {newContent.content}, Channel: {channelA.id}')
+                aChannel = bot.get_channel(channelA.id)
+                await asyncio.sleep(2)
+                await aChannel.send(embed=aEmbed)
+                await botMsg.edit(content='Announcement sent succesfully.')
+                await botMsg.add_reaction(config.Emojis.whiteCheckMark)
         except asyncio.TimeoutError:
             print('Timeout in announce command')
             await botMsg.edit(content="You didn't send your message in time, please try again!")
@@ -76,11 +92,9 @@ async def announce(ctx, channelA: discord.TextChannel=None):
 
 @announce.error
 async def announce_error(ctx, error):
-    if isinstance(error, commands.ChannelNotFound):
-        await ctx.send("I can't find that channel!")
-        return
-    if isinstance(error,commands.MissingPermissions):
-        await ctx.send('Only administrators of this server can use that command!')
+    if isinstance(error,commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** Only administrators of this server can use that command!', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
 
 
@@ -94,19 +108,12 @@ async def avatar(ctx, member: discord.Member = None):
     await ctx.send(embed=embed)
 
 
-@avatar.error
-async def avatar_error(ctx, error):
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.send('I was unable to find that user!')
-        return
-
-
 
 @bot.command(name='help', aliases=['h'])
 async def help(ctx, arg = None):
     if arg == None:
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        helpEmbed.add_field(name='Normal commands', value='`announce`, `avatar`, `help`, `id`, `info`, `invite`, `ping`,`reminder`, `suggest`')
+        helpEmbed.add_field(name='Normal commands', value='`announce`, `avatar`, `help`, `id`, `info`, `invite`, `ping`, `reminder`, `suggest`')
         helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
         helpEmbed.add_field(name='Owner commands', value='`save`, `say`')
         helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
@@ -130,11 +137,6 @@ async def id(ctx, member: discord.Member = None):
     await ctx.send(member.id)
 
 
-@id.error
-async def id_error(ctx, error):
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.send("I can't find that user!")
-
 
 
 @bot.command(name='info')
@@ -142,7 +144,7 @@ async def info(ctx):
     embedI = discord.Embed(title=f'Information about Al3xis#4614', colour=config.Colors.blue, timestamp=ctx.message.created_at)
     embedI.set_author(name='Al3xis')
     embedI.add_field(name='Owner', value='`Alex22#7756`')
-    embedI.add_field(name='Current Version', value='`1.3.1`')
+    embedI.add_field(name='Current Version', value='`1.3.2`')
     embedI.add_field(name='Guilds', value=f'`{len(bot.guilds)}`')
     embedI.add_field(name='Prefix', value='`a!`, `A!`')
     embedI.add_field(name='Developed since', value='`11/30/2020`')
@@ -201,8 +203,9 @@ async def reminder(ctx, time:int =None, *, msg=None):
 
 @reminder.error
 async def reminder_error(ctx, error):
-    if isinstance(error, commands.BadArgument):
-        await ctx.send('`Time` must only include numbers.')
+    if isinstance(error, commands.errors.BadArgument):
+        embed = discord.Embed(description='**Error!** `Time` must only include numbers.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
 
 
@@ -234,8 +237,9 @@ async def suggest(ctx, *, new_suggestion):
 
 @suggest.error
 async def suggest_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send('Please add a message to create your suggestion!')
+    if isinstance(error, commands.errors.MissingRequiredArgument):
+        embed = discord.Embed(description='**Error!** Please add a message to create your suggestion.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
 
 
 
@@ -289,20 +293,18 @@ async def ban(ctx, member : discord.Member, *, reason=None):
 
 @ban.error
 async def ban_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
+    if isinstance(error, commands.errors.MissingRequiredArgument):
         await ctx.send('Please specify an user to ban!')
         return
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} You need the permission `ban_members` in this server to use `{ctx.command}` command!')
-        return
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.send('I cannot find that user!')
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
 
 
 
 @bot.command(name='kick', pass_context=True)
-@commands.has_permissions(kick_members=True)
+@commands.has_permissions(ban_members=True)
 async def kick(ctx, member : discord.Member, *, reason=None):
     guild = ctx.guild
     if reason == None:
@@ -310,7 +312,7 @@ async def kick(ctx, member : discord.Member, *, reason=None):
     if member != ctx.author:
         if member != ctx.me:
             if not member.bot:
-                if not member.guild_permissions.kick_members:
+                if not member.guild_permissions.ban_members:
                     try:
                         time.sleep(0.5)
                         await ctx.send(f'User {member.mention} was kicked | `{reason}`.')
@@ -344,20 +346,18 @@ async def kick(ctx, member : discord.Member, *, reason=None):
 
 @kick.error
 async def kick_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
+    if isinstance(error, commands.errors.MissingRequiredArgument):
         await ctx.send('Please specify an user to kick!')
         return
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f"{ctx.author.mention} You need the permission `kick_members` to use the `{ctx.command}` command!")
-        return
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.send('I cannot find that user!')
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
 
 
 
 @bot.command(name='mute')
-@commands.has_permissions(kick_members=True)
+@commands.has_permissions(ban_members=True)
 async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
     guild = ctx.guild
     if reason == None:
@@ -368,7 +368,7 @@ async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
         if member != ctx.author:
             if member != ctx.me:
                 if not member.bot:
-                    if not member.guild_permissions.kick_members:
+                    if not member.guild_permissions.ban_members:
                         if not mutedRole in member.roles:
                             if duration:
 
@@ -427,20 +427,18 @@ async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
 
 @mute.error
 async def mute_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
+    if isinstance(error, commands.errors.MissingRequiredArgument):
         await ctx.send('Please specify an user to mute!')
         return
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} You need the permission `kick_members` to use the `{ctx.command}` command!')
-        return
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.send('I cannot find that user!')
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
 
 
 
 @bot.command(name='pmute', aliases= ['p-mute', 'pm'])
-@commands.has_permissions(kick_members=True)
+@commands.has_permissions(ban_members=True)
 async def pmute(ctx, member: discord.Member, *, reason=None):
     guild = ctx.guild
     if reason == None:
@@ -452,7 +450,7 @@ async def pmute(ctx, member: discord.Member, *, reason=None):
         if member != ctx.author:
             if member != ctx.me:
                 if not member.bot:
-                    if not member.guild_permissions.kick_members:
+                    if not member.guild_permissions.ban_members:
                         if not mutedRole in member.roles:
                             try:
                                 time.sleep(0.5)
@@ -496,14 +494,12 @@ async def pmute(ctx, member: discord.Member, *, reason=None):
 
 @pmute.error
 async def pmute_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
+    if isinstance(error, commands.errors.MissingRequiredArgument):
         await ctx.send('Please specify an user to mute!')
         return
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} You need the permission `kick_members` to use the `{ctx.command}` command!')
-        return
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.send('I cannot find that user!')
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
 
 
@@ -537,8 +533,9 @@ async def purge(ctx, amount = 0):
 
 @purge.error
 async def purge_error(ctx, error):
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} You need the permission `manage_messages` to purge messages!')
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `MANAGE MESSAGES` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
 
 
@@ -588,18 +585,19 @@ async def unban(ctx, UserID: int, *, reason=None):
 
 @unban.error
 async def unban_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
+    if isinstance(error, commands.errors.MissingRequiredArgument):
         await ctx.send('Please specify an user to unban!')
         return
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} You need the permission `ban_members` to use the `{ctx.command}` command!')
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
 
 
 
 
 @bot.command(name='unmute')
-@commands.has_permissions(kick_members=True)
+@commands.has_permissions(ban_members=True)
 async def unmute(ctx, member: discord.Member, *, reason=None):
     guild = ctx.guild
     if reason == None:
@@ -645,16 +643,13 @@ async def unmute(ctx, member: discord.Member, *, reason=None):
 
 @unmute.error
 async def unmute_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
+    if isinstance(error, commands.errors.MissingRequiredArgument):
         await ctx.send('Please specify an user to unmute!')
         return
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} You need the permission `kick_members` to use the `{ctx.command}` command!')
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.send('I cannot find that user!')
-        return
-
 
 
 
@@ -690,13 +685,6 @@ async def save(ctx,*, saveMsg=None):
             return
 
 
-@save.error
-async def save_error(ctx, error):
-    if isinstance(error, commands.NotOwner):
-        await ctx.send(f'{ctx.author.mention} Only the owner of the bot can use `{ctx.prefix}{ctx.command}`.')
-        return
-
-
 
 @bot.command(name='say')
 @commands.is_owner()
@@ -711,13 +699,6 @@ async def say(ctx, *, sayMsg=None):
         embed = discord.Embed(title='Hi!',description=sayMsg, colour=random.choice(randomColors))
         await ctx.send(embed=embed)
         await ctx.message.delete()
-        return
-
-
-@say.error
-async def say_error(ctx, error):
-    if isinstance(error, commands.NotOwner):
-        await ctx.send(f'{ctx.author.mention} Only the owner of the bot can use `{ctx.prefix}{ctx.command}`.')
         return
 
 
