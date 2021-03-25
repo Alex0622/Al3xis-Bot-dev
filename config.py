@@ -73,17 +73,17 @@ class RequiredPermissions:
     info = 'NO REQUIRED PERMISSION'
     invite = 'NO REQUIRED PERMISSION'
     help = 'NO REQUIRED PERMISSION'
-    kick = 'KICK MEMBERS'
-    mute = 'KICK MEMBERS'
+    kick = 'BAN MEMBERS'
+    mute = 'BAN MEMBERS'
     ping = 'NO REQUIRED PERMISSION'
-    pmute = 'KICK MEMBERS'
+    pmute = 'BAN MEMBERS'
     purge = 'MANAGE MESSAGES'
     reminder = 'NO REQUIRED PERMISSION'
     save = "BOT'S OWNER"
     say = "BOT'S OWNER"
     suggest = 'NO REQUIRED PERMISSION'
-    unban = 'BAN USERS'
-    unmute = 'KICK USERS'
+    unban = 'BAN MEMBERS'
+    unmute = 'BAN MEMBERS'
 
 
     
