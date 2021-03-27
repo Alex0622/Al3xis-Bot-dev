@@ -261,8 +261,8 @@ async def ban(ctx, member : discord.Member, *, reason=None):
                 if not member.guild_permissions.ban_members:
                     try:
                         time.sleep(0.5)    
-                        await ctx.send(f'User {member.mention} was banned | `{reason}`.')
-                        await member.send(f'You were banned from {guild.name} | `{reason}`.')
+                        await ctx.send(f'**{member}** was banned | `{reason}`.')
+                        await member.send(f'You were banned in server: **{guild.name}** | `{reason}`.')
                         await member.ban(reason=reason)
                         print(f'User {ctx.author} banned {member} | {reason}')
                         logEmbed = discord.Embed(title=f'Case: `ban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
@@ -315,8 +315,8 @@ async def kick(ctx, member : discord.Member, *, reason=None):
                 if not member.guild_permissions.ban_members:
                     try:
                         time.sleep(0.5)
-                        await ctx.send(f'User {member.mention} was kicked | `{reason}`.')
-                        await member.send(f'You were kicked from {guild.name} | `{reason}`.')
+                        await ctx.send(f'**{member}** was kicked | `{reason}`.')
+                        await member.send(f'You were kicked from server: **{guild.name}** | `{reason}`.')
                         await member.kick(reason=reason)
                         print(f'User {ctx.author} kicked {member} in server {guild.name}| {reason}')
                         logEmbed = discord.Embed(title=f'Case: `kick`', colour=config.Colors.red, timestamp=ctx.message.created_at)
@@ -375,12 +375,12 @@ async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
                                 try:
                                     time.sleep(0.5)
                                     await member.add_roles(mutedRole, reason= reason)
-                                    await ctx.send(f'{member.mention} was muted for {duration} seconds | `{reason}`')
-                                    await member.send(f'You were muted in {guild.name} for {duration} seconds | `{reason}`')
+                                    await ctx.send(f'**{member}** was muted for {duration} seconds | `{reason}`')
+                                    await member.send(f'You were muted in server: **{guild.name}** for {duration} seconds | `{reason}`')
                                     print(f'User {ctx.author} muted {member} in server {guild.name} for {duration} seconds | {reason}')
                                     logEmbed = discord.Embed(title=f'Case: `mute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                                     logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                                    logEmbed.add_field(name='User', value=member.mention)
+                                    logEmbed.add_field(name='User', value=member.mention)   
                                     logEmbed.add_field(name='Reason', value=reason) 
                                     logEmbed.add_field(name='Duration', value=f'{duration} seconds')
                                     logEmbed.set_footer(text=f'Guild: {ctx.guild}')
@@ -390,7 +390,7 @@ async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
                                     await asyncio.sleep(duration) 
                                     await member.remove_roles(mutedRole)
                                     reason = 'Temporary mute completed!'
-                                    await member.send(f'You were unmuted in {guild.name} | `{reason}`')
+                                    await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
                                     print(f'User {member} was unmuted in server {guild.name} | {reason}')
                                     logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                                     logEmbed.add_field(name='User', value=member.mention)
@@ -455,8 +455,8 @@ async def pmute(ctx, member: discord.Member, *, reason=None):
                             try:
                                 time.sleep(0.5)
                                 await member.add_roles(mutedRole, reason= reason)
-                                await ctx.send(f'{member.mention} was permanently muted | `{reason}`')
-                                await member.send(f'You were permanently muted in {guild.name} | `{reason}`')
+                                await ctx.send(f'**{member}** was permanently muted | `{reason}`')
+                                await member.send(f'You were permanently muted in server: **{guild.name}** | `{reason}`')
                                 print(f'User {ctx.author} permanently muted {member} in server {guild.name} | {reason}')
                                 logEmbed = discord.Embed(title=f'Case: `mute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                                 logEmbed.add_field(name='Moderator', value=ctx.author.mention)
@@ -555,8 +555,8 @@ async def unban(ctx, UserID: int, *, reason=None):
                     try:
                         time.sleep(0.5)
                         await ctx.guild.unban(member)
-                        await ctx.send(f'User {member.mention} was unbanned | `{reason}`.')
-                        await member.send(f'You were unbanned from {guild.name} | `{reason}`.')
+                        await ctx.send(f'**{member}** was unbanned | `{reason}`.')
+                        await member.send(f'You were unbanned in server: **{guild.name}** | `{reason}`.')
                         print(f'User {ctx.author} unbanned {member} from {guild.name} | {reason}')
                         logEmbed = discord.Embed(title=f'Case: `unban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                         logEmbed.add_field(name='Moderator', value=ctx.author.mention)
@@ -611,8 +611,8 @@ async def unmute(ctx, member: discord.Member, *, reason=None):
                         try:
                             time.sleep(0.5)
                             await member.remove_roles(mutedRole, reason=reason)
-                            await ctx.send(f'{member.mention} was unmuted | `{reason}`')
-                            await member.send(f'You were unmuted in {guild.name} | `{reason}`')
+                            await ctx.send(f'**{member}** was unmuted | `{reason}`')
+                            await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
                             print(f'User {ctx.author} unmuted {member} in server {guild.name} | {reason}')
                             logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                             logEmbed.add_field(name='Moderator', value=ctx.author.mention)
@@ -700,7 +700,6 @@ async def say(ctx, *, sayMsg=None):
         await ctx.send(embed=embed)
         await ctx.message.delete()
         return
-
 
     
     
