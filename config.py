@@ -1,45 +1,47 @@
 
 class InfoCommands:
     announce = 'Make announcements.'
-    avatar = 'Get and post the avatar of the user/ID mentioned.'
-    ban = 'Ban the user mentioned in the command. | Permanent ban.'
-    id = 'Get the ID of the user given.'
+    avatar = 'Get and post the avatar of the member/ID mentioned.'
+    ban = 'Ban the member mentioned in the command. | Permanent ban.'
+    id = 'Get the ID of the member given.'
     info = 'Get information about the bot.'
     invite = 'Invite the bot to your server.'
     help = 'Display the list of commands'
-    kick = 'Kick a user from the server.'
-    mute = 'Mute users so they cannot send messages or join VC channels. | Duration: seconds.'
+    kick = 'Kick a member from the server.'
+    mute = 'Mute members so they cannot send messages or join VC channels. | Duration: seconds.'
     ping = "Shows the bot's latency/ping."
-    pmute = 'Mute a user permanently.'
+    pmute = 'Mute a member permanently.'
     purge = 'Delete an amount of messages. | Limit of messages deleted per command: `500`.'
     reminder = 'Set a reminder. | Duration: minutes.'
     save = 'Save messages to a channel.'
-    say = 'Send the latest saved message in an embed.' 
+    say = 'Send the latest saved message in an embed.'
+    softban = 'Ban and automatically unban member.' 
     suggest = 'Make a new suggestion.'
-    unban = 'Remove ban from user.'
-    unmute = 'Remove `Muted` role from user.'
+    unban = 'Remove ban from member.'
+    unmute = 'Remove `Muted` role from member.'
 
 
 
 class UsageCommands:
-    announce = '`a!announce #channel` | After this you will send the title and then description in a new message.'
-    avatar = '`a!avatar @user/ID`'
-    ban = '`a!ban @user/ID (reason)`'
-    id = '`a!id @user`'
+    announce = "`a!announce #channel` | After this you will send the title (if you don't want to set a title use `None` when the bot requests a title) and then a description in a new message."
+    avatar = '`a!avatar @member/ID`'
+    ban = '`a!ban @member/ID (reason)`'
+    id = '`a!id @member`'
     info = '`a!info`'
     invite = '`a!invite`'
     help = '`a!help "command"` | If you do not add a command, it will show the general help command.'
-    kick = '`a!kick @user/ID (reason)`'
-    mute = '`a!mute @user/ID duration (reason)`'
+    kick = '`a!kick @member/ID (reason)`'
+    mute = '`a!mute @member/ID duration (reason)`'
     ping = '`a!ping`'
-    pmute = '`a!pmute @user/ID (reason)`'
+    pmute = '`a!pmute @member/ID (reason)`'
     purge = '`a!purge (amount of messages that will be purged)`'
     reminder = 'a!reminder (time) (message)'
     save = '`a!save (message)`' 
-    say = '`a!say (message)` | if there is no message, it will send the latest messaged saved.' 
+    say = '`a!say (message)` | if there is no message, it will send the latest messaged saved.'
+    softban = '`a!softban @member/ID (reason)`' 
     suggest = '`a!suggest (suggestion)`'
     unban = '`a!unban ID (reason)`'
-    unmute = '`a!unmute @user/ID (reason)`'
+    unmute = '`a!unmute @member/ID (reason)`'
     
     
     
@@ -59,6 +61,7 @@ class AliasesCommands:
     reminder = 'remind'
     save = 'No aliases'
     say = 'No aliases'
+    softban = 'No aliases'
     suggest = 'sug'
     unban = 'No aliases'
     unmute = 'No aliases'
@@ -81,6 +84,7 @@ class RequiredPermissions:
     reminder = 'NO REQUIRED PERMISSION'
     save = "BOT'S OWNER"
     say = "BOT'S OWNER"
+    softban = 'BAN MEMBERS'
     suggest = 'NO REQUIRED PERMISSION'
     unban = 'BAN MEMBERS'
     unmute = 'BAN MEMBERS'
@@ -116,5 +120,3 @@ class Emojis:
     octagonalSign = '🛑'
     eyes = '👀'
     loading = '<a:loading:823701755946074142>'
-
-    

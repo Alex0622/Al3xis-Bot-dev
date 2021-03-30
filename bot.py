@@ -238,8 +238,9 @@ async def suggest(ctx, *, new_suggestion):
 @suggest.error
 async def suggest_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        embed = discord.Embed(description='**Error!** Please add a message to create your suggestion.', colour=config.Colors.red)
+        embed = discord.Embed(description='Please add a suggestion in your message.', colour=config.Colors.red)
         await ctx.send(embed=embed)
+        return
 
 
 
@@ -277,24 +278,28 @@ async def ban(ctx, member : discord.Member, *, reason=None):
                         await ctx.message.add_reaction(config.Emojis.noEntry)
                         return
                 else:
-                    await ctx.send(f"{ctx.author.mention} You don't have permissions to ban **{member}**!")
+                    embed = discord.Embed(description="**Error!** You don't have permissions to ban that member.", colour=config.Colors.red)
+                    await ctx.send(embed=embed)
                     return
-            
             else:
-                await ctx.send(f'{ctx.author.mention} You are not allowed to ban bots!')
+                embed = discord.Embed(description="I can't interact with bots.", colour=config.Colors.red)
+                await ctx.send(embed=embed)
                 return
         else: 
-            await ctx.send(f"{ctx.author.mention} You are not allowed to ban me!")
+            embed = discord.Embed(description="You can't ban me.", colour=config.Colors.red)
+            await ctx.send(embed=embed)
             return
     else:
-        await ctx.send(f"{ctx.author.mention} You can't ban yourself!")
+        embed = discord.Embed(description="You can't ban yourself.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
     
 
 @ban.error
 async def ban_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send('Please specify an user to ban!')
+        embed = discord.Embed(description='Please specify a member to ban.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
     if isinstance(error, commands.errors.MissingPermissions):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
@@ -308,7 +313,7 @@ async def ban_error(ctx, error):
 async def kick(ctx, member : discord.Member, *, reason=None):
     guild = ctx.guild
     if reason == None:
-        reason = 'No reason provided.'
+        reason = 'No reason provided'
     if member != ctx.author:
         if member != ctx.me:
             if not member.bot:
@@ -331,23 +336,28 @@ async def kick(ctx, member : discord.Member, *, reason=None):
                         await ctx.message.add_reaction(config.Emojis.noEntry)
                         return
                 else:
-                    await ctx.send(f"{ctx.author.mention} You don't have permissions to kick **{member}**!")
+                    embed = discord.Embed(description="**Error!** You don't have permissions to kick that member.", colour=config.Colors.red)
+                    await ctx.send(embed=embed)
                     return
             else:
-                await ctx.send(f'{ctx.author.mention} You are not allowed to kick bots!')
+                embed = discord.Embed(description="I can't interact with bots.", colour=config.Colors.red)
+                await ctx.send(embed=embed)
                 return
         else: 
-            await ctx.send(f"{ctx.author.mention} You are not allowed to kick me!")
+            embed = discord.Embed(description="You can't kick me.", colour=config.Colors.red)
+            await ctx.send(embed=embed)
             return
     else:
-        await ctx.send(f"{ctx.author.mention} You can't kick yourself!")
+        embed = discord.Embed(description="You can't kick yourself.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
 
 
 @kick.error
 async def kick_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send('Please specify an user to kick!')
+        embed = discord.Embed(description='Please specify a member to kick.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
     if isinstance(error, commands.errors.MissingPermissions):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
@@ -361,7 +371,7 @@ async def kick_error(ctx, error):
 async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
     guild = ctx.guild
     if reason == None:
-        reason = 'No reason provided.'
+        reason = 'No reason provided'
     mutedRole = discord.utils.get(guild.roles, name='Muted')
     
     if mutedRole:
@@ -405,30 +415,40 @@ async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
                                     await ctx.message.add_reaction(config.Emojis.noEntry)
                                     return
                             else:
-                                await ctx.send(f'{ctx.author.mention} Please specify an amount of time or use the `{ctx.command}` command!')
+                                embed = discord.Embed(description='Please specify an amount of time to mute that member.', colour=config.Colors.red)
+                                await ctx.send(embed=embed)
+                                return
                         else:
-                            await ctx.send(f"**{member}** is already muted!")
+                            embed = discord.Embed(description=f'**{member}** is already muted.', colour=config.Colors.red)
+                            await ctx.send(embed=embed)
                             return
                     else:
-                        await ctx.send(f"{ctx.author.mention} You don't have permissions to mute **{member}**!")
+                        embed = discord.Embed(description="**Error!** You don't have permissions to mute that member.", colour=config.Colors.red)
+                        await ctx.send(embed=embed)
                         return
                 else:
-                    await ctx.send(f'{ctx.author.mention} You are not allowed to mute bots!')
+                    embed = discord.Embed(description="I can't interact with bots.", colour=config.Colors.red)
+                    await ctx.send(embed=embed)
+                    return
             else:
-                await ctx.send(f"{ctx.author.mention} You can't mute me!")
+                embed = discord.Embed(description="You can't mute me.", colour=config.Colors.red)
+                await ctx.send(embed=embed)
                 return
         else:
-            await ctx.send(f"{ctx.author.mention} You can't mute yourself!")
+            embed = discord.Embed(description="You can't mute yourself.", colour=config.Colors.red)
+            await ctx.send(embed=embed)
             return
     else:   
-        await ctx.send("This server doesn't have a muted role. Please create one with the name `Muted`.")
-        return     
+        embed = discord.Embed(description='**Error!** This server does not have a Muted role. Please make one named `Muted`.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return 
 
 
 @mute.error
 async def mute_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send('Please specify an user to mute!')
+        embed = discord.Embed(description='Please specify a member to mute.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
     if isinstance(error, commands.errors.MissingPermissions):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
@@ -442,7 +462,7 @@ async def mute_error(ctx, error):
 async def pmute(ctx, member: discord.Member, *, reason=None):
     guild = ctx.guild
     if reason == None:
-        reason = 'No reason provided.'
+        reason = 'No reason provided'
 
     mutedRole = discord.utils.get(guild.roles,name='Muted')
     
@@ -474,28 +494,36 @@ async def pmute(ctx, member: discord.Member, *, reason=None):
                                 return
 
                         else:
-                            await ctx.send(f"**{member}** is already muted!")
-                            return
+                            embed = discord.Embed(description=f'**{member}** is already muted.', colour=config.Colors.red)
+                            await ctx.send(embed=embed)
+                            return 
                     else:
-                        await ctx.send(f"{ctx.author.mention} You don't have permissions to mute **{member}**!")
+                        embed = discord.Embed(description=f"**Error!** You don't have permissions to mute that member!", colour=config.Colors.red)
+                        await ctx.send(embed=embed)
                         return
                 else:
-                    await ctx.send(f'{ctx.author.mention} You are not allowed to mute bots!')
+                    embed = discord.Embed(description="I can't interact with bots.", colour=config.Colors.red)
+                    await ctx.send(embed=embed)
+                    return
             else:
-                await ctx.send(f"{ctx.author.mention} You can't mute me!")
+                embed = discord.Embed(description="You can't mute me.", colour=config.Colors.red)
+                await ctx.send(embed=embed)
                 return
         else:
-            await ctx.send(f"{ctx.author.mention} You can't mute yourself!")
+            embed = discord.Embed(description="You can't mute yourself.", colour=config.Colors.red)
+            await ctx.send(embed=embed)
             return
     else:   
-        await ctx.send("This server doesn't have a muted role. Please create one with the name `Muted`.")
-        return     
+        embed = discord.Embed(description='**Error!** This server does not have a Muted role. Please make one named `Muted`.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return   
 
 
 @pmute.error
 async def pmute_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send('Please specify an user to mute!')
+        embed = discord.Embed(description='Please specify a member to mute.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
     if isinstance(error, commands.errors.MissingPermissions):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
@@ -528,7 +556,9 @@ async def purge(ctx, amount = 0):
         print(f'{ctx.message.author} tried to delete {amount} messages with the purge command in server {guild.name}.')
         return
     if amount == 0:
-        await ctx.send('Select an amount of messages that should be purged!')
+        embed = discord.Embed(description='Select an amount of messages to purge.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
 
 
 @purge.error
@@ -540,12 +570,71 @@ async def purge_error(ctx, error):
 
 
 
+@bot.command(name='softban')
+@commands.has_permissions(ban_members=True)
+async def softban(ctx, member : discord.Member, *, reason=None):
+    guild = ctx.guild
+    if reason == None:
+        reason = 'No reason provided.'
+    if member != ctx.author:
+        if member != ctx.me:
+            if not member.bot:
+                if not member.guild_permissions.ban_members:
+                    try:
+                        time.sleep(0.5)
+                        await ctx.send(f'**{member}** was softbanned | `{reason}`.')
+                        await member.send(f'You were softbanned in server: **{guild.name}** | `{reason}`.')
+                        await member.ban(reason=f'{ctx.author}: {reason}', delete_message_days=5)
+                        await member.unban(reason=f'{ctx.author}: softban')
+                        print(f'User {ctx.author} softbanned {member} in server {guild.name}| {reason}')
+                        logEmbed = discord.Embed(title=f'Case: `softban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                        logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                        logEmbed.add_field(name='User', value=member.mention)
+                        logEmbed.add_field(name='Reason', value=reason) 
+                        logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                        logChannel = bot.get_channel(config.Channels.logChannel)
+                        await logChannel.send(embed=logEmbed)       
+                    except Exception:
+                        await ctx.send('An error ocurred while runnining the command.') 
+                        await ctx.message.add_reaction(config.Emojis.noEntry)
+                        return
+                else:
+                    embed = discord.Embed(description="**Error!** You don't have permissions to softban that member.", colour=config.Colors.red)
+                    await ctx.send(embed=embed)
+                    return
+            else:
+                embed = discord.Embed(description="I can't interact with bots.", colour=config.Colors.red)
+                await ctx.send(embed=embed)
+                return
+        else: 
+            embed = discord.Embed(description="You can't softban me.", colour=config.Colors.red)
+            await ctx.send(embed=embed)
+            return
+    else:
+        embed = discord.Embed(description="You can't softban yourself.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+
+
+@softban.error
+async def softban_error(ctx, error):
+    if isinstance(error, commands.errors.MissingRequiredArgument):
+        embed = discord.Embed(description='Please specify a member to softban.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+
+
+
 @bot.command(name='unban') 
 @commands.has_permissions(ban_members=True)
 async def unban(ctx, UserID: int, *, reason=None):
     guild = ctx.guild
     if reason == None:
-        reason = 'No reason provided.'
+        reason = 'No reason provided'
     member = await bot.fetch_user(UserID)
     if member != ctx.author:
         if member != ctx.me:
@@ -570,23 +659,28 @@ async def unban(ctx, UserID: int, *, reason=None):
                         await ctx.message.add_reaction(config.Emojis.noEntry)
                         return
                 except discord.NotFound:
-                    await ctx.send('User is not banned here.')
-                
+                    embed = discord.Embed(description='User is not banned here.', colour=config.Colors.red)
+                    await ctx.send(embed=embed)
+                    return     
             else:
-                await ctx.send(f'{ctx.author.mention} You are not allowed to unban bots!')
+                embed = discord.Embed(description="I can't interact with bots.", colour=config.Colors.red)
+                await ctx.send(embed=embed)
                 return
         else:
-            await ctx.send(f"{ctx.author.mention} I'm not banned!")
+            embed = discord.Embed(description="I'm not banned...", colour=config.Colors.red)
+            await ctx.send(embed=embed)
             return
     else:
-        await ctx.send(f"{ctx.author.mention} You are not banned!")
+        embed = discord.Embed(description="You are not banned here...", colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
 
 
 @unban.error
 async def unban_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send('Please specify an user to unban!')
+        embed = discord.Embed(description='Please specify a member to unban.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
     if isinstance(error, commands.errors.MissingPermissions):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
@@ -626,25 +720,31 @@ async def unmute(ctx, member: discord.Member, *, reason=None):
                             await ctx.message.add_reaction(config.Emojis.noEntry)
                             return
                     else:
-                        await ctx.send(f"**{member}** is not muted!")
-                        return
+                        embed = discord.Embed(description=f'**{member}** is not muted.', colour=config.Colors.red)
+                        await ctx.send(embed=embed)
+                        return 
                 else:
-                    await ctx.send(f'{ctx.author.mention} You are not allowed to unmute bots!')
-            else:
-                await ctx.send(f"{ctx.author.mention} I'm not muted!")
+                    embed = discord.Embed(description="I can't interact with bots.", colour=config.Colors.red)
+                    await ctx.send(embed=embed)
+                    return
+            else: 
+                embed = discord.Embed(description="You can't unmute me.", colour=config.Colors.red)
+                await ctx.send(embed=embed)
                 return
         else:
-            await ctx.send(f"{ctx.author.mention} You are not muted!")
+            embed = discord.Embed(description="You can't unmute yourself.", colour=config.Colors.red)
+            await ctx.send(embed=embed)
             return
     else:
-        await ctx.send("This server doesn't have a muted role so nobody is muted.")
+        await ctx.send("I can't find any muted role here. Guess nobody is muted.")
         return
  
 
 @unmute.error
 async def unmute_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send('Please specify an user to unmute!')
+        embed = discord.Embed(description='Please specify a member to unmute.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
     if isinstance(error, commands.errors.MissingPermissions):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
