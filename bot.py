@@ -184,7 +184,7 @@ async def reminder(ctx, time:int =None, *, msg=None):
         if msg != None:
             try:
                 await asyncio.sleep(0.5)
-                await ctx.send(f'I have set a reminder for **{time} minutes** with the message: \n**{msg}**')
+                await ctx.send(f'I have set a reminder of **{time} minutes** with the message: \n**{msg}**')
                 newTime = time * 60
                 await asyncio.sleep(newTime)
                 randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
@@ -263,7 +263,7 @@ async def ban(ctx, member : discord.Member, *, reason=None):
                         time.sleep(0.5)    
                         await ctx.send(f'**{member}** was banned | `{reason}`.')
                         await member.send(f'You were banned in server: **{guild.name}** | `{reason}`.')
-                        await member.ban(reason=reason)
+                        await member.ban(reason=f'{ctx.author}: {reason}')
                         print(f'User {ctx.author} banned {member} | {reason}')
                         logEmbed = discord.Embed(title=f'Case: `ban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                         logEmbed.add_field(name='Moderator', value=ctx.author.mention)
@@ -317,7 +317,7 @@ async def kick(ctx, member : discord.Member, *, reason=None):
                         time.sleep(0.5)
                         await ctx.send(f'**{member}** was kicked | `{reason}`.')
                         await member.send(f'You were kicked from server: **{guild.name}** | `{reason}`.')
-                        await member.kick(reason=reason)
+                        await member.kick(reason=f'{ctx.author}: {reason}')
                         print(f'User {ctx.author} kicked {member} in server {guild.name}| {reason}')
                         logEmbed = discord.Embed(title=f'Case: `kick`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                         logEmbed.add_field(name='Moderator', value=ctx.author.mention)
@@ -374,7 +374,7 @@ async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
 
                                 try:
                                     time.sleep(0.5)
-                                    await member.add_roles(mutedRole, reason= reason)
+                                    await member.add_roles(mutedRole, reason=f'{ctx.author}: {reason}')
                                     await ctx.send(f'**{member}** was muted for {duration} seconds | `{reason}`')
                                     await member.send(f'You were muted in server: **{guild.name}** for {duration} seconds | `{reason}`')
                                     print(f'User {ctx.author} muted {member} in server {guild.name} for {duration} seconds | {reason}')
@@ -388,7 +388,7 @@ async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
                                     await logChannel.send(embed=logEmbed)   
 
                                     await asyncio.sleep(duration) 
-                                    await member.remove_roles(mutedRole)
+                                    await member.remove_roles(mutedRole, reason='Temporary mute completed!')
                                     reason = 'Temporary mute completed!'
                                     await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
                                     print(f'User {member} was unmuted in server {guild.name} | {reason}')
@@ -454,7 +454,7 @@ async def pmute(ctx, member: discord.Member, *, reason=None):
                         if not mutedRole in member.roles:
                             try:
                                 time.sleep(0.5)
-                                await member.add_roles(mutedRole, reason= reason)
+                                await member.add_roles(mutedRole, reason=f'{ctx.author}: {reason}')
                                 await ctx.send(f'**{member}** was permanently muted | `{reason}`')
                                 await member.send(f'You were permanently muted in server: **{guild.name}** | `{reason}`')
                                 print(f'User {ctx.author} permanently muted {member} in server {guild.name} | {reason}')
@@ -610,7 +610,7 @@ async def unmute(ctx, member: discord.Member, *, reason=None):
                     if mutedRole in member.roles:
                         try:
                             time.sleep(0.5)
-                            await member.remove_roles(mutedRole, reason=reason)
+                            await member.remove_roles(mutedRole, reason=f'{ctx.author}: {reason}')
                             await ctx.send(f'**{member}** was unmuted | `{reason}`')
                             await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
                             print(f'User {ctx.author} unmuted {member} in server {guild.name} | {reason}')
