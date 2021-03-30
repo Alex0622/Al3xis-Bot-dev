@@ -261,8 +261,8 @@ async def ban(ctx, member : discord.Member, *, reason=None):
                 if not member.guild_permissions.ban_members:
                     try:
                         time.sleep(0.5)    
-                        await ctx.send(f'**{member}** was banned | `{reason}`.')
-                        await member.send(f'You were banned in server: **{guild.name}** | `{reason}`.')
+                        await ctx.send(f'**{member}** was banned | `{reason}`')
+                        await member.send(f'You were banned in server: **{guild.name}** | `{reason}`')
                         await member.ban(reason=f'{ctx.author}: {reason}')
                         print(f'User {ctx.author} banned {member} | {reason}')
                         logEmbed = discord.Embed(title=f'Case: `ban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
@@ -308,15 +308,15 @@ async def ban_error(ctx, error):
 async def kick(ctx, member : discord.Member, *, reason=None):
     guild = ctx.guild
     if reason == None:
-        reason = 'No reason provided'
+        reason = 'No reason provided.'
     if member != ctx.author:
         if member != ctx.me:
             if not member.bot:
                 if not member.guild_permissions.ban_members:
                     try:
                         time.sleep(0.5)
-                        await ctx.send(f'**{member}** was kicked | `{reason}`.')
-                        await member.send(f'You were kicked from server: **{guild.name}** | `{reason}`.')
+                        await ctx.send(f'**{member}** was kicked | `{reason}`')
+                        await member.send(f'You were kicked from server: **{guild.name}** | `{reason}`')
                         await member.kick(reason=f'{ctx.author}: {reason}')
                         print(f'User {ctx.author} kicked {member} in server {guild.name}| {reason}')
                         logEmbed = discord.Embed(title=f'Case: `kick`', colour=config.Colors.red, timestamp=ctx.message.created_at)
@@ -361,7 +361,7 @@ async def kick_error(ctx, error):
 async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
     guild = ctx.guild
     if reason == None:
-        reason = 'No reason provided'
+        reason = 'No reason provided.'
     mutedRole = discord.utils.get(guild.roles, name='Muted')
     
     if mutedRole:
@@ -442,7 +442,7 @@ async def mute_error(ctx, error):
 async def pmute(ctx, member: discord.Member, *, reason=None):
     guild = ctx.guild
     if reason == None:
-        reason = 'No reason provided'
+        reason = 'No reason provided.'
 
     mutedRole = discord.utils.get(guild.roles,name='Muted')
     
@@ -545,7 +545,7 @@ async def purge_error(ctx, error):
 async def unban(ctx, UserID: int, *, reason=None):
     guild = ctx.guild
     if reason == None:
-        reason = 'No reason provided'
+        reason = 'No reason provided.'
     member = await bot.fetch_user(UserID)
     if member != ctx.author:
         if member != ctx.me:
@@ -554,9 +554,9 @@ async def unban(ctx, UserID: int, *, reason=None):
                     await ctx.guild.fetch_ban(discord.Object(id=member.id))
                     try:
                         time.sleep(0.5)
-                        await ctx.guild.unban(member)
-                        await ctx.send(f'**{member}** was unbanned | `{reason}`.')
-                        await member.send(f'You were unbanned in server: **{guild.name}** | `{reason}`.')
+                        await ctx.guild.unban(member, reason=f'{ctx.author}: {reason}')
+                        await ctx.send(f'**{member}** was unbanned | `{reason}`')
+                        await member.send(f'You were unbanned in server: **{guild.name}** | `{reason}`')
                         print(f'User {ctx.author} unbanned {member} from {guild.name} | {reason}')
                         logEmbed = discord.Embed(title=f'Case: `unban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                         logEmbed.add_field(name='Moderator', value=ctx.author.mention)
