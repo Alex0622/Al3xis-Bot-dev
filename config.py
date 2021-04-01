@@ -19,6 +19,7 @@ class InfoCommands:
     suggest = 'Make a new suggestion.'
     unban = 'Remove ban from member.'
     unmute = 'Remove `Muted` role from member.'
+    userinfo = 'Get information about a member.'
 
 
 
@@ -42,6 +43,7 @@ class UsageCommands:
     suggest = '`a!suggest (suggestion)`'
     unban = '`a!unban ID (reason)`'
     unmute = '`a!unmute @member/ID (reason)`'
+    userinfo = '`a!userinfo (@member/ID)`'
     
     
     
@@ -65,6 +67,7 @@ class AliasesCommands:
     suggest = 'sug'
     unban = 'No aliases'
     unmute = 'No aliases'
+    userinfo = 'user', 'ui'
 
 
 
@@ -88,6 +91,7 @@ class RequiredPermissions:
     suggest = 'NO REQUIRED PERMISSION'
     unban = 'BAN MEMBERS'
     unmute = 'BAN MEMBERS'
+    userinfo = 'NO REQUIRED PERMISSION'
 
 
     
@@ -120,3 +124,4 @@ class Emojis:
     octagonalSign = '🛑'
     eyes = '👀'
     loading = '<a:loading:823701755946074142>'
+    

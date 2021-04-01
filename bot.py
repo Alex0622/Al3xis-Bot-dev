@@ -244,6 +244,37 @@ async def suggest_error(ctx, error):
 
 
 
+@bot.command(name='userinfo', aliases=['user', 'ui'])
+async def userinfo(ctx, member: discord.Member=None):
+    if member is None:
+        member = ctx.author
+    try:
+        mentions = []
+        for role in member.roles:
+            if role.name != "@everyone":
+                mentions.append(role.mention)
+        roleS = ", ".join(mentions)
+
+        if roleS == '':
+            ROLES = f'No roles to show here {config.Emojis.eyes}'
+        else:
+            ROLES = roleS
+
+        if member.bot:
+            isBotMsg = 'Yes'
+        else:
+            isBotMsg = 'No'
+
+        userinfoEmbed = discord.Embed(title=str(member), description=f'__**Information about**__ {member.mention} \n**User ID**: {member.id} \n**Created at** {member.created_at.strftime("%A %d %B %Y, %H:%M")} \n**Joined at** {member.joined_at.strftime("%A %d %B %Y, %H:%M")} \n **Bot**?: {isBotMsg}', colour=config.Colors.darkGreen, timestamp=ctx.message.created_at)
+        userinfoEmbed.set_thumbnail(url=member.avatar_url)
+        userinfoEmbed.add_field(name='**Roles**', value=ROLES)
+        await ctx.send(embed=userinfoEmbed)
+    except Exception:
+        await ctx.send('An error ocurred while executing the command.')
+        await ctx.message.add_reaction(config.Emojis.noEntry)
+        return
+
+
 
 ####################################################################################################
 ####################################################################################################
