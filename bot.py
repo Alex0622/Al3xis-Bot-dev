@@ -139,7 +139,7 @@ async def id(ctx, member: discord.Member = None):
 
 
 
-@bot.command(name='info')
+@bot.command(name='info', aliases=['about'])
 async def info(ctx):
     embedI = discord.Embed(title=f'Information about Al3xis#4614', colour=config.Colors.blue, timestamp=ctx.message.created_at)
     embedI.set_author(name='Al3xis')

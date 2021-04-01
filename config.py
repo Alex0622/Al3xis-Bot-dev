@@ -1,5 +1,6 @@
 
 class InfoCommands:
+    about =             'Get information about the bot.'
     ann =               'Make announcements.'
     announce =          'Make announcements.'
     announcement =      'Make announcements.'
@@ -38,6 +39,7 @@ class InfoCommands:
 
 
 class UsageCommands:
+    about =             '`a!about`'
     ann =               "`a!ann #channel` | After this you will send the title (if you don't want to set a title use `None` when the bot requests a title) and then a description in a new message."
     announce =          "`a!announce #channel` | After this you will send the title (if you don't want to set a title use `None` when the bot requests a title) and then a description in a new message."
     announcement =      "`a!announcement #channel` | After this you will send the title (if you don't want to set a title use `None` when the bot requests a title) and then a description in a new message."
@@ -76,6 +78,7 @@ class UsageCommands:
     
     
 class AliasesCommands:
+    about =             'info'
     ann =               'announce, announcement'
     announce =          'announcement, ann'
     announcement =      'ann, announce'
@@ -114,6 +117,7 @@ class AliasesCommands:
 
 
 class RequiredPermissions:
+    about =             'NO REQUIRED PERMISSION'
     ann =               'ADMINISTRATOR'
     announce =          'ADMINISTRATOR'
     announcement =      'ADMINISTRATOR'
