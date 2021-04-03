@@ -43,13 +43,13 @@ async def announce(ctx, channelA: discord.TextChannel=None):
         try:
             botMsg = await ctx.send('Please provide the title for your announcement!')
             await ctx.message.delete()
-            newTitle = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=120)
+            newTitle = await bot.wait_for('message', check=lambda message: message.author == ctx.author and message.channel == ctx.channel, timeout=120)
             await newTitle.delete()
 
             if newTitle.content == 'a!none':
                 await botMsg.edit(content='Now provide the message or description of your announcement!')
 
-                newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=200)
+                newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author and message.channel == ctx.channel, timeout=200)
                 await newContent.delete()
 
                 if newContent.content == 'a!none':
@@ -80,7 +80,7 @@ async def announce(ctx, channelA: discord.TextChannel=None):
             else:      
                 await botMsg.edit(content='Now provide the message or description of your announcement!')
 
-                newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=200)
+                newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author and message.channel == ctx.channel, timeout=200)
                 await newContent.delete()
 
                 if newContent.content == 'a!none':
