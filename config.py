@@ -40,9 +40,9 @@ class InfoCommands:
 
 class UsageCommands:
     about =             '`a!about`'
-    ann =               "`a!ann #channel` | After this you will send the title (if you don't want to set a title use `None` when the bot requests a title) and then a description in a new message."
-    announce =          "`a!announce #channel` | After this you will send the title (if you don't want to set a title use `None` when the bot requests a title) and then a description in a new message."
-    announcement =      "`a!announcement #channel` | After this you will send the title (if you don't want to set a title use `None` when the bot requests a title) and then a description in a new message."
+    ann =               '`a!ann #channel` | If you want to cancel the announcement use `a!cancel` and if you want an empty title or description use `a!none` when the bot asks for it.'
+    announce =          '`a!announce #channel` | If you want to cancel the announcement use `a!cancel` and if you want an empty title or description use `a!none` when the bot asks for it.'
+    announcement =      '`a!announcement #channel` | If you want to cancel the announcement use `a!cancel` and if you want an empty title or description use `a!none` when the bot asks for it.'
     av =                '`a!av (member)`'
     avatar =            '`a!avatar (member)`'
     ban =               '`a!ban (member) (reason)`'

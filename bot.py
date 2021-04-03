@@ -46,36 +46,76 @@ async def announce(ctx, channelA: discord.TextChannel=None):
             newTitle = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=120)
             await newTitle.delete()
 
-            if newTitle.content == 'None':
+            if newTitle.content == 'a!none':
                 await botMsg.edit(content='Now provide the message or description of your announcement!')
 
                 newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=200)
                 await newContent.delete()
-                await botMsg.edit(content='Preparing to make the announcement...')
-                
-                randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
-                aEmbed = discord.Embed(description=newContent.content, colour=random.choice(randomColors)) 
-                print(f'Preparing announcement... Description: {newContent.content}, Channel: {channelA.id}')
-                aChannel = bot.get_channel(channelA.id)
-                await asyncio.sleep(2)
-                await aChannel.send(embed=aEmbed)
-                await botMsg.edit(content='Announcement sent succesfully.')
-                await botMsg.add_reaction(config.Emojis.whiteCheckMark)
-            if newTitle.content != 'None':      
+
+                if newContent.content == 'a!none':
+                    embed = discord.Embed(description='**Error!** You cannot make an announcement without a title and description.', colour=config.Colors.red)
+                    await botMsg.edit(content='', embed=embed)
+                    return
+
+                if newContent.content == 'a!cancel':
+                    await botMsg.edit(content='Announcement cancelled succesfully.')
+                    return
+                else:
+                    await botMsg.edit(content='Preparing to make the announcement...')
+                    
+                    randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+                    aEmbed = discord.Embed(description=newContent.content, colour=random.choice(randomColors)) 
+                    print(f'Preparing announcement... Description: {newContent.content}, Channel: {channelA.id}')
+                    aChannel = bot.get_channel(channelA.id)
+                    await asyncio.sleep(2)
+                    await aChannel.send(embed=aEmbed)
+                    await botMsg.edit(content='Announcement sent succesfully.')
+                    await botMsg.add_reaction(config.Emojis.whiteCheckMark)
+                    return
+
+            if newTitle.content == 'a!cancel':
+                await botMsg.edit(content='Announcement cancelled succesfully.')
+                return
+
+            else:      
                 await botMsg.edit(content='Now provide the message or description of your announcement!')
 
                 newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=200)
                 await newContent.delete()
-                await botMsg.edit(content='Preparing to make the announcement...')
-                
-                randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
-                aEmbed = discord.Embed(title=newTitle.content, description=newContent.content, colour=random.choice(randomColors)) 
-                print(f'Preparing announcement... Title: {newTitle.content}, Description: {newContent.content}, Channel: {channelA.id}')
-                aChannel = bot.get_channel(channelA.id)
-                await asyncio.sleep(2)
-                await aChannel.send(embed=aEmbed)
-                await botMsg.edit(content='Announcement sent succesfully.')
-                await botMsg.add_reaction(config.Emojis.whiteCheckMark)
+
+                if newContent.content == 'a!none':
+
+                    await botMsg.edit(content='Preparing to make the announcement...')
+                    
+                    randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+                    aEmbed = discord.Embed(title=newTitle.content, colour=random.choice(randomColors)) 
+                    print(f'Preparing announcement... Title: {newTitle.content}, Channel: {channelA.id}')
+                    aChannel = bot.get_channel(channelA.id)
+                    await asyncio.sleep(2)
+                    await aChannel.send(embed=aEmbed)
+                    await botMsg.edit(content='Announcement sent succesfully.')
+                    await botMsg.add_reaction(config.Emojis.whiteCheckMark)
+                    return
+
+                if newContent.content == 'a!cancel':
+                    await botMsg.edit(content='Announcement cancelled succesfully.')
+                    return
+
+                else:
+
+                    await botMsg.edit(content='Preparing to make the announcement...')
+                    
+                    randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+                    aEmbed = discord.Embed(title=newTitle.content, description=newContent.content, colour=random.choice(randomColors)) 
+                    print(f'Preparing announcement... Title: {newTitle.content}, Description: {newContent.content}, Channel: {channelA.id}')
+                    aChannel = bot.get_channel(channelA.id)
+                    await asyncio.sleep(2)
+                    await aChannel.send(embed=aEmbed)
+                    await botMsg.edit(content='Announcement sent succesfully.')
+                    await botMsg.add_reaction(config.Emojis.whiteCheckMark)
+                    return
+
+
         except asyncio.TimeoutError:
             print('Timeout in announce command')
             await botMsg.edit(content="You didn't send your message in time, please try again!")
