@@ -281,7 +281,7 @@ async def suggest(ctx, *, new_suggestion):
         print('New suggestions | ' + suggestion)
         
         await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
-        await msg.edit(content=f'**{ctx.author}**, your suggestion has been submited! \n Suggestion: **{suggestion}**')
+        await msg.edit(content=f'**{ctx.author}**, your suggestion has been submited! \n Suggestion: **{suggestion}**', allowed_mentions=discord.AllowedMentions.none())
     except Exception:
         await ctx.send('An error ocurred while running the command.')
         await ctx.message.add_reaction(config.Emojis.noEntry)
