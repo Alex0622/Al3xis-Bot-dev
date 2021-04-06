@@ -62,7 +62,7 @@ class UsageCommands:
     help =              '`a!help (command)` | If you do not mention a command, it will show the general help command.'
     kick =              '`a!kick (member) (reason)`'
     latency =           '`a!latency`'
-    msg =               '`a!msg (member) (reason`'
+    msg =               '`a!msg (member) (reason)`'
     mute =              '`a!mute (member) (duration) (reason)`'
     ping =              '`a!ping`'
     pm =                '`a!pm (member) (reason)`'
