@@ -23,7 +23,7 @@ async def on_ready():
 
 @bot.event 
 async def on_command_error(ctx, error):
-    if isinstance(error, commands.errors.MissingPermissions) or isinstance(error, commands.CommandNotFound) or isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.CommandInvokeError):
+    if isinstance(error, commands.errors.MissingPermissions) or isinstance(error, commands.BotMissingPermissions) or isinstance(error, commands.CommandNotFound) or isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.CommandInvokeError):
         pass
     else:
         embed = discord.Embed(description='**Error!** '+str(error), colour=config.Colors.red)
@@ -334,6 +334,7 @@ async def userinfo(ctx, member: discord.Member=None):
 
 
 @bot.command(name='ban')
+@commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def ban(ctx, member : discord.Member, *, reason=None):
     guild = ctx.guild
@@ -388,10 +389,15 @@ async def ban_error(ctx, error):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
 
 
 
 @bot.command(name='kick', pass_context=True)
+@commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def kick(ctx, member : discord.Member, *, reason=None):
     guild = ctx.guild
@@ -446,10 +452,15 @@ async def kick_error(ctx, error):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
 
 
 
 @bot.command(name='mute')
+@commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
     guild = ctx.guild
@@ -527,6 +538,7 @@ async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
         return 
 
 
+
 @mute.error
 async def mute_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
@@ -537,10 +549,15 @@ async def mute_error(ctx, error):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
 
 
 
 @bot.command(name='pmute', aliases= ['pm'])
+@commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def pmute(ctx, member: discord.Member, *, reason=None):
     guild = ctx.guild
@@ -612,10 +629,15 @@ async def pmute_error(ctx, error):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
 
 
 
 @bot.command(name='purge', aliases=['clear'])
+@commands.bot_has_permissions(manage_messages=True)
 @commands.has_permissions(manage_messages = True)
 async def purge(ctx, amount = 0):
     guild = ctx.guild
@@ -650,10 +672,15 @@ async def purge_error(ctx, error):
         embed = discord.Embed(description='**Error!** You need the permission `MANAGE MESSAGES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `MANAGE MESSAGES` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
 
 
 
 @bot.command(name='softban')
+@commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def softban(ctx, member : discord.Member, *, reason=None):
     guild = ctx.guild
@@ -709,10 +736,15 @@ async def softban_error(ctx, error):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
 
 
 
 @bot.command(name='unban') 
+@commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def unban(ctx, UserID: int, *, reason=None):
     guild = ctx.guild
@@ -769,11 +801,16 @@ async def unban_error(ctx, error):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
 
 
 
 
 @bot.command(name='unmute')
+@commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def unmute(ctx, member: discord.Member, *, reason=None):
     guild = ctx.guild
@@ -831,6 +868,10 @@ async def unmute_error(ctx, error):
         return
     if isinstance(error, commands.errors.MissingPermissions):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
 
