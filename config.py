@@ -25,6 +25,7 @@ class InfoCommands:
     purge =             'Delete an amount of messages. | Limit of messages deleted per command: `500`.'
     remind =            'Set a reminder. | Duration: minutes.'
     reminder =          'Set a reminder. | Duration: minutes.'
+    report =            'Report bugs, errors or problems related to the bot.'
     save =              'Save messages to a channel.'
     say =               'Send the latest saved message in an embed.'
     softban =           'Ban and automatically unban a member.' 
@@ -64,6 +65,7 @@ class UsageCommands:
     purge =             '`a!purge (amount of messages that will be purged)`'
     remind =            '`a!remind (time) (message)`'
     reminder =          '`a!reminder (time) (message)`'
+    report =            '`a!report (message)`'
     save =              '`a!save (message)`' 
     say =               '`a!say (message)` | if there is no message, it will send the latest messaged saved.'
     sug =               '`a!sug (suggestion)`'
@@ -103,6 +105,7 @@ class AliasesCommands:
     pong =              'ping, latency'
     remind =            'reminder'
     reminder =          'remind'
+    report =            'No aliases'
     save =              'No aliases'
     say =               'No aliases'
     softban =           'No aliases'
@@ -142,6 +145,7 @@ class RequiredPermissions:
     pong =              'NO REQUIRED PERMISSION'
     remind =            'NO REQUIRED PERMISSION'
     reminder =          'NO REQUIRED PERMISSION'
+    report =            'NO REQUIRED PERMISSION'
     save =              "BOT'S OWNER"
     say =               "BOT'S OWNER"
     softban =           'BAN MEMBERS'
@@ -156,31 +160,33 @@ class RequiredPermissions:
 
     
 class Channels:
-    suggestionsChannel = 793989328602791946
-    botChannel = 793989024879476767
-    logChannel = 793990292213727262
-    ownerChannel = 793989996494192692
+    suggestionsChannel =    793989328602791946
+    botChannel =            793989024879476767
+    ownerChannel =          793989996494192692
+    logChannel =            793990292213727262
+    reportsChannel =        826158056173469727
+    
 
 
 
 class Colors:
-    red = 0xde0707
-    ligthBlue = 0x32d9cb
-    green = 0x6cfd00
-    blue = 0x0037fa
-    yellow = 0xf1fc14 
-    orange = 0xe07007
-    purple = 0x8a1bba
-    darkGreen = 0x156109
+    red =               0xde0707
+    ligthBlue =         0x32d9cb
+    green =             0x6cfd00
+    blue =              0x0037fa
+    yellow =            0xf1fc14 
+    orange =            0xe07007
+    purple =            0x8a1bba
+    darkGreen =         0x156109
 
 
 
 class Emojis:
-    ballotBoxWithCheck = '☑️'
-    x ='❌'
-    warning = '⚠️'
-    noEntry = '⛔'
-    whiteCheckMark = '✅'
-    octagonalSign = '🛑'
-    eyes = '👀'
-    loading = '<a:loading:823701755946074142>'
+    ballotBoxWithCheck =        '☑️'
+    x =                         '❌'
+    warning =                   '⚠️'
+    noEntry =                   '⛔'
+    whiteCheckMark =            '✅'
+    octagonalSign =             '🛑'
+    eyes =                      '👀'
+    loading =                   '<a:loading:823701755946074142>'

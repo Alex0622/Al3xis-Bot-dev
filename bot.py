@@ -153,7 +153,7 @@ async def avatar(ctx, member: discord.Member = None):
 async def help(ctx, arg = None):
     if arg == None:
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        helpEmbed.add_field(name='Normal commands', value='`announce`, `avatar`, `help`, `id`, `info`, `invite`, `ping`, `reminder`, `suggest`, `userinfo`')
+        helpEmbed.add_field(name='Normal commands', value='`announce`, `avatar`, `help`, `id`, `info`, `invite`, `ping`, `reminder`, `report`, `suggest`, `userinfo`')
         helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
         helpEmbed.add_field(name='Owner commands', value='`save`, `say`')
         helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
@@ -238,6 +238,26 @@ async def reminder(ctx, time:int =None, *, msg=None):
             return
     else:
         await ctx.send('Please provide a period of time! (use `a!help reminder`)')
+        return
+
+
+
+@bot.command(name='report')
+async def report(ctx, *, msg=None):
+    if msg != None:
+        botMsg = await ctx.send(f'Saving report {config.Emojis.loading}')
+        await asyncio.sleep(2)
+        embed = discord.Embed(title=f'Report made by {ctx.author.name}', description=msg, colour=config.Colors.purple, timestamp=ctx.message.created_at)
+        embed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        channel = bot.get_channel(config.Channels.reportsChannel)
+        await channel.send(embed=embed)
+        
+        await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
+        await botMsg.edit(content='Your report has been sent successfully!')
+
+    else:
+        embed = discord.Embed(description="Please provide a description for your report.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
 
 
