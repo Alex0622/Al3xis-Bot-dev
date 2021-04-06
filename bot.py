@@ -140,7 +140,7 @@ async def announce_error(ctx, error):
 
 
 @bot.command(name='avatar', aliases=['av'])
-async def avatar(ctx, member: discord.Member = None): 
+async def avatar(ctx, member: discord.Member = None):
     if member == None:
         member = ctx.author
     embed = discord.Embed(title = f'Avatar of user {member}', colour=config.Colors.green, timestamp=ctx.message.created_at)
@@ -266,7 +266,7 @@ async def report(ctx, *, msg=None):
 suggestion = ''
 listSuggestions = ''
 @bot.command(name='suggest', aliases=['sug'])
-async def suggest(ctx, *, new_suggestion):  
+async def suggest(ctx, *, new_suggestion):
     try:
         global suggestion
         suggestion =  new_suggestion
@@ -775,7 +775,7 @@ async def unban(ctx, UserID: int, *, reason=None):
                         await ctx.message.add_reaction(config.Emojis.noEntry)
                         return
                 except discord.NotFound:
-                    embed = discord.Embed(description='User is not banned here.', colour=config.Colors.red)
+                    embed = discord.Embed(description='That user is not banned here.', colour=config.Colors.red)
                     await ctx.send(embed=embed)
                     return     
             else:
@@ -912,7 +912,7 @@ async def DM_error(ctx, error):
         return
 
 
-        
+
 savedMessageSave = ''
 @bot.command(name='save')
 @commands.is_owner()
