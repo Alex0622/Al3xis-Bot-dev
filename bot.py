@@ -224,7 +224,7 @@ async def reminder(ctx, time:int =None, *, msg=None):
         if msg != None:
             try:
                 await asyncio.sleep(0.5)
-                await ctx.send(f'I have set a reminder of **{time} minutes** with the message: \n**{msg}**')
+                await ctx.send(f'I have set a reminder of **{time} minutes** with the message: \n**{msg}**', allowed_mentions=discord.AllowedMentions.none())
                 newTime = time * 60
                 await asyncio.sleep(newTime)
                 randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
