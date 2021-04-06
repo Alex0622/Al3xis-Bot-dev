@@ -23,7 +23,7 @@ async def on_ready():
 
 @bot.event 
 async def on_command_error(ctx, error):
-    if isinstance(error, commands.errors.MissingPermissions) or isinstance(error, commands.CommandNotFound) or isinstance(error, commands.MissingRequiredArgument):
+    if isinstance(error, commands.errors.MissingPermissions) or isinstance(error, commands.CommandNotFound) or isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.CommandInvokeError):
         pass
     else:
         embed = discord.Embed(description='**Error!** '+str(error), colour=config.Colors.red)
@@ -238,14 +238,6 @@ async def reminder(ctx, time:int =None, *, msg=None):
             return
     else:
         await ctx.send('Please provide a period of time! (use `a!help reminder`)')
-        return
-
-
-@reminder.error
-async def reminder_error(ctx, error):
-    if isinstance(error, commands.errors.BadArgument):
-        embed = discord.Embed(description='**Error!** `Time` must only include numbers.', colour=config.Colors.red)
-        await ctx.send(embed=embed)
         return
 
 
