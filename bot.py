@@ -153,9 +153,9 @@ async def avatar(ctx, member: discord.Member = None):
 async def help(ctx, arg = None):
     if arg == None:
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        helpEmbed.add_field(name='Normal commands', value='`announce`, `avatar`, `help`, `id`, `info`, `invite`, `ping`, `reminder`, `report`, `suggest`, `userinfo`')
+        helpEmbed.add_field(name='Normal commands', value='`announce`, `avatar`, `help`, `id`, `info`, `invite`, `ping`, `remind`, `report`, `suggest`, `userinfo`')
         helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
-        helpEmbed.add_field(name='Owner commands', value='`save`, `say`')
+        helpEmbed.add_field(name='Owner commands', value='`DM`, `save`, `say`')
         helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.channel.send(embed=helpEmbed)
         return
@@ -249,6 +249,7 @@ async def report(ctx, *, msg=None):
         await asyncio.sleep(2)
         embed = discord.Embed(title=f'Report made by {ctx.author.name}', description=msg, colour=config.Colors.purple, timestamp=ctx.message.created_at)
         embed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        print(f'{ctx.author} reported: {msg}')
         channel = bot.get_channel(config.Channels.reportsChannel)
         await channel.send(embed=embed)
         
@@ -883,6 +884,35 @@ async def unmute_error(ctx, error):
 
 
 
+@bot.command(name='DM', aliases=['dm', 'msg'])
+@commands.is_owner()
+async def DM(ctx, member: discord.Member=None, *, msg=None):
+    if member != None:
+        if msg != None:
+            await asyncio.sleep(2)
+            embed = discord.Embed(description=msg, colour=config.Colors.orange)
+            await member.send(embed=embed)
+            await ctx.send('DM sent successfully.')
+
+        else:
+            embed = discord.Embed(description='Please provide a description for your embed.', colour=config.Colors.red)
+            await ctx.send(embed=embed)
+            return
+    else:
+        embed = discord.Embed(description='Please specify a member to DM.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+
+
+@DM.error
+async def DM_error(ctx, error):
+    if isinstance(error, commands.errors.CommandInvokeError):
+        embed = discord.Embed(description="I can't send messages to that user.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+
+
+        
 savedMessageSave = ''
 @bot.command(name='save')
 @commands.is_owner()

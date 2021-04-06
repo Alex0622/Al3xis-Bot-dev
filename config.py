@@ -8,6 +8,8 @@ class InfoCommands:
     avatar =            'Get and post the avatar of the member mentioned.'
     ban =               'Ban the member mentioned in the command. | Permanent ban.'
     clear =             'Delete an amount of messages. | Limit of messages deleted per command: `500`.'
+    dm =                'Send direct messages to users.'
+    DM =                'Send direct messages to users.'
     id =                'Get the ID of the given member.'
     ID =                'Get the ID of the given member.' 
     info =              'Get information about the bot.'
@@ -17,6 +19,7 @@ class InfoCommands:
     help =              'Display the list of commands.'
     kick =              'Kick a member from the server.'
     latency =           "Shows the bot's latency/ping."
+    msg =                'Send direct messages to users.'
     mute =              'Mute members so they cannot send messages or join VC channels. | Duration: seconds.'
     ping =              "Shows the bot's latency/ping."
     pm =                'Mute a member permanently.'
@@ -48,6 +51,8 @@ class UsageCommands:
     avatar =            '`a!avatar (member)`'
     ban =               '`a!ban (member) (reason)`'
     clear =             '`a!clear (amount of messages that will be purged)`'
+    dm =                '`a!dm (member) (message)`'
+    DM =                '`a!DM (member) (message)`'
     id =                '`a!id (member)`'
     ID =                '`a!ID (member)`'
     info =              '`a!info`'
@@ -57,6 +62,7 @@ class UsageCommands:
     help =              '`a!help (command)` | If you do not mention a command, it will show the general help command.'
     kick =              '`a!kick (member) (reason)`'
     latency =           '`a!latency`'
+    msg =               '`a!msg (member) (reason`'
     mute =              '`a!mute (member) (duration) (reason)`'
     ping =              '`a!ping`'
     pm =                '`a!pm (member) (reason)`'
@@ -88,6 +94,8 @@ class AliasesCommands:
     avatar =            'av'
     ban =               'No aliases'
     clear =             'purge'
+    dm =                'DM, msg'
+    DM =                'dm, msg'
     id =                'ID'
     ID =                'id'
     info =              'No aliases'
@@ -97,6 +105,7 @@ class AliasesCommands:
     help =              'h'
     kick =              'No aliases'
     latency =           'ping, pong'
+    msg =               'dm, DM'
     mute =              'No aliases'
     ping =              'pong, latency'
     pm =                'pmute'
@@ -128,6 +137,8 @@ class RequiredPermissions:
     avatar =            'NO REQUIRED PERMISSION'
     ban =               'BAN MEMBERS'
     clear =             'MANAGE MESSAGES'
+    dm =                "Bot's owner"
+    DM =                "Bot's owner"
     id =                'NO REQUIRED PERMISSION'
     ID =                'NO REQUIRED PERMISSION'
     info =              'NO REQUIRED PERMISSION'
@@ -137,6 +148,7 @@ class RequiredPermissions:
     help =              'NO REQUIRED PERMISSION'
     kick =              'BAN MEMBERS'
     latency =           'NO REQUIRED PERMISSION'
+    msg =               "Bot's owner"
     mute =              'BAN MEMBERS'
     ping =              'NO REQUIRED PERMISSION'
     pm =                'BAN MEMBERS'
