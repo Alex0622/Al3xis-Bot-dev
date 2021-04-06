@@ -230,7 +230,7 @@ async def reminder(ctx, time:int =None, *, msg=None):
                 randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
                 embed = discord.Embed(title='Reminder!', description=msg, colour=random.choice(randomColors), timestamp=ctx.message.created_at)
                 embed.set_footer(text='Reminder set ')
-                await ctx.author.send(embed=embed)
+                await ctx.reply(embed=embed, mention_author=True)
             except Exception:
                 await ctx.send('An error ocurred while running the command.')
         else: 
@@ -320,7 +320,7 @@ async def userinfo(ctx, member: discord.Member=None):
         userinfoEmbed = discord.Embed(title=str(member), description=f'__**Information about**__ {member.mention} \n**User ID**: {member.id} \n**Created at** {member.created_at.strftime("%A %d %B %Y, %H:%M")} \n**Joined at** {member.joined_at.strftime("%A %d %B %Y, %H:%M")} \n **Bot**?: {isBotMsg}', colour=config.Colors.darkGreen, timestamp=ctx.message.created_at)
         userinfoEmbed.set_thumbnail(url=member.avatar_url)
         userinfoEmbed.add_field(name='**Roles**', value=ROLES)
-        await ctx.send(embed=userinfoEmbed)
+        await ctx.reply(embed=userinfoEmbed, mention_author=False)
     except Exception:
         await ctx.send('An error ocurred while executing the command.')
         await ctx.message.add_reaction(config.Emojis.noEntry)
