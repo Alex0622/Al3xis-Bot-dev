@@ -28,7 +28,7 @@ async def on_command_error(ctx, error):
     else:
         embed = discord.Embed(description='**Error!** '+str(error), colour=config.Colors.red)
         await ctx.send(embed=embed)
-    
+  
 
 ####################################################################################################
 ####################################################################################################
@@ -153,7 +153,7 @@ async def avatar(ctx, member: discord.Member = None):
 async def help(ctx, arg = None):
     if arg == None:
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        helpEmbed.add_field(name='Normal commands', value='`announce`, `avatar`, `help`, `id`, `info`, `invite`, `ping`, `remind`, `report`, `suggest`, `userinfo`')
+        helpEmbed.add_field(name='Info commands', value='`announce`, `avatar`, `help`, `id`, `about`, `invite`, `ping`, `remind`, `report`, `suggest`, `userinfo`')
         helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
         helpEmbed.add_field(name='Owner commands', value='`DM`, `save`, `say`')
         helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
