@@ -222,22 +222,32 @@ async def ping (ctx):
 async def reminder(ctx, time:int =None, *, msg=None):
     if time != None:
         if msg != None:
-            try:
-                await asyncio.sleep(0.5)
-                await ctx.send(f'I have set a reminder of **{time} minutes** with the message: \n**{msg}**', allowed_mentions=discord.AllowedMentions.none())
-                newTime = time * 60
-                await asyncio.sleep(newTime)
-                randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
-                embed = discord.Embed(title='Reminder!', description=msg, colour=random.choice(randomColors), timestamp=ctx.message.created_at)
-                embed.set_footer(text='Reminder set ')
-                await ctx.message.reply(embed=embed, mention_author=True)
-            except Exception:
-                await ctx.send('An error ocurred while running the command.')
+            await asyncio.sleep(0.5)
+            if time == 1:
+                timeInMinutes = 'minute'    
+            else:
+                timeInMinutes = 'minutes'
+            await ctx.send(f"I've set a reminder of {time} {timeInMinutes}: {msg}", allowed_mentions=discord.AllowedMentions.none())
+            newTime = time * 60
+            
+            await asyncio.sleep(newTime)
+            await ctx.reply(f'Hey! {msg}', mention_author=True, allowed_mentions=discord.AllowedMentions.none())
+
         else: 
-            ctx.send('Please provide a message for your reminder!')
+            embed = discord.Embed(description="Please provide a message for your reminder.", colour=config.Colors.red)
+            await ctx.send(embed=embed)
             return
     else:
-        await ctx.send('Please provide a period of time! (use `a!help reminder`)')
+        embed = discord.Embed(description="Please provide a period of time (in minutes) for your reminder.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+
+
+@reminder.error
+async def reminder_error(ctx, error):
+    if isinstance(error, commands.errors.CommandInvokeError):
+        embed = discord.Embed(description=f"You set a reminder but probably deleted your message so I can't reply to it.", colour=config.Colors.red)
+        await ctx.send(str(f'Hi {ctx.author.mention}!'),embed=embed)
         return
 
 
@@ -318,10 +328,10 @@ async def userinfo(ctx, member: discord.Member=None):
         else:
             isBotMsg = 'No'
 
-        userinfoEmbed = discord.Embed(title=str(member), description=f'__**Information about**__ {member.mention} \n**User ID**: {member.id} \n**Created at** {member.created_at.strftime("%A %d %B %Y, %H:%M")} \n**Joined at** {member.joined_at.strftime("%A %d %B %Y, %H:%M")} \n **Bot**?: {isBotMsg}', colour=config.Colors.darkGreen, timestamp=ctx.message.created_at)
+        userinfoEmbed = discord.Embed(title=str(member), description=f'__**Information about**__ {member.mention} \n**User ID**: {member.id} \n**Created at** {member.created_at.strftime("%A %d %B %Y, %H:%M")} \n**Joined at** {member.joined_at.strftime("%A %d %B %Y, %H:%M")} \n **Bot?**: {isBotMsg}', colour=config.Colors.darkGreen, timestamp=ctx.message.created_at)
         userinfoEmbed.set_thumbnail(url=member.avatar_url)
         userinfoEmbed.add_field(name='**Roles**', value=ROLES)
-        await ctx.message.reply(embed=userinfoEmbed, mention_author=False)
+        await ctx.send(embed=userinfoEmbed)
     except Exception:
         await ctx.send('An error ocurred while executing the command.')
         await ctx.message.add_reaction(config.Emojis.noEntry)
