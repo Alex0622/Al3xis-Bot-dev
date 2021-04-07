@@ -328,7 +328,7 @@ async def userinfo(ctx, member: discord.Member=None):
         else:
             isBotMsg = 'No'
 
-        userinfoEmbed = discord.Embed(title=str(member), description=f'__**Information about**__ {member.mention} \n**User ID**: {member.id} \n**Created at** {member.created_at.strftime("%A %d %B %Y, %H:%M")} \n**Joined at** {member.joined_at.strftime("%A %d %B %Y, %H:%M")} \n **Bot?**: {isBotMsg}', colour=config.Colors.darkGreen, timestamp=ctx.message.created_at)
+        userinfoEmbed = discord.Embed(title=str(member), description=f'__**Information about**__ {member.mention} \n**User ID**: {member.id} \n**Created at** {member.created_at.strftime("%A %d %B %Y, %H:%M")} \n**Joined at** {member.joined_at.strftime("%A %d %B %Y, %H:%M")} \n **Bot**?: {isBotMsg}', colour=config.Colors.darkGreen, timestamp=ctx.message.created_at)
         userinfoEmbed.set_thumbnail(url=member.avatar_url)
         userinfoEmbed.add_field(name='**Roles**', value=ROLES)
         await ctx.send(embed=userinfoEmbed)
