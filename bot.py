@@ -63,7 +63,7 @@ async def announce(ctx, channelA: discord.TextChannel=None):
                 else:
                     await botMsg.edit(content='Preparing to make the announcement...')
                     
-                    randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+                    randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
                     aEmbed = discord.Embed(description=newContent.content, colour=random.choice(randomColors)) 
                     print(f'Preparing announcement... Description: {newContent.content}, Channel: {channelA.id}')
                     aChannel = bot.get_channel(channelA.id)
@@ -87,7 +87,7 @@ async def announce(ctx, channelA: discord.TextChannel=None):
 
                     await botMsg.edit(content='Preparing to make the announcement...')
                     
-                    randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+                    randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
                     aEmbed = discord.Embed(title=newTitle.content, colour=random.choice(randomColors)) 
                     print(f'Preparing announcement... Title: {newTitle.content}, Channel: {channelA.id}')
                     aChannel = bot.get_channel(channelA.id)
@@ -105,7 +105,7 @@ async def announce(ctx, channelA: discord.TextChannel=None):
 
                     await botMsg.edit(content='Preparing to make the announcement...')
                     
-                    randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+                    randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
                     aEmbed = discord.Embed(title=newTitle.content, description=newContent.content, colour=random.choice(randomColors)) 
                     print(f'Preparing announcement... Title: {newTitle.content}, Description: {newContent.content}, Channel: {channelA.id}')
                     aChannel = bot.get_channel(channelA.id)
@@ -153,7 +153,7 @@ async def avatar(ctx, member: discord.Member = None):
 async def help(ctx, arg = None):
     if arg == None:
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        helpEmbed.add_field(name='Info commands', value='`announce`, `avatar`, `help`, `id`, `about`, `invite`, `ping`, `remind`, `report`, `suggest`, `userinfo`')
+        helpEmbed.add_field(name='Info commands', value='`about`, `announce`, `avatar`, `help`, `id`, `invite`, `membercount`, `ping`, `remind`, `report`, `suggest`, `userinfo`')
         helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
         helpEmbed.add_field(name='Owner commands', value='`DM`, `save`, `say`')
         helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
@@ -203,6 +203,13 @@ async def invite(ctx):
     embed.add_field(name='Join our Discord server!', value="[Alex's bots](https://discord.gg/AAJPHqNXUy)", inline=False)
     embed.add_field(name='Invite the bot to your server', value='[Admin permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8) \n[Required permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=2081287413)')
     embed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
+    await ctx.send(embed=embed)
+
+
+
+@bot.command(name='membercount')
+async def membercount(ctx):
+    embed = discord.Embed(description=f'There are **{ctx.guild.member_count} members** in this server.', colour=config.Colors.lightBlue)
     await ctx.send(embed=embed)
 
 
@@ -953,7 +960,7 @@ async def save(ctx,*, saveMsg=None):
 @bot.command(name='say')
 @commands.is_owner()
 async def say(ctx, *, sayMsg=None):
-    randomColors = [config.Colors.red, config.Colors.ligthBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+    randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
     if sayMsg == None:
         embed = discord.Embed(title='Hi!',description=savedMessageSave, colour=random.choice(randomColors))
         await ctx.send(embed=embed)

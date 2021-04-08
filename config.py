@@ -19,6 +19,7 @@ class InfoCommands:
     help =              'Display the list of commands.'
     kick =              'Kick a member from the server.'
     latency =           "Shows the bot's latency/ping."
+    membercount =       'Get how many members are in your server.'
     msg =                'Send direct messages to users.'
     mute =              'Mute members so they cannot send messages or join VC channels. | Duration: seconds.'
     ping =              "Shows the bot's latency/ping."
@@ -62,6 +63,7 @@ class UsageCommands:
     help =              '`a!help (command)` | If you do not mention a command, it will show the general help command.'
     kick =              '`a!kick (member) (reason)`'
     latency =           '`a!latency`'
+    membercount =       '`a!membercount`'
     msg =               '`a!msg (member) (reason)`'
     mute =              '`a!mute (member) (duration) (reason)`'
     ping =              '`a!ping`'
@@ -105,6 +107,7 @@ class AliasesCommands:
     help =              'h'
     kick =              'No aliases'
     latency =           'ping, pong'
+    membercount =       'No aliases'
     msg =               'dm, DM'
     mute =              'No aliases'
     ping =              'pong, latency'
@@ -148,6 +151,7 @@ class RequiredPermissions:
     help =              'NO REQUIRED PERMISSION'
     kick =              'BAN MEMBERS'
     latency =           'NO REQUIRED PERMISSION'
+    membercount =       'NO REQUIRED PERMISSION'
     msg =               "Bot's owner"
     mute =              'BAN MEMBERS'
     ping =              'NO REQUIRED PERMISSION'
@@ -176,6 +180,7 @@ class Channels:
     botChannel =            793989024879476767
     ownerChannel =          793989996494192692
     logChannel =            793990292213727262
+    commandsChannel =       826133121573191681
     reportsChannel =        826158056173469727
     
 
@@ -183,7 +188,7 @@ class Channels:
 
 class Colors:
     red =               0xde0707
-    ligthBlue =         0x32d9cb
+    lightBlue =         0x32d9cb
     green =             0x6cfd00
     blue =              0x0037fa
     yellow =            0xf1fc14 
