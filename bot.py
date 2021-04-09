@@ -963,12 +963,12 @@ async def save(ctx,*, saveMsg=None):
 async def say(ctx, *, sayMsg=None):
     randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
     if sayMsg == None:
-        embed = discord.Embed(title='Hi!',description=savedMessageSave, colour=random.choice(randomColors))
+        embed = discord.Embed(description=savedMessageSave, colour=random.choice(randomColors))
         await ctx.send(embed=embed)
         await ctx.message.delete()
         return
     else:
-        embed = discord.Embed(title='Hi!',description=sayMsg, colour=random.choice(randomColors))
+        embed = discord.Embed(description=sayMsg, colour=random.choice(randomColors))
         await ctx.send(embed=embed)
         await ctx.message.delete()
         return
