@@ -34,7 +34,19 @@ async def on_command_error(ctx, error):
 async def on_command(ctx):
     channel = bot.get_channel(config.Channels.logCommandsChannel)
     embed = discord.Embed(description=f'{ctx.guild.name} - {ctx.author} | {ctx.message.clean_content}', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+    embed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
     await channel.send(embed=embed) 
+
+
+@bot.event
+async def on_message(message):
+    if isinstance(message.channel, discord.channel.DMChannel):
+        if not message.author.bot:                
+            channel = bot.get_channel(config.Channels.DMsChannel)
+            embed = discord.Embed(title=f'{message.author.name} sent a DM!', description=message.content, colour=config.Colors.orange, timestamp=message.created_at)
+            embed.set_footer(text=message.author, icon_url=message.author.avatar_url)
+            await channel.send(embed=embed)
+    await bot.process_commands(message) 
     
 
 ####################################################################################################
