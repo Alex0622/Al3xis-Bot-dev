@@ -177,7 +177,7 @@ class RequiredPermissions:
     
 class Channels:
     suggestionsChannel =    793989328602791946
-    botChannel =            793989024879476767
+    botChannel =            822135281511694386
     ownerChannel =          793989996494192692
     logChannel =            793990292213727262
     commandsChannel =       826133121573191681
