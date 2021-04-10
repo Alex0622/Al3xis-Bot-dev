@@ -27,8 +27,8 @@ class InfoCommands:
     pmute =             'Mute a member permanently.'
     pong =              "Shows the bot's latency/ping."
     purge =             'Delete an amount of messages. | Limit of messages deleted per command: `500`.'
-    remind =            'Set a reminder. | Duration: minutes.'
-    reminder =          'Set a reminder. | Duration: minutes.'
+    remind =            'Set a reminder. | Duration: seconds, minutes, hours or days.'
+    reminder =          'Set a reminder. | Duration: seconds, minutes, hours or days.'
     report =            'Report bugs, errors or problems related to the bot.'
     save =              'Save messages to a channel.'
     say =               'Send the latest saved message in an embed.'

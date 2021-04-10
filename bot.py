@@ -245,26 +245,37 @@ async def ping (ctx):
     
 
 @bot.command(name='reminder', aliases=['remind'])
-async def reminder(ctx, time:int =None, *, msg=None):
+async def reminder(ctx, time=None, *, msg=None):
     if time != None:
         if msg != None:
             await asyncio.sleep(0.5)
-            if time == 1:
-                timeInMinutes = 'minute'    
+            seconds = 0
+            if time.lower().endswith("d"):
+                seconds += int(time[:-1]) * 60 * 60 * 24
+                counter = f"{seconds // 60 // 60 // 24} days"
+            elif time.lower().endswith("h"):
+                seconds += int(time[:-1]) * 60 * 60
+                counter = f"{seconds // 60 // 60} hours"
+            elif time.lower().endswith("m"):
+                seconds += int(time[:-1]) * 60
+                counter = f"{seconds // 60} minutes"
+            elif time.lower().endswith("s"):
+                seconds += int(time[:-1])
+                counter = f"{seconds} seconds"
             else:
-                timeInMinutes = 'minutes'
-            await ctx.send(f"I've set a reminder of {time} {timeInMinutes}: {msg}", allowed_mentions=discord.AllowedMentions.none())
-            newTime = time * 60
-            
-            await asyncio.sleep(newTime)
-            await ctx.reply(f'Hey! {msg}', mention_author=True, allowed_mentions=discord.AllowedMentions.none())
+                embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration.', colour=config.Colors.red)
+                await ctx.send(embed=embed)
+                return  
 
+            await ctx.send(f"I've set a reminder of {counter}: {msg}", allowed_mentions=discord.AllowedMentions.none())
+            await asyncio.sleep(seconds)
+            await ctx.reply(f'Hey! {msg}', mention_author=True, allowed_mentions=discord.AllowedMentions.none())
         else: 
             embed = discord.Embed(description="Please provide a message for your reminder.", colour=config.Colors.red)
             await ctx.send(embed=embed)
             return
     else:
-        embed = discord.Embed(description="Please provide a period of time (in minutes) for your reminder.", colour=config.Colors.red)
+        embed = discord.Embed(description="Please provide a period of time for your reminder.", colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
 
