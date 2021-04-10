@@ -28,7 +28,14 @@ async def on_command_error(ctx, error):
     else:
         embed = discord.Embed(description='**Error!** '+str(error), colour=config.Colors.red)
         await ctx.send(embed=embed)
-  
+
+
+@bot.event
+async def on_command(ctx):
+    channel = bot.get_channel(config.Channels.logCommandsChannel)
+    embed = discord.Embed(description=f'{ctx.guild.name} - {ctx.author} | {ctx.message.clean_content}', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+    await channel.send(embed=embed) 
+    
 
 ####################################################################################################
 ####################################################################################################

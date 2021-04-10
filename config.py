@@ -182,6 +182,7 @@ class Channels:
     logChannel =            793990292213727262
     commandsChannel =       826133121573191681
     reportsChannel =        826158056173469727
+    logCommandsChannel =    826133121573191681
     
 
 
