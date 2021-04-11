@@ -203,7 +203,7 @@ async def info(ctx):
     embedI = discord.Embed(title=f'Information about Al3xis#4614', colour=config.Colors.blue, timestamp=ctx.message.created_at)
     embedI.set_author(name='Al3xis')
     embedI.add_field(name='Owner', value='`Alex22#7756`')
-    embedI.add_field(name='Current Version', value='`1.3.4`')
+    embedI.add_field(name='Current Version', value='__[v1.3.4](https://github.com/Alex0622/Al3xis-Bot-dev/releases/tag/v1.3.4)__')
     embedI.add_field(name='Guilds', value=f'`{len(bot.guilds)}`')
     embedI.add_field(name='Prefix', value='`a!`, `A!`')
     embedI.add_field(name='Developed since', value='`11/30/2020`')
