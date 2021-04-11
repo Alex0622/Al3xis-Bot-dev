@@ -511,7 +511,7 @@ async def kick_error(ctx, error):
 @bot.command(name='mute')
 @commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
-async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
+async def mute(ctx, member: discord.Member, duration=None, *, reason=None):
     guild = ctx.guild
     if reason == None:
         reason = 'No reason provided'
@@ -527,31 +527,55 @@ async def mute(ctx, member: discord.Member, duration: int=None, *, reason=None):
 
                                 try:
                                     time.sleep(0.5)
+                                    seconds = 0
+                                    if duration.lower().endswith("d"):
+                                        seconds += int(duration[:-1]) * 60 * 60 * 24
+                                        counter = f"{seconds // 60 // 60 // 24} days"
+                                    elif duration.lower().endswith("h"):
+                                        seconds += int(duration[:-1]) * 60 * 60
+                                        counter = f"{seconds // 60 // 60} hours"
+                                    elif duration.lower().endswith("m"):
+                                        seconds += int(duration[:-1]) * 60
+                                        counter = f"{seconds // 60} minutes"
+                                    elif duration.lower().endswith("s"):
+                                        seconds += int(duration[:-1])
+                                        counter = f"{seconds} seconds"
+                                    else:
+                                        embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration.', colour=config.Colors.red)
+                                        await ctx.send(embed=embed)
+                                        return 
+
+                                    
                                     await member.add_roles(mutedRole, reason=f'{ctx.author}: {reason}')
-                                    await ctx.send(f'**{member}** was muted for {duration} seconds | `{reason}`')
-                                    await member.send(f'You were muted in server: **{guild.name}** for {duration} seconds | `{reason}`')
-                                    print(f'User {ctx.author} muted {member} in server {guild.name} for {duration} seconds | {reason}')
+                                    await ctx.send(f'**{member}** was muted for {counter} | `{reason}`')
+                                    await member.send(f'You were muted in server: **{guild.name}** for {counter} | `{reason}`')
+                                    print(f'User {ctx.author} muted {member} in server {guild.name} for {counter} | {reason}')
                                     logEmbed = discord.Embed(title=f'Case: `mute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                                     logEmbed.add_field(name='Moderator', value=ctx.author.mention)
                                     logEmbed.add_field(name='User', value=member.mention)   
                                     logEmbed.add_field(name='Reason', value=reason) 
-                                    logEmbed.add_field(name='Duration', value=f'{duration} seconds')
+                                    logEmbed.add_field(name='Duration', value=counter)
                                     logEmbed.set_footer(text=f'Guild: {ctx.guild}')
                                     logChannel=bot.get_channel(config.Channels.logChannel)
                                     await logChannel.send(embed=logEmbed)   
 
-                                    await asyncio.sleep(duration) 
-                                    await member.remove_roles(mutedRole, reason='Temporary mute completed!')
-                                    reason = 'Temporary mute completed!'
-                                    await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
-                                    print(f'User {member} was unmuted in server {guild.name} | {reason}')
-                                    logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                                    logEmbed.add_field(name='User', value=member.mention)
-                                    logEmbed.add_field(name='Reason', value=reason) 
-                                    logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                                    logChannel=bot.get_channel(config.Channels.logChannel)
-                                    await logChannel.send(embed=logEmbed)
-                                    return
+                                    await asyncio.sleep(seconds) 
+
+                                    if mutedRole in member.roles:
+                                        await member.remove_roles(mutedRole, reason='Temporary mute completed!')
+                                        reason = 'Temporary mute completed!'
+                                        await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
+                                        print(f'User {member} was unmuted in server {guild.name} | {reason}')
+                                        logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                                        logEmbed.add_field(name='User', value=member.mention)
+                                        logEmbed.add_field(name='Reason', value=reason) 
+                                        logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                                        logChannel=bot.get_channel(config.Channels.logChannel)
+                                        await logChannel.send(embed=logEmbed)
+                                        return
+                                    if not mutedRole in member.roles:
+                                        print('test')
+                                        return
 
                                 except Exception:
                                     await ctx.send('An error ocurred while running the command.')
