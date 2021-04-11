@@ -21,7 +21,7 @@ class InfoCommands:
     latency =           "Shows the bot's latency/ping."
     membercount =       'Get how many members are in your server.'
     msg =                'Send direct messages to users.'
-    mute =              'Mute members so they cannot send messages or join VC channels. | Duration: seconds.'
+    mute =              'Mute members so they cannot send messages or join VC channels. | Duration: seconds, minutes, hours or days.'
     ping =              "Shows the bot's latency/ping."
     pm =                'Mute a member permanently.'
     pmute =             'Mute a member permanently.'
