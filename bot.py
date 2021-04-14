@@ -3,7 +3,7 @@ from discord.ext import commands
 import datetime
 import asyncio
 import config, os
-import time, random
+import time, random, math
 
     
 #Bot (our bot)
@@ -18,7 +18,7 @@ async def on_ready():
     general_channel = bot.get_channel(config.Channels.botChannel)
     await general_channel.send('Hi, I am online again.')
     #Status
-    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name='a!help', emoji=None, type=discord.ActivityType.listening))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'{len(bot.guilds)} servers', emoji=None, type=discord.ActivityType.listening))
 
 
 @bot.event 
@@ -28,7 +28,6 @@ async def on_command_error(ctx, error):
     else:
         embed = discord.Embed(description='**Error!** '+str(error), colour=config.Colors.red)
         await ctx.send(embed=embed)
-
 
 @bot.event
 async def on_command(ctx):
@@ -46,12 +45,12 @@ async def on_message(message):
             embed = discord.Embed(title=f'{message.author.name} sent a DM!', description=message.content, colour=config.Colors.orange, timestamp=message.created_at)
             embed.set_footer(text=message.author, icon_url=message.author.avatar_url)
             await channel.send(embed=embed)
-    await bot.process_commands(message) 
-    
+    await bot.process_commands(message)
+
 
 ####################################################################################################
 ####################################################################################################
-##Normal Commands
+##Info Commands
 
 
 
@@ -173,6 +172,7 @@ async def help(ctx, arg = None):
     if arg == None:
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
         helpEmbed.add_field(name='Info commands', value='`about`, `announce`, `avatar`, `help`, `id`, `invite`, `membercount`, `ping`, `remind`, `report`, `suggest`, `userinfo`')
+        helpEmbed.add_field(name='Math commands', value='`mathadd`, `mathdiv`, `mathmult`, `mathrandom`, `mathsq`, `mathsqrt`, `mathsub`')
         helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
         helpEmbed.add_field(name='Owner commands', value='`DM`, `save`, `say`')
         helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
@@ -233,7 +233,7 @@ async def membercount(ctx):
 
 
 @bot.command(name='ping', aliases=['pong', 'latency'])
-async def ping (ctx):
+async def ping(ctx):
     before = time.monotonic()
     message = await ctx.send("Pong!")
     time.sleep(2)
@@ -241,8 +241,8 @@ async def ping (ctx):
     await message.edit(content=f"**Bot's ping:**  `{int(ping)}ms`")
     print(f'Ping {int(ping)}ms')
 
-    
 
+    
 @bot.command(name='reminder', aliases=['remind'])
 async def reminder(ctx, time=None, *, msg=None):
     if time != None:
@@ -373,6 +373,146 @@ async def userinfo(ctx, member: discord.Member=None):
         await ctx.send('An error ocurred while executing the command.')
         await ctx.message.add_reaction(config.Emojis.noEntry)
         return
+
+
+
+####################################################################################################
+####################################################################################################
+#Math commands
+
+
+def add(x:float, y:float):
+    return x + y
+def sub(x:float, y:float):
+    return x - y
+def mult(x:float, y:float):
+    return x * y
+def div(x:float, y:float):
+    return x / y
+def rando(x:int, y:int):
+    return random.randint(x, y)
+def sqrt(x:float):
+    return math.sqrt(x)
+def sq(x:float):
+    return x * x
+
+
+@bot.command(name='mathadd')
+async def mathadd(ctx, x:float=None, y:float=None):
+    if x != None:
+        if y != None:
+            result = add(x, y)
+            await ctx.reply(result, mention_author=False)
+        else:
+            embed = discord.Embed(description='You are missing the argument "y".', colour=config.Colors.red)
+            await ctx.send(embed=embed)
+            return    
+    else:
+        embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return    
+
+
+
+@bot.command(name='mathdiv')
+async def mathdiv(ctx, x:float=None, y:float=None):
+    if x != None:
+        if y != None:
+            result = div(x, y)
+            await ctx.reply(result, mention_author=False)
+        else:
+            embed = discord.Embed(description='You are missing the argument "y".', colour=config.Colors.red)
+            await ctx.send(embed=embed)
+            return    
+    else:
+        embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return 
+   
+
+
+
+@bot.command(name='mathmult')
+async def mathmult(ctx, x:float=None, y:float=None):
+    if x != None:
+        if y != None:
+            result = mult(x, y)
+            await ctx.reply(result, mention_author=False)
+        else:
+            embed = discord.Embed(description='You are missing the argument "y".', colour=config.Colors.red)
+            await ctx.send(embed=embed)
+            return    
+    else:
+        embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return    
+
+
+
+
+@bot.command(name='mathrandom')
+async def mathrandom(ctx, x:int=None, y:float=None):
+    if x != None:
+        if y != None:
+            result = rando(x, y)
+            await ctx.reply(result, mention_author=False)
+        else:
+            embed = discord.Embed(description='You are missing the argument "y".', colour=config.Colors.red)
+            await ctx.send(embed=embed)
+            return    
+    else:
+        embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return 
+
+
+@mathrandom.error
+async def mathrandom_error(ctx, error):
+    if isinstance(error, commands.CommandInvokeError):
+        embed = discord.Embed(description='The order of your values must be from lowest to highest. \n Note: Only use numbers.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return  
+
+
+
+@bot.command(name='mathsq')
+async def mathsq(ctx, x:float=None):
+    if x != None:      
+        result = sq(x)
+        await ctx.reply(result, mention_author=False)
+    else:
+        embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return  
+
+
+
+@bot.command(name='mathsqrt')
+async def mathsqrt(ctx, x:float=None):
+    if x != None:          
+        result = sqrt(x)
+        await ctx.reply(result, mention_author=False)
+    else:
+        embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return  
+
+
+
+@bot.command(name='mathsub')
+async def mathsub(ctx, x:float=None, y:float=None):
+    if x != None:
+        if y != None:
+            result = sub(x, y)
+            await ctx.reply(result, mention_author=False)
+        else:
+            embed = discord.Embed(description='You are missing the argument "y".', colour=config.Colors.red)
+            await ctx.send(embed=embed)
+            return    
+    else:
+        embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return 
 
 
 
@@ -1051,7 +1191,7 @@ async def say(ctx, *, sayMsg=None):
         return
 
     
-    
+  
 ################################
 ####################################################################################################
 ####################################################################################################
