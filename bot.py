@@ -197,7 +197,6 @@ async def id(ctx, member: discord.Member = None):
 
 
 
-
 @bot.command(name='info', aliases=['about'])
 async def info(ctx):
     embedI = discord.Embed(title=f'Information about Al3xis#4614', colour=config.Colors.blue, timestamp=ctx.message.created_at)
@@ -396,7 +395,10 @@ async def ban(ctx, member : discord.Member, *, reason=None):
                     try:
                         time.sleep(0.5)    
                         await ctx.send(f'**{member}** was banned | `{reason}`')
-                        await member.send(f'You were banned in server: **{guild.name}** | `{reason}`')
+                        try:
+                            await member.send(f'You were banned in server: **{guild.name}** | `{reason}`')
+                        except Exception:
+                            pass
                         await member.ban(reason=f'{ctx.author}: {reason}')
                         print(f'User {ctx.author} banned {member} | {reason}')
                         logEmbed = discord.Embed(title=f'Case: `ban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
@@ -459,7 +461,10 @@ async def kick(ctx, member : discord.Member, *, reason=None):
                     try:
                         time.sleep(0.5)
                         await ctx.send(f'**{member}** was kicked | `{reason}`')
-                        await member.send(f'You were kicked from server: **{guild.name}** | `{reason}`')
+                        try:
+                            await member.send(f'You were kicked from server: **{guild.name}** | `{reason}`')
+                        except Exception:
+                            pass
                         await member.kick(reason=f'{ctx.author}: {reason}')
                         print(f'User {ctx.author} kicked {member} in server {guild.name}| {reason}')
                         logEmbed = discord.Embed(title=f'Case: `kick`', colour=config.Colors.red, timestamp=ctx.message.created_at)
@@ -547,7 +552,10 @@ async def mute(ctx, member: discord.Member, duration=None, *, reason=None):
 
                                     
                                     await member.add_roles(mutedRole, reason=f'{ctx.author}: {reason}')
-                                    await ctx.send(f'**{member}** was muted for {counter} | `{reason}`')
+                                    try:                    
+                                        await ctx.send(f'**{member}** was muted for {counter} | `{reason}`')
+                                    except Exception:
+                                        pass
                                     await member.send(f'You were muted in server: **{guild.name}** for {counter} | `{reason}`')
                                     print(f'User {ctx.author} muted {member} in server {guild.name} for {counter} | {reason}')
                                     logEmbed = discord.Embed(title=f'Case: `mute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
@@ -561,22 +569,22 @@ async def mute(ctx, member: discord.Member, duration=None, *, reason=None):
 
                                     await asyncio.sleep(seconds) 
 
-                                    if mutedRole in member.roles:
-                                        await member.remove_roles(mutedRole, reason='Temporary mute completed!')
-                                        reason = 'Temporary mute completed!'
+                                    
+                                    await member.remove_roles(mutedRole, reason='Temporary mute completed!')
+                                    reason = 'Temporary mute completed!'
+                                    try:
                                         await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
-                                        print(f'User {member} was unmuted in server {guild.name} | {reason}')
-                                        logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                                        logEmbed.add_field(name='User', value=member.mention)
-                                        logEmbed.add_field(name='Reason', value=reason) 
-                                        logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                                        logChannel=bot.get_channel(config.Channels.logChannel)
-                                        await logChannel.send(embed=logEmbed)
-                                        return
-                                    if not mutedRole in member.roles:
-                                        print('test')
-                                        return
-
+                                    except Exception:
+                                        pass
+                                    print(f'User {member} was unmuted in server {guild.name} | {reason}')
+                                    logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                                    logEmbed.add_field(name='User', value=member.mention)
+                                    logEmbed.add_field(name='Reason', value=reason) 
+                                    logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                                    logChannel=bot.get_channel(config.Channels.logChannel)
+                                    await logChannel.send(embed=logEmbed)
+                                    return
+                                
                                 except Exception:
                                     await ctx.send('An error ocurred while running the command.')
                                     await ctx.message.add_reaction(config.Emojis.noEntry)
@@ -648,7 +656,10 @@ async def pmute(ctx, member: discord.Member, *, reason=None):
                             try:
                                 time.sleep(0.5)
                                 await member.add_roles(mutedRole, reason=f'{ctx.author}: {reason}')
-                                await ctx.send(f'**{member}** was permanently muted | `{reason}`')
+                                try:
+                                    await ctx.send(f'**{member}** was permanently muted | `{reason}`')
+                                except Exception:
+                                    pass
                                 await member.send(f'You were permanently muted in server: **{guild.name}** | `{reason}`')
                                 print(f'User {ctx.author} permanently muted {member} in server {guild.name} | {reason}')
                                 logEmbed = discord.Embed(title=f'Case: `mute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
@@ -765,8 +776,11 @@ async def softban(ctx, member : discord.Member, *, reason=None):
                 if not member.guild_permissions.ban_members:
                     try:
                         time.sleep(0.5)
-                        await ctx.send(f'**{member}** was softbanned | `{reason}`.')
-                        await member.send(f'You were softbanned in server: **{guild.name}** | `{reason}`.')
+                        await ctx.send(f'**{member}** was softbanned | `{reason}`')
+                        try:
+                            await member.send(f'You were softbanned in server: **{guild.name}** | `{reason}`')
+                        except Exception:
+                            pass
                         await member.ban(reason=f'{ctx.author}: {reason}', delete_message_days=5)
                         await member.unban(reason=f'{ctx.author}: softban')
                         print(f'User {ctx.author} softbanned {member} in server {guild.name}| {reason}')
@@ -833,7 +847,10 @@ async def unban(ctx, UserID: int, *, reason=None):
                         time.sleep(0.5)
                         await ctx.guild.unban(member, reason=f'{ctx.author}: {reason}')
                         await ctx.send(f'**{member}** was unbanned | `{reason}`')
-                        await member.send(f'You were unbanned in server: **{guild.name}** | `{reason}`')
+                        try:
+                            await member.send(f'You were unbanned in server: **{guild.name}** | `{reason}`')
+                        except Exception:
+                            pass
                         print(f'User {ctx.author} unbanned {member} from {guild.name} | {reason}')
                         logEmbed = discord.Embed(title=f'Case: `unban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                         logEmbed.add_field(name='Moderator', value=ctx.author.mention)
@@ -899,7 +916,10 @@ async def unmute(ctx, member: discord.Member, *, reason=None):
                             time.sleep(0.5)
                             await member.remove_roles(mutedRole, reason=f'{ctx.author}: {reason}')
                             await ctx.send(f'**{member}** was unmuted | `{reason}`')
-                            await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
+                            try:
+                                await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
+                            except Exception:
+                                pass
                             print(f'User {ctx.author} unmuted {member} in server {guild.name} | {reason}')
                             logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                             logEmbed.add_field(name='Moderator', value=ctx.author.mention)
@@ -961,11 +981,21 @@ async def unmute_error(ctx, error):
 async def DM(ctx, member: discord.Member=None, *, msg=None):
     if member != None:
         if msg != None:
+            botMsg = await ctx.send(f'DMing user {config.Emojis.loading}')
             await asyncio.sleep(2)
             embed = discord.Embed(description=msg, colour=config.Colors.orange)
-            await member.send(embed=embed)
-            await ctx.send('DM sent successfully.')
-
+            try:
+                await member.send(embed=embed)
+                logEmbed = discord.Embed(title=f'{ctx.author.name} has sent a DM to {member.name}', description=msg, colour=config.Colors.orange, timestamp=ctx.message.created_at)
+                logEmbed.set_footer(text=member, icon_url=member.avatar_url)
+                DMs_channel = bot.get_channel(config.Channels.DMsChannel)
+                await DMs_channel.send(embed=logEmbed)
+                await botMsg.edit(content=f'DM sent successfully! {config.Emojis.whiteCheckMark}')
+            except Exception:
+                errorEmbed = discord.Embed(description=f'**Error!** I could not send a DM to {member.name}.', colour=config.Colors.red)
+                await botMsg.edit(content='', embed=errorEmbed)
+                return
+        
         else:
             embed = discord.Embed(description='Please provide a description for your embed.', colour=config.Colors.red)
             await ctx.send(embed=embed)
@@ -975,13 +1005,6 @@ async def DM(ctx, member: discord.Member=None, *, msg=None):
         await ctx.send(embed=embed)
         return
 
-
-@DM.error
-async def DM_error(ctx, error):
-    if isinstance(error, commands.errors.CommandInvokeError):
-        embed = discord.Embed(description="I can't send messages to that user.", colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return
 
 
 
@@ -1032,7 +1055,7 @@ async def say(ctx, *, sayMsg=None):
 ################################
 ####################################################################################################
 ####################################################################################################
-#Run the bot on the server
+#Run the bot on Discord.
 bot.run(os.environ['discordToken'])
 
 
