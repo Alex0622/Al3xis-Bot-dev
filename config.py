@@ -206,6 +206,7 @@ class RequiredPermissions:
 class Channels:
     suggestionsChannel =    793989328602791946
     botChannel =            822135281511694386
+    joinsleavesChannel =    832320231325696070
     ownerChannel =          793989996494192692
     logChannel =            793990292213727262
     commandsChannel =       826133121573191681
@@ -237,3 +238,6 @@ class Emojis:
     octagonalSign =             '🛑'
     eyes =                      '👀'
     loading =                   '<a:loading:823701755946074142>'
+
+
+BadWords = ["arse","bitch","cock","cunt","dick","fuck","nigg","pennis","pussy","shit"]

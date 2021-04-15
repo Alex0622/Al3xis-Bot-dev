@@ -39,6 +39,20 @@ async def on_command(ctx):
 
 @bot.event
 async def on_message(message):
+    if message.guild == bot.get_guild(793987455149408309):
+        for word in config.BadWords:
+            if word in message.content.lower():
+                embed = discord.Embed(description=f"{config.Emojis.noEntry} {message.author.mention} your message includes words that are not allowed here. {config.Emojis.noEntry}", colour=config.Colors.red)
+                await message.delete()
+                botMsg = await message.channel.send(embed=embed)
+                logEmbed = discord.Embed(title=f'Message in #{message.channel} was deleted.', description=f'{message.content}\n __**Reason**: Message includes words that are not allowed here.__', colour=config.Colors.red, timestamp=message.created_at)
+                logEmbed.set_footer(text=message.author.id, icon_url=message.author.avatar_url)
+                channel = bot.get_channel(config.Channels.logChannel)
+                await channel.send(embed=logEmbed)
+                await asyncio.sleep(4)
+                await botMsg.delete()
+
+
     if isinstance(message.channel, discord.channel.DMChannel):
         if not message.author.bot:                
             channel = bot.get_channel(config.Channels.DMsChannel)
@@ -46,6 +60,25 @@ async def on_message(message):
             embed.set_footer(text=message.author, icon_url=message.author.avatar_url)
             await channel.send(embed=embed)
     await bot.process_commands(message)
+
+
+@bot.event
+async def on_guild_join(guild):
+    channel = bot.get_channel(config.Channels.joinsleavesChannel)
+    embed = discord.Embed(title='Al3xis was added to a guild.', description=f'Guild name: {guild.name} \n Guild ID: {guild.id} \n Member count: {guild.member_count}', colour=config.Colors.green)
+    embed.set_footer(text=f'{len(bot.guilds)} guilds now', icon_url=guild.icon_url)
+    await channel.send(embed=embed)
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'{len(bot.guilds)} servers', emoji=None, type=discord.ActivityType.listening))
+
+
+@bot.event
+async def on_guild_remove(guild):
+    channel = bot.get_channel(config.Channels.joinsleavesChannel)
+    embed = discord.Embed(title='Al3xis was removed from a guild.', description=f'Guild name: {guild.name} \n Guild ID: {guild.id} \n Member count: {guild.member_count}', colour=config.Colors.green)
+    embed.set_footer(text=f'{len(bot.guilds)} guilds now', icon_url=guild.icon_url)
+    await channel.send(embed=embed)
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'{len(bot.guilds)} servers', emoji=None, type=discord.ActivityType.listening))
+
 
 
 ####################################################################################################
