@@ -173,7 +173,7 @@ async def announce(ctx, channelA: discord.TextChannel=None):
             return
         
         except Exception:
-            await botMsg.edit(content='An error ocurred while running the command.')
+            await botMsg.edit(content='An error occurred while running the command.')
             await botMsg.add_reaction(config.Emojis.noEntry)
             return 
     else:
@@ -364,7 +364,7 @@ async def suggest(ctx, *, new_suggestion):
         await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
         await msg.edit(content=f'**{ctx.author}**, your suggestion has been submited: {suggestion}', allowed_mentions=discord.AllowedMentions.none())
     except Exception:
-        await ctx.send('An error ocurred while running the command.')
+        await ctx.send('An error occurred while running the command.')
         await ctx.message.add_reaction(config.Emojis.noEntry)
         return
 
@@ -403,7 +403,7 @@ async def userinfo(ctx, member: discord.Member=None):
         userinfoEmbed.add_field(name='**Roles**', value=ROLES)
         await ctx.send(embed=userinfoEmbed)
     except Exception:
-        await ctx.send('An error ocurred while executing the command.')
+        await ctx.send('An error occurred while executing the command.')
         await ctx.message.add_reaction(config.Emojis.noEntry)
         return
 
@@ -582,7 +582,7 @@ async def ban(ctx, member : discord.Member, *, reason=None):
                         logChannel=bot.get_channel(config.Channels.logChannel)
                         await logChannel.send(embed=logEmbed)     
                     except Exception:
-                        await ctx.send('An error ocurred while runnining the command.')
+                        await ctx.send('An error occurred while runnining the command.')
                         await ctx.message.add_reaction(config.Emojis.noEntry)
                         return
                 else:
@@ -648,7 +648,7 @@ async def kick(ctx, member : discord.Member, *, reason=None):
                         logChannel = bot.get_channel(config.Channels.logChannel)
                         await logChannel.send(embed=logEmbed)       
                     except Exception:
-                        await ctx.send('An error ocurred while runnining the command.') 
+                        await ctx.send('An error occurred while runnining the command.') 
                         await ctx.message.add_reaction(config.Emojis.noEntry)
                         return
                 else:
@@ -759,7 +759,7 @@ async def mute(ctx, member: discord.Member, duration=None, *, reason=None):
                                     return
                                 
                                 except Exception:
-                                    await ctx.send('An error ocurred while running the command.')
+                                    await ctx.send('An error occurred while running the command.')
                                     await ctx.message.add_reaction(config.Emojis.noEntry)
                                     return
                             else:
@@ -846,7 +846,7 @@ async def pmute(ctx, member: discord.Member, *, reason=None):
                                 return
 
                             except Exception:
-                                await ctx.send('An error ocurred while running the command.')
+                                await ctx.send('An error occurred while running the command.')
                                 await ctx.message.add_reaction(config.Emojis.noEntry)
                                 return
 
@@ -965,7 +965,7 @@ async def softban(ctx, member : discord.Member, *, reason=None):
                         logChannel = bot.get_channel(config.Channels.logChannel)
                         await logChannel.send(embed=logEmbed)       
                     except Exception:
-                        await ctx.send('An error ocurred while runnining the command.') 
+                        await ctx.send('An error occurred while runnining the command.') 
                         await ctx.message.add_reaction(config.Emojis.noEntry)
                         return
                 else:
@@ -1033,7 +1033,7 @@ async def unban(ctx, UserID: int, *, reason=None):
                         logChannel=bot.get_channel(config.Channels.logChannel)
                         await logChannel.send(embed=logEmbed)     
                     except Exception:
-                        await ctx.send('An error ocurred while running the command.')
+                        await ctx.send('An error occurred while running the command.')
                         await ctx.message.add_reaction(config.Emojis.noEntry)
                         return
                 except discord.NotFound:
@@ -1102,7 +1102,7 @@ async def unmute(ctx, member: discord.Member, *, reason=None):
                             logChannel=bot.get_channel(config.Channels.logChannel)
                             await logChannel.send(embed=logEmbed)     
                         except Exception:
-                            await ctx.send('An error ocurred while running the command.')
+                            await ctx.send('An error occurred while running the command.')
                             await ctx.message.add_reaction(config.Emojis.noEntry)
                             return
                     else:
@@ -1202,7 +1202,7 @@ async def save(ctx,*, saveMsg=None):
             print(f'New message saved sent by {ctx.author} | {savedMessageSave}')
             await firstMessage.edit(content=f'**{ctx.author}** Your message has been saved!')
         except Exception:
-            await ctx.send('An error ocurred while running the command.')
+            await ctx.send('An error occurred while running the command.')
             await ctx.message.add_reaction(config.Emojis.noEntry)
             return
 
