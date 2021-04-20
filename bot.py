@@ -207,7 +207,7 @@ async def help(ctx, arg = None):
         helpEmbed.add_field(name='Info commands', value='`about`, `announce`, `avatar`, `help`, `id`, `invite`, `membercount`, `ping`, `remind`, `report`, `suggest`, `userinfo`')
         helpEmbed.add_field(name='Math commands', value='`mathadd`, `mathdiv`, `mathmult`, `mathrandom`, `mathsq`, `mathsqrt`, `mathsub`')
         helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
-        helpEmbed.add_field(name='Owner commands', value='`save`, `say`')
+        helpEmbed.add_field(name="Only bot's owner", value='`DM`, `save`, `say`')
         helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.channel.send(embed=helpEmbed)
         return
@@ -1157,6 +1157,7 @@ async def DM(ctx, member: discord.Member=None, *, msg=None):
             botMsg = await ctx.send(f'DMing user {config.Emojis.loading}')
             await asyncio.sleep(2)
             embed = discord.Embed(description=msg, colour=config.Colors.orange)
+            embed.set_footer(text='Sent by '+ctx.author, icon_url=ctx.author.avatar_url)
             try:
                 await member.send(embed=embed)
                 logEmbed = discord.Embed(title=f'{ctx.author.name} has sent a DM to {member.name}', description=msg, colour=config.Colors.orange, timestamp=ctx.message.created_at)
