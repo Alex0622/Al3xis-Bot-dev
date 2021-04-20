@@ -206,7 +206,7 @@ async def help(ctx, arg = None):
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
         helpEmbed.add_field(name='Info commands', value='`about`, `announce`, `avatar`, `help`, `id`, `invite`, `membercount`, `ping`, `remind`, `report`, `suggest`, `userinfo`')
         helpEmbed.add_field(name='Math commands', value='`mathadd`, `mathdiv`, `mathmult`, `mathrandom`, `mathsq`, `mathsqrt`, `mathsub`')
-        helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
+        helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `softban`, `unban`, `unmute`')
         helpEmbed.add_field(name="Only bot's owner", value='`DM`, `save`, `say`')
         helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.channel.send(embed=helpEmbed)
