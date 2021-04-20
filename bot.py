@@ -1157,7 +1157,7 @@ async def DM(ctx, member: discord.Member=None, *, msg=None):
             botMsg = await ctx.send(f'DMing user {config.Emojis.loading}')
             await asyncio.sleep(2)
             embed = discord.Embed(description=msg, colour=config.Colors.orange)
-            embed.set_footer(text='Sent by '+ctx.author, icon_url=ctx.author.avatar_url)
+            embed.set_footer(text=f'Sent by {ctx.author}', icon_url=ctx.author.avatar_url)
             try:
                 await member.send(embed=embed)
                 logEmbed = discord.Embed(title=f'{ctx.author.name} has sent a DM to {member.name}', description=msg, colour=config.Colors.orange, timestamp=ctx.message.created_at)
