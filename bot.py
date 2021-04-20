@@ -725,11 +725,11 @@ async def mute(ctx, member: discord.Member, duration=None, *, reason=None):
 
                                     
                                     await member.add_roles(mutedRole, reason=f'{ctx.author}: {reason}')
+                                    await ctx.send(f'**{member}** was muted for {counter} | `{reason}`')
                                     try:                    
-                                        await ctx.send(f'**{member}** was muted for {counter} | `{reason}`')
+                                        await member.send(f'You were muted in server: **{guild.name}** for {counter} | `{reason}`')
                                     except Exception:
                                         pass
-                                    await member.send(f'You were muted in server: **{guild.name}** for {counter} | `{reason}`')
                                     print(f'User {ctx.author} muted {member} in server {guild.name} for {counter} | {reason}')
                                     logEmbed = discord.Embed(title=f'Case: `mute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                                     logEmbed.add_field(name='Moderator', value=ctx.author.mention)
@@ -829,11 +829,11 @@ async def pmute(ctx, member: discord.Member, *, reason=None):
                             try:
                                 time.sleep(0.5)
                                 await member.add_roles(mutedRole, reason=f'{ctx.author}: {reason}')
+                                await ctx.send(f'**{member}** was permanently muted | `{reason}`')
                                 try:
-                                    await ctx.send(f'**{member}** was permanently muted | `{reason}`')
+                                    await member.send(f'You were permanently muted in server: **{guild.name}** | `{reason}`')
                                 except Exception:
                                     pass
-                                await member.send(f'You were permanently muted in server: **{guild.name}** | `{reason}`')
                                 print(f'User {ctx.author} permanently muted {member} in server {guild.name} | {reason}')
                                 logEmbed = discord.Embed(title=f'Case: `mute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                                 logEmbed.add_field(name='Moderator', value=ctx.author.mention)
