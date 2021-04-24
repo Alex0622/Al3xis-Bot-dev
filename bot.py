@@ -315,9 +315,13 @@ async def reminder(ctx, time=None, *, msg=None):
 @reminder.error
 async def reminder_error(ctx, error):
     if isinstance(error, commands.errors.CommandInvokeError):
-        embed = discord.Embed(description=f"You set a reminder but probably deleted your message so I can't reply to it.", colour=config.Colors.red)
-        await ctx.send(str(f'Hi {ctx.author.mention}!'),embed=embed)
-        return
+        if str('Unknown message') in str(error):
+            await ctx.send(f"Hey {ctx.author.mention} please don't delete your message when using `{ctx.prefix}{ctx.command}`")
+            return
+        if str('ValueError') in str(error): 
+            embed = discord.Embed(description=f'**Error!** Your message does not include a valid duration.', colour=config.Colors.red)
+            await ctx.send(embed=embed)
+            return 
 
 
 
@@ -461,7 +465,13 @@ async def mathdiv(ctx, x:float=None, y:float=None):
         embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return 
-   
+
+
+@mathdiv.error
+async def mathdiv_error(ctx, error):
+    if str(error) == 'Command raised an exception: ZeroDivisionError: float division by zero':
+        await ctx.send('Math ERROR.')
+        return
 
 
 
@@ -479,7 +489,6 @@ async def mathmult(ctx, x:float=None, y:float=None):
         embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return    
-
 
 
 
@@ -582,7 +591,7 @@ async def ban(ctx, member : discord.Member, *, reason=None):
                         logChannel=bot.get_channel(config.Channels.logChannel)
                         await logChannel.send(embed=logEmbed)     
                     except Exception:
-                        await ctx.send('An error occurred while runnining the command.')
+                        await ctx.send('An error occurred while running the command.')
                         await ctx.message.add_reaction(config.Emojis.noEntry)
                         return
                 else:
@@ -648,7 +657,7 @@ async def kick(ctx, member : discord.Member, *, reason=None):
                         logChannel = bot.get_channel(config.Channels.logChannel)
                         await logChannel.send(embed=logEmbed)       
                     except Exception:
-                        await ctx.send('An error occurred while runnining the command.') 
+                        await ctx.send('An error occurred while running the command.') 
                         await ctx.message.add_reaction(config.Emojis.noEntry)
                         return
                 else:
@@ -702,66 +711,56 @@ async def mute(ctx, member: discord.Member, duration=None, *, reason=None):
                     if not member.guild_permissions.ban_members:
                         if not mutedRole in member.roles:
                             if duration:
-
-                                try:
-                                    time.sleep(0.5)
-                                    seconds = 0
-                                    if duration.lower().endswith("d"):
-                                        seconds += int(duration[:-1]) * 60 * 60 * 24
-                                        counter = f"{seconds // 60 // 60 // 24} days"
-                                    elif duration.lower().endswith("h"):
-                                        seconds += int(duration[:-1]) * 60 * 60
-                                        counter = f"{seconds // 60 // 60} hours"
-                                    elif duration.lower().endswith("m"):
-                                        seconds += int(duration[:-1]) * 60
-                                        counter = f"{seconds // 60} minutes"
-                                    elif duration.lower().endswith("s"):
-                                        seconds += int(duration[:-1])
-                                        counter = f"{seconds} seconds"
-                                    else:
-                                        embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration.', colour=config.Colors.red)
-                                        await ctx.send(embed=embed)
-                                        return 
-
-                                    
-                                    await member.add_roles(mutedRole, reason=f'{ctx.author}: {reason}')
-                                    await ctx.send(f'**{member}** was muted for {counter} | `{reason}`')
-                                    try:                    
-                                        await member.send(f'You were muted in server: **{guild.name}** for {counter} | `{reason}`')
-                                    except Exception:
-                                        pass
-                                    print(f'User {ctx.author} muted {member} in server {guild.name} for {counter} | {reason}')
-                                    logEmbed = discord.Embed(title=f'Case: `mute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                                    logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                                    logEmbed.add_field(name='User', value=member.mention)   
-                                    logEmbed.add_field(name='Reason', value=reason) 
-                                    logEmbed.add_field(name='Duration', value=counter)
-                                    logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                                    logChannel=bot.get_channel(config.Channels.logChannel)
-                                    await logChannel.send(embed=logEmbed)   
-
-                                    await asyncio.sleep(seconds) 
-
-                                    
-                                    await member.remove_roles(mutedRole, reason='Temporary mute completed!')
-                                    reason = 'Temporary mute completed!'
-                                    try:
-                                        await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
-                                    except Exception:
-                                        pass
-                                    print(f'User {member} was unmuted in server {guild.name} | {reason}')
-                                    logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                                    logEmbed.add_field(name='User', value=member.mention)
-                                    logEmbed.add_field(name='Reason', value=reason) 
-                                    logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                                    logChannel=bot.get_channel(config.Channels.logChannel)
-                                    await logChannel.send(embed=logEmbed)
-                                    return
+                                time.sleep(0.5)
+                                seconds = 0
+                                if duration.lower().endswith("d"):
+                                    seconds += int(duration[:-1]) * 60 * 60 * 24
+                                    counter = f"{seconds // 60 // 60 // 24} days"
+                                elif duration.lower().endswith("h"):
+                                    seconds += int(duration[:-1]) * 60 * 60
+                                    counter = f"{seconds // 60 // 60} hours"
+                                elif duration.lower().endswith("m"):
+                                    seconds += int(duration[:-1]) * 60
+                                    counter = f"{seconds // 60} minutes"
+                                elif duration.lower().endswith("s"):
+                                    seconds += int(duration[:-1])
+                                    counter = f"{seconds} seconds"
+                                else:
+                                    embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration.', colour=config.Colors.red)
+                                    await ctx.send(embed=embed)
+                                    return 
                                 
+                                await member.add_roles(mutedRole, reason=f'{ctx.author}: {reason}')
+                                await ctx.send(f'**{member}** was muted for {counter} | `{reason}`')
+                                try:                    
+                                    await member.send(f'You were muted in server: **{guild.name}** for {counter} | `{reason}`')
                                 except Exception:
-                                    await ctx.send('An error occurred while running the command.')
-                                    await ctx.message.add_reaction(config.Emojis.noEntry)
-                                    return
+                                    pass
+                                print(f'User {ctx.author} muted {member} in server {guild.name} for {counter} | {reason}')
+                                logEmbed = discord.Embed(title=f'Case: `mute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                                logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                                logEmbed.add_field(name='User', value=member.mention)   
+                                logEmbed.add_field(name='Reason', value=reason) 
+                                logEmbed.add_field(name='Duration', value=counter)
+                                logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                                logChannel=bot.get_channel(config.Channels.logChannel)
+                                await logChannel.send(embed=logEmbed)   
+
+                                await asyncio.sleep(seconds) 
+                                await member.remove_roles(mutedRole, reason='Temporary mute completed!')
+                                reason = 'Temporary mute completed!'
+                                try:
+                                    await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
+                                except Exception:
+                                    pass
+                                print(f'User {member} was unmuted in server {guild.name} | {reason}')
+                                logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                                logEmbed.add_field(name='User', value=member.mention)
+                                logEmbed.add_field(name='Reason', value=reason) 
+                                logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                                logChannel=bot.get_channel(config.Channels.logChannel)
+                                await logChannel.send(embed=logEmbed)
+                                return
                             else:
                                 embed = discord.Embed(description='Please specify an amount of time to mute that member.', colour=config.Colors.red)
                                 await ctx.send(embed=embed)
@@ -807,6 +806,11 @@ async def mute_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.CommandInvokeError):
+        if str('ValueError') in str(error): 
+            embed = discord.Embed(description=f'**Error!** Your message does not include a valid duration.', colour=config.Colors.red)
+            await ctx.send(embed=embed)
+            return 
 
 
 
@@ -965,7 +969,7 @@ async def softban(ctx, member : discord.Member, *, reason=None):
                         logChannel = bot.get_channel(config.Channels.logChannel)
                         await logChannel.send(embed=logEmbed)       
                     except Exception:
-                        await ctx.send('An error occurred while runnining the command.') 
+                        await ctx.send('An error occurred while running the command.') 
                         await ctx.message.add_reaction(config.Emojis.noEntry)
                         return
                 else:
