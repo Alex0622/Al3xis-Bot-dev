@@ -31,10 +31,13 @@ async def on_command_error(ctx, error):
 
 @bot.event
 async def on_command(ctx):
-    channel = bot.get_channel(config.Channels.logCommandsChannel)
-    embed = discord.Embed(description=f'{ctx.guild.name} - {ctx.author} | {ctx.message.clean_content}', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-    embed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-    await channel.send(embed=embed) 
+    try:
+        channel = bot.get_channel(config.Channels.logCommandsChannel)
+        embed = discord.Embed(description=f'{ctx.guild.name} - {ctx.author} | {ctx.message.clean_content}', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+        embed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await channel.send(embed=embed)
+    except Exception:
+        pass 
 
 
 @bot.event
@@ -88,6 +91,7 @@ async def on_guild_remove(guild):
 
 
 @bot.command(name='announce', aliases=['announcement', 'ann'])
+@commands.guild_only()
 @commands.has_permissions(administrator=True)
 async def announce(ctx, channelA: discord.TextChannel=None):
     if channelA:
@@ -191,6 +195,7 @@ async def announce_error(ctx, error):
 
 
 @bot.command(name='avatar', aliases=['av'])
+@commands.guild_only()
 async def avatar(ctx, member: discord.Member = None):
     if member == None:
         member = ctx.author
@@ -204,10 +209,10 @@ async def avatar(ctx, member: discord.Member = None):
 async def help(ctx, arg = None):
     if arg == None:
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        helpEmbed.add_field(name='Info commands', value='`about`, `announce`, `avatar`, `help`, `id`, `invite`, `membercount`, `ping`, `remind`, `report`, `suggest`, `userinfo`')
-        helpEmbed.add_field(name='Math commands', value='`mathadd`, `mathdiv`, `mathmult`, `mathrandom`, `mathsq`, `mathsqrt`, `mathsub`')
-        helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `softban`, `unban`, `unmute`')
-        helpEmbed.add_field(name="Only bot's owner", value='`DM`, `save`, `say`')
+        helpEmbed.add_field(name='Utility commands', value='`about`, `announce`, `avatar`, `help`, `id`, `invite`, `membercount`, `nick`, `ping`, `reminder`, `report`, `suggest`, `userinfo`')
+        helpEmbed.add_field(name='Math commands', value='`calc`, `mathadd`, `mathdiv`, `mathmult`, `mathrandom`, `mathsq`, `mathsqrt`, `mathsub`')
+        helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `lock`, `mute`, `pmute`, `purge`, `unban`, `unlock`, `unmute`')
+        helpEmbed.add_field(name='Owner commands', value='`DM`, `save`, `say`')
         helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.channel.send(embed=helpEmbed)
         return
@@ -223,6 +228,7 @@ async def help(ctx, arg = None):
 
 
 @bot.command(name='id', aliases=['ID'])
+@commands.guild_only()
 async def id(ctx, member: discord.Member = None):
     if member == None:
         member = ctx.author
@@ -235,7 +241,7 @@ async def info(ctx):
     embedI = discord.Embed(title=f'Information about Al3xis#4614', colour=config.Colors.blue, timestamp=ctx.message.created_at)
     embedI.set_author(name='Al3xis')
     embedI.add_field(name='Owner', value='`Alex22#7756`')
-    embedI.add_field(name='Current Version', value='__[v1.3.5](https://github.com/Alex0622/Al3xis-Bot-dev/releases/tag/v1.3.5)__')
+    embedI.add_field(name='Current Version', value='__[v1.3.6](https://github.com/Alex0622/Al3xis-Bot-dev/releases/tag/v1.3.6)__')
     embedI.add_field(name='Guilds', value=f'`{len(bot.guilds)}`')
     embedI.add_field(name='Prefix', value='`a!`, `A!`')
     embedI.add_field(name='Developed since', value='`21/10/2020`')
@@ -252,16 +258,53 @@ async def info(ctx):
 async def invite(ctx):
     embed = discord.Embed(title='Links', colour=config.Colors.darkGreen, timestamp=ctx.message.created_at)
     embed.add_field(name='Join our Discord server!', value="[Alex's bots](https://discord.gg/AAJPHqNXUy)", inline=False)
-    embed.add_field(name='Invite the bot to your server', value='[Admin permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8) \n[Required permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=268823622)')
+    embed.add_field(name='Invite the bot to your server', value='[Admin permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8) \n[Required permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=134556758)')
     embed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
     await ctx.send(embed=embed)
 
 
 
 @bot.command(name='membercount')
+@commands.guild_only()
 async def membercount(ctx):
     embed = discord.Embed(description=f'There are **{ctx.guild.member_count} members** in this server.', colour=config.Colors.lightBlue)
     await ctx.send(embed=embed)
+
+
+
+@bot.command(name='nick', aliases=['setnick'])
+@commands.guild_only()
+@commands.has_permissions(change_nickname=True)
+@commands.bot_has_permissions(manage_nicknames=True)
+async def nick(ctx, *, new_nick=None):
+    embed = discord.Embed(description=f'Updating nick {config.Emojis.loading}', colour=config.Colors.gray)
+    if new_nick:
+        botmsg = await ctx.send(embed=embed)
+        await asyncio.sleep(1)
+        if ctx.author.top_role.position >= ctx.guild.me.top_role.position:
+            embed = discord.Embed(description="I cannot change your nickname because you have the same role as me or your top role is above mine.", colour=config.Colors.red)
+            await botmsg.edit(embed=embed)
+            return   
+        else:         
+            await ctx.author.edit(nick=new_nick)
+            embed2 = discord.Embed(description=f'{config.Emojis.whiteCheckMark} Your new nickname is: {new_nick}', colour=config.Colors.green)
+            await botmsg.edit(embed=embed2)
+    else:
+        embed = discord.Embed(description='Please provide a nickname for your message.', colour=config.Colors.red)
+        await ctx.channel.send(embed=embed)
+        return
+
+
+@nick.error
+async def nick_error(ctx, error):
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `CHANGE NICKNAME` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `MANAGE NICKNAMES` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
 
 
 
@@ -299,7 +342,7 @@ async def reminder(ctx, time=None, *, msg=None):
                 await ctx.send(embed=embed)
                 return  
 
-            await ctx.send(f"I've set a reminder of {counter}: {msg}", allowed_mentions=discord.AllowedMentions.none())
+            await ctx.reply(f"I've set a reminder of {counter}: {msg}", mention_author=False, allowed_mentions=discord.AllowedMentions.none())
             await asyncio.sleep(seconds)
             await ctx.reply(f'Hey! {msg}', mention_author=True, allowed_mentions=discord.AllowedMentions.none())
         else: 
@@ -382,6 +425,7 @@ async def suggest_error(ctx, error):
 
 
 @bot.command(name='userinfo', aliases=['user', 'ui'])
+@commands.guild_only()
 async def userinfo(ctx, member: discord.Member=None):
     if member is None:
         member = ctx.author
@@ -434,6 +478,52 @@ def sq(x:float):
     return x * x
 
 
+@bot.command(name='calc', aliases=['calculator'])
+async def calc(ctx, x:float=None, arg=None, y:float=None):
+    if arg != None:
+        if x != None:
+            if y != None:
+                if arg == '+':
+                    result = add(x, y)
+                    await ctx.reply(result, mention_author=False)
+                    return
+                if arg == '-':
+                    result = sub(x, y)
+                    await ctx.reply(result, mention_author=False)
+                    return
+                if arg == '*':
+                    result = mult(x, y)
+                    await ctx.reply(result, mention_author=False)
+                    return
+                if arg == '/':
+                    result = div(x, y)
+                    await ctx.reply(result, mention_author=False)
+                    return
+                else:
+                    embed = discord.Embed(description=f'"{arg}" is not a valid option!', colour=config.Colors.red)
+                    await ctx.send(embed=embed)
+                    return   
+            else:
+                embed = discord.Embed(description='You are missing the argument "y".', colour=config.Colors.red)
+                await ctx.send(embed=embed)
+                return    
+        else:
+            embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
+            await ctx.send(embed=embed)
+            return      
+    else:
+        embed = discord.Embed(description=f'Please provide a math argument (+ - * /)', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return 
+
+
+@calc.error
+async def calc_error(ctx, error):
+    if str(error) == 'Command raised an exception: ZeroDivisionError: float division by zero':
+        await ctx.reply('Math ERROR.')
+        return
+
+
 @bot.command(name='mathadd')
 async def mathadd(ctx, x:float=None, y:float=None):
     if x != None:
@@ -470,7 +560,7 @@ async def mathdiv(ctx, x:float=None, y:float=None):
 @mathdiv.error
 async def mathdiv_error(ctx, error):
     if str(error) == 'Command raised an exception: ZeroDivisionError: float division by zero':
-        await ctx.send('Math ERROR.')
+        await ctx.reply('Math ERROR.')
         return
 
 
@@ -554,7 +644,7 @@ async def mathsub(ctx, x:float=None, y:float=None):
     else:
         embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
         await ctx.send(embed=embed)
-        return 
+        return     
 
 
 
@@ -564,12 +654,17 @@ async def mathsub(ctx, x:float=None, y:float=None):
 
 
 @bot.command(name='ban')
+@commands.guild_only()
 @commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def ban(ctx, member : discord.Member, *, reason=None):
     guild = ctx.guild
     if reason == None:
         reason = 'No reason provided.'
+    if member.top_role > ctx.me.top_role:
+        embed = discord.Embed(description="I cannot ban that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return   
     if member != ctx.author:
         if member != ctx.me:
             if not member.bot:
@@ -630,12 +725,17 @@ async def ban_error(ctx, error):
 
 
 @bot.command(name='kick', pass_context=True)
+@commands.guild_only()
 @commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def kick(ctx, member : discord.Member, *, reason=None):
     guild = ctx.guild
     if reason == None:
         reason = 'No reason provided'
+    if member.top_role > ctx.me.top_role:
+        embed = discord.Embed(description="I cannot kick that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
     if member != ctx.author:
         if member != ctx.me:
             if not member.bot:
@@ -696,12 +796,17 @@ async def kick_error(ctx, error):
 
 
 @bot.command(name='mute')
+@commands.guild_only()
 @commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def mute(ctx, member: discord.Member, duration=None, *, reason=None):
     guild = ctx.guild
     if reason == None:
         reason = 'No reason provided'
+    if member.top_role > ctx.me.top_role:
+        embed = discord.Embed(description="I cannot mute that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
     mutedRole = discord.utils.get(guild.roles, name='Muted')
     
     if mutedRole:
@@ -815,13 +920,17 @@ async def mute_error(ctx, error):
 
 
 @bot.command(name='pmute', aliases= ['pm'])
+@commands.guild_only()
 @commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def pmute(ctx, member: discord.Member, *, reason=None):
     guild = ctx.guild
     if reason == None:
         reason = 'No reason provided'
-
+    if member.top_role > ctx.me.top_role:
+        embed = discord.Embed(description="I cannot mute that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
     mutedRole = discord.utils.get(guild.roles,name='Muted')
     
     if mutedRole:
@@ -898,6 +1007,7 @@ async def pmute_error(ctx, error):
 
 
 @bot.command(name='purge', aliases=['clear'])
+@commands.guild_only()
 @commands.bot_has_permissions(manage_messages=True)
 @commands.has_permissions(manage_messages = True)
 async def purge(ctx, amount = 0):
@@ -941,12 +1051,17 @@ async def purge_error(ctx, error):
 
 
 @bot.command(name='softban')
+@commands.guild_only()
 @commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def softban(ctx, member : discord.Member, *, reason=None):
     guild = ctx.guild
     if reason == None:
         reason = 'No reason provided.'
+    if member.top_role > ctx.me.top_role:
+        embed = discord.Embed(description="I cannot softban that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
     if member != ctx.author:
         if member != ctx.me:
             if not member.bot:
@@ -1007,7 +1122,8 @@ async def softban_error(ctx, error):
 
 
 
-@bot.command(name='unban') 
+@bot.command(name='unban')
+@commands.guild_only()
 @commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def unban(ctx, UserID: int, *, reason=None):
@@ -1077,6 +1193,7 @@ async def unban_error(ctx, error):
 
 
 @bot.command(name='unmute')
+@commands.guild_only()
 @commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def unmute(ctx, member: discord.Member, *, reason=None):
@@ -1154,6 +1271,7 @@ async def unmute_error(ctx, error):
 
 
 @bot.command(name='DM', aliases=['dm', 'msg'])
+@commands.guild_only()
 @commands.is_owner()
 async def DM(ctx, member: discord.Member=None, *, msg=None):
     if member != None:
@@ -1214,6 +1332,7 @@ async def save(ctx,*, saveMsg=None):
 
 
 @bot.command(name='say')
+@commands.guild_only()
 @commands.is_owner()
 async def say(ctx, *, sayMsg=None):
     randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]

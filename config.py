@@ -7,6 +7,8 @@ class InfoCommands:
     av =                'Get and post the avatar of the member mentioned.'
     avatar =            'Get and post the avatar of the member mentioned.'
     ban =               'Ban the member mentioned in the command. | Permanent ban.'
+    calc =              'Basic calculator (add, subtract, multiply and divide two values).'
+    calculator =        'Basic calculator (add, subtract, multiply and divide two values).'
     clear =             'Delete an amount of messages. | Limit of messages deleted per command: `500`.'
     dm =                'Send direct messages to users (usually to reply to their reports).'
     DM =                'Send direct messages to users (usually to reply to their reports).'
@@ -19,6 +21,7 @@ class InfoCommands:
     help =              'Display the list of commands.'
     kick =              'Kick a member from the server.'
     latency =           "Shows the bot's latency/ping."
+    lock =              'Lock channels (stop users from sending messages or adding reactions).'
     mathadd =           "Add two values."
     mathdiv =           "Divide two values."
     mathmult =          "Multiply two values."
@@ -29,6 +32,7 @@ class InfoCommands:
     membercount =       'Get how many members are in your server.'
     msg =                'Send direct messages to users.'
     mute =              'Mute members so they cannot send messages or join VC channels. | Duration: seconds, minutes, hours or days.'
+    nick =              'Change your nickname on this guild.'
     ping =              "Shows the bot's latency/ping."
     pm =                'Mute a member permanently.'
     pmute =             'Mute a member permanently.'
@@ -39,10 +43,12 @@ class InfoCommands:
     report =            'Report bugs, errors or problems related to the bot.'
     save =              'Save messages to a channel.'
     say =               'Send the latest saved message in an embed.'
+    setnick =           'Change your nickname on this guild.'
     softban =           'Ban and automatically unban a member.' 
     sug =               'Make a new suggestion for the bot.'
     suggest =           'Make a new suggestion for the bot.'
     ui =                'Get information about a member.'
+    unlock =            'Unlock channels.'
     unban =             'Remove ban from member.'
     unmute =            'Remove `Muted` role from member.'
     user =              'Get information about a member.'
@@ -58,6 +64,8 @@ class UsageCommands:
     av =                '`a!av (member)`'
     avatar =            '`a!avatar (member)`'
     ban =               '`a!ban (member) (reason)`'
+    calc =              '`a!calc (value 1) (+ - * /) (value 2)`'
+    calculator =        '`a!calculator (value 1) (+ - * /) (value 2)`' 
     clear =             '`a!clear (amount of messages that will be purged)`'
     dm =                '`a!dm (member) (message)`'
     DM =                '`a!DM (member) (message)`'
@@ -70,6 +78,7 @@ class UsageCommands:
     help =              '`a!help (command)` | If you do not mention a command, it will show the general help command.'
     kick =              '`a!kick (member) (reason)`'
     latency =           '`a!latency`'
+    lock =              '`a!lock (channel) (reason)`'
     mathadd =           '`a!mathadd (value1) (value2)`'
     mathdiv =           '`a!mathdiv (value1) (value2)`'
     mathmult =          '`a!mathmult (value1) (value2)`'
@@ -80,6 +89,7 @@ class UsageCommands:
     membercount =       '`a!membercount`'
     msg =               '`a!msg (member) (reason)`'
     mute =              '`a!mute (member) (duration) (reason)`'
+    nick =              '`a!nick (new nickname)`'
     ping =              '`a!ping`'
     pm =                '`a!pm (member) (reason)`'
     pmute =             '`a!pmute (member) (reason)`'
@@ -90,13 +100,15 @@ class UsageCommands:
     report =            '`a!report (message)`'
     save =              '`a!save (message)`' 
     say =               '`a!say (message)` | if there is no message, it will send the latest messaged saved.'
+    setnick =           '`a!setnick (new nickname)`'
     sug =               '`a!sug (suggestion)`'
     softban =           '`a!softban (member) (reason)`' 
     suggest =           '`a!suggest (suggestion)`'
-    ui =                '`a!userinfo (member)`'
+    ui =                '`a!ui (member)`'
+    unlock =            '`a!unlock (channel) (reason)`'
     unban =             '`a!unban ID (reason)`'
     unmute =            '`a!unmute (member) (reason)`'
-    user =              '`a!userinfo (member)`'
+    user =              '`a!user (member)`'
     userinfo =          '`a!userinfo (member)`'
     
     
@@ -109,6 +121,8 @@ class AliasesCommands:
     av =                'avatar'
     avatar =            'av'
     ban =               'No aliases'
+    cal =               'calculator'
+    calculator =        'calc'
     clear =             'purge'
     dm =                'DM, msg'
     DM =                'dm, msg'
@@ -121,6 +135,7 @@ class AliasesCommands:
     help =              'h'
     kick =              'No aliases'
     latency =           'ping, pong'
+    lock =              'No aliases'
     membercount =       'No aliases'
     mathadd =           'No aliases'
     mathdiv =           'No aliases'
@@ -131,6 +146,7 @@ class AliasesCommands:
     mathsub =           'No aliases'
     msg =               'dm, DM'
     mute =              'No aliases'
+    nick =              'setnick'
     ping =              'pong, latency'
     pm =                'pmute'
     pmute =             'pm'
@@ -141,10 +157,12 @@ class AliasesCommands:
     report =            'No aliases'
     save =              'No aliases'
     say =               'No aliases'
+    setnick =           'nick'
     softban =           'No aliases'
     sug =               'suggest'
     suggest =           'sug'
     ui =                'user, userinfo'
+    unlock =            'No aliases'
     unban =             'No aliases'
     unmute =            'No aliases'
     user =              'ui, userinfo'
@@ -160,6 +178,8 @@ class RequiredPermissions:
     av =                'NO REQUIRED PERMISSION'
     avatar =            'NO REQUIRED PERMISSION'
     ban =               'BAN MEMBERS'
+    calc =              'NO REQUIRED PERMISSION'
+    calculator =        'NO REQUIRED PERMISSION'
     clear =             'MANAGE MESSAGES'
     dm =                "Bot's owner"
     DM =                "Bot's owner"
@@ -172,6 +192,7 @@ class RequiredPermissions:
     help =              'NO REQUIRED PERMISSION'
     kick =              'BAN MEMBERS'
     latency =           'NO REQUIRED PERMISSION'
+    lock =              'MANAGE CHANNELS'
     mathadd =           'NO REQUIRED PERMISSION'
     mathdiv =           'NO REQUIRED PERMISSION'
     mathmult =          'NO REQUIRED PERMISSION'
@@ -182,6 +203,7 @@ class RequiredPermissions:
     membercount =       'NO REQUIRED PERMISSION'
     msg =               "Bot's owner"
     mute =              'BAN MEMBERS'
+    nick =              'CHANGE NICKNAME'
     ping =              'NO REQUIRED PERMISSION'
     pm =                'BAN MEMBERS'
     pmute =             'BAN MEMBERS'
@@ -192,10 +214,12 @@ class RequiredPermissions:
     report =            'NO REQUIRED PERMISSION'
     save =              "BOT'S OWNER"
     say =               "BOT'S OWNER"
+    setnick =           'CHANGE NICKNAME'
     softban =           'BAN MEMBERS'
     sug =               'NO REQUIRED PERMISSION'
     suggest =           'NO REQUIRED PERMISSION'
     ui =                'NO REQUIRED PERMISSION'
+    unlock =            'MANAGE CHANNELS'
     unban =             'BAN MEMBERS'
     unmute =            'BAN MEMBERS'
     user =              'NO REQUIRED PERMISSION'
@@ -226,6 +250,7 @@ class Colors:
     orange =            0xe07007
     purple =            0x8a1bba
     darkGreen =         0x156109
+    gray =              0x678188
 
 
 
