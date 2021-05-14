@@ -571,7 +571,7 @@ async def ban(ctx, member : discord.Member, *, reason=None):
     if reason == None:
         reason = 'No reason provided.'
     if member.top_role > ctx.author.top_role:
-        return await ctx.send('I can not ban people with a higher role then you.')
+        return await ctx.send('I can not ban people with a higher role than you.')
     if member != ctx.author:
         if member != ctx.me:
             if not member.bot:
