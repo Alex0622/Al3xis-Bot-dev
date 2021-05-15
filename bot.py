@@ -795,6 +795,45 @@ async def kick_error(ctx, error):
 
 
 
+@bot.command(name='lock')
+@commands.has_permissions(manage_channels=True)
+@commands.bot_has_permissions(manage_channels=True)
+async def lock(ctx, channel: discord.TextChannel=None, *, msg=None):
+    if channel != None:
+        if msg !=None:
+            try:
+                await channel.set_permissions(ctx.guild.default_role, send_messages=False, add_reactions=False)
+                await ctx.channel.send('Locked ' + channel.mention)
+                embed = discord.Embed(title='This channel is locked.', description=msg, colour=config.Colors.red)
+                await channel.send(embed=embed)
+            except Exception:
+                await ctx.send('An error occurred while running the command.')
+                await ctx.message.add_reaction(config.Emojis.noEntry)
+                return
+        else:
+            await channel.set_permissions(ctx.guild.default_role, send_messages=False, add_reactions=False)
+            await ctx.channel.send('Locked ' + channel.mention)
+            embed = discord.Embed(title='This channel is locked.', colour=config.Colors.red)
+            await channel.send(embed=embed)
+    else:
+        embed = discord.Embed(description='Please specify a channel!', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+
+
+@lock.error
+async def lock_error(ctx, error):
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `MANAGE CHANNELS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `MANAGE CHANNELS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+
+
+
 @bot.command(name='mute')
 @commands.guild_only()
 @commands.bot_has_permissions(ban_members=True)
@@ -1189,6 +1228,44 @@ async def unban_error(ctx, error):
         await ctx.send(embed=embed)
         return
 
+
+
+@bot.command(name='unlock')
+@commands.has_permissions(manage_channels=True)
+@commands.bot_has_permissions(manage_channels=True)
+async def unlock(ctx, channel: discord.TextChannel=None, *, msg=None):
+    if channel != None:
+        if msg !=None:
+            try:
+                await channel.set_permissions(ctx.guild.default_role, send_messages=True, add_reactions=True)
+                await ctx.channel.send('Unlocked ' + channel.mention)
+                embed = discord.Embed(title='This channel has been unlocked.', description=msg, colour=config.Colors.green)
+                await channel.send(embed=embed)
+            except Exception:
+                await ctx.send('An error occurred while running the command.')
+                await ctx.message.add_reaction(config.Emojis.noEntry)
+                return
+        else:
+            await channel.set_permissions(ctx.guild.default_role, send_messages=True, add_reactions=True)
+            await ctx.channel.send('Unlocked ' + channel.mention)
+            embed = discord.Embed(title='This channel has been unlocked.', colour=config.Colors.green)
+            await channel.send(embed=embed)
+    else:
+        embed = discord.Embed(description='Please specify a channel!', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+
+
+@unlock.error
+async def unlock_error(ctx, error):
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `MANAGE CHANNELS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `MANAGE CHANNELS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
 
 
 
