@@ -93,6 +93,7 @@ async def on_guild_remove(guild):
 @bot.command(name='announce', aliases=['announcement', 'ann'])
 @commands.guild_only()
 @commands.has_permissions(administrator=True)
+@commands.bot_has_permissions(manage_messages=True)
 async def announce(ctx, channelA: discord.TextChannel=None):
     if channelA:
         try:
@@ -189,6 +190,10 @@ async def announce(ctx, channelA: discord.TextChannel=None):
 async def announce_error(ctx, error):
     if isinstance(error,commands.errors.MissingPermissions):
         embed = discord.Embed(description='**Error!** Only administrators of this server can use that command!', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `MANAGE MESSAGES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
 

@@ -121,7 +121,7 @@ class AliasesCommands:
     av =                'avatar'
     avatar =            'av'
     ban =               'No aliases'
-    cal =               'calculator'
+    calc =              'calculator'
     calculator =        'calc'
     clear =             'purge'
     dm =                'DM, msg'
