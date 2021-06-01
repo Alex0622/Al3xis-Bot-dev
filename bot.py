@@ -249,7 +249,7 @@ async def info(ctx):
     embedI.add_field(name='Prefix', value='`a!`, `A!`')
     embedI.add_field(name='Developed since', value='`21/10/2020`')
     embedI.add_field(name='Developed with', value='`Python`')
-    embedI.add_field(name='Useful links', value='[GitHub](https://github.com/Alex0622/Al3xis-Bot-dev/) | [Top.gg](https://top.gg/bot/768309916112650321)')
+    embedI.add_field(name='Useful links', value='[GitHub](https://github.com/Alex0622/Al3xis-Bot-dev/) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
     embedI.add_field(name='Important', value="Please do not try to lock private channels, for some reason it gives permissions for everyone to see that channel, I'm already looking on a fix.", inline=False)
     embedI.set_thumbnail(url=ctx.me.avatar_url)
     embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
