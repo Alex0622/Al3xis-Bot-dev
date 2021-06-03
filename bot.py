@@ -34,7 +34,7 @@ async def on_command(ctx):
     try:
         channel = bot.get_channel(config.Channels.logCommandsChannel)
         embed = discord.Embed(description=f'{ctx.guild.name} - {ctx.author} | {ctx.message.clean_content}', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        embed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        embed.set_footer(text=ctx.author.id, icon_url=ctx.author.avatar_url)
         await channel.send(embed=embed)
     except Exception:
         pass 
