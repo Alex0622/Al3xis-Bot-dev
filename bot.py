@@ -400,7 +400,7 @@ async def report(ctx, *, msg=None):
 suggestion = ''
 listSuggestions = ''
 @bot.command(name='suggest', aliases=['sug'])
-async def suggest(ctx, *, new_suggestion):
+async def suggest(ctx, *, new_suggestion=None):
     if new_suggestion == None:
         embed = discord.Embed(description='Please add a suggestion in your message.', colour=config.Colors.red)
         await ctx.send(embed=embed)
