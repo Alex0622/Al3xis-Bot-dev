@@ -60,7 +60,7 @@ async def on_message(message):
         if not message.author.bot:                
             channel = bot.get_channel(config.Channels.DMsChannel)
             embed = discord.Embed(title=f'{message.author.name} sent a DM!', description=message.content, colour=config.Colors.orange, timestamp=message.created_at)
-            embed.set_footer(text=message.author, icon_url=message.author.avatar_url)
+            embed.set_footer(text=message.author.id, icon_url=message.author.avatar_url)
             await channel.send(embed=embed)
     await bot.process_commands(message)
 
@@ -200,7 +200,7 @@ async def announce_error(ctx, error):
 
 @bot.command(name='avatar', aliases=['av'])
 @commands.guild_only()
-async def avatar(ctx, member: discord.Member = None):
+async def avatar(ctx, *, member: discord.Member = None):
     if member == None:
         member = ctx.author
     embed = discord.Embed(title = f'Avatar of user {member}', colour=config.Colors.green, timestamp=ctx.message.created_at)
@@ -233,7 +233,7 @@ async def help(ctx, arg = None):
 
 @bot.command(name='id', aliases=['ID'])
 @commands.guild_only()
-async def id(ctx, member: discord.Member = None):
+async def id(ctx, *, member: discord.Member = None):
     if member == None:
         member = ctx.author
     await ctx.reply(member.id, mention_author=False)
@@ -430,7 +430,7 @@ async def suggest(ctx, *, new_suggestion):
 
 @bot.command(name='userinfo', aliases=['user', 'ui'])
 @commands.guild_only()
-async def userinfo(ctx, member: discord.Member=None):
+async def userinfo(ctx, *, member: discord.Member=None):
     if member is None:
         member = ctx.author
     try:
