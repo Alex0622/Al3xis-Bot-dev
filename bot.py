@@ -1,10 +1,9 @@
-import discord 
+import discord
 from discord.ext import commands 
 import datetime
 import asyncio
 import config, os
 import time, random, math
-
     
 #Bot (our bot)
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('a!', 'A!')) #Set the prefix of the bot and removes the default help command.
@@ -18,13 +17,20 @@ async def on_ready():
     general_channel = bot.get_channel(config.Channels.botChannel)
     await general_channel.send('Hi, I am online again.')
     #Status
-    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'{len(bot.guilds)} servers', emoji=None, type=discord.ActivityType.listening))
-
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'{len(bot.guilds)} servers | a!help', emoji=None, type=discord.ActivityType.listening))
 
 @bot.event 
 async def on_command_error(ctx, error):
-    if isinstance(error, commands.errors.MissingPermissions) or isinstance(error, commands.BotMissingPermissions) or isinstance(error, commands.CommandNotFound) or isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.CommandInvokeError):
-        pass
+    if isinstance(error, commands.errors.MemberNotFound):
+        embed = discord.Embed(description='**Error!** I cannot find that user.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    if isinstance(error, commands.errors.ChannelNotFound):
+        embed = discord.Embed(description='**Error!** I cannot find that channel.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    if isinstance(error, commands.errors.MissingPermissions) or isinstance(error, commands.errors.BadArgument) or isinstance(error, commands.errors.BotMissingPermissions) or isinstance(error, commands.errors.CommandNotFound) or isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.CommandInvokeError):
+        pass  
     else:
         embed = discord.Embed(description='**Error!** '+str(error), colour=config.Colors.red)
         await ctx.send(embed=embed)
@@ -39,7 +45,6 @@ async def on_command(ctx):
     except Exception:
         pass 
 
-
 @bot.event
 async def on_message(message):
     if message.guild == bot.get_guild(793987455149408309):
@@ -50,11 +55,10 @@ async def on_message(message):
                 botMsg = await message.channel.send(embed=embed)
                 logEmbed = discord.Embed(title=f'Message in #{message.channel} was deleted.', description=f'{message.content}\n __**Reason**: Message includes words that are not allowed here.__', colour=config.Colors.red, timestamp=message.created_at)
                 logEmbed.set_footer(text=message.author.id, icon_url=message.author.avatar_url)
-                channel = bot.get_channel(config.Channels.logChannel)
-                await channel.send(embed=logEmbed)
+                logChannel = bot.get_channel(config.Channels.logChannel)
+                await logChannel.send(embed=logEmbed)
                 await asyncio.sleep(4)
                 await botMsg.delete()
-
 
     if isinstance(message.channel, discord.channel.DMChannel):
         if not message.author.bot:                
@@ -64,6 +68,14 @@ async def on_message(message):
             await channel.send(embed=embed)
     await bot.process_commands(message)
 
+@bot.event
+async def on_message_delete(message):
+    if message.guild == bot.get_guild(793987455149408309):
+        if not message.author.bot:
+            logEmbed = discord.Embed(title=f'Message in #{message.channel} was deleted.', description=f'{message.content}', colour=config.Colors.red, timestamp=message.created_at)
+            logEmbed.set_footer(text=message.author.id, icon_url=message.author.avatar_url)
+            logChannel = bot.get_channel(config.Channels.logChannel)
+            await logChannel.send(embed=logEmbed)
 
 @bot.event
 async def on_guild_join(guild):
@@ -73,7 +85,6 @@ async def on_guild_join(guild):
     await channel.send(embed=embed)
     await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'{len(bot.guilds)} servers', emoji=None, type=discord.ActivityType.listening))
 
-
 @bot.event
 async def on_guild_remove(guild):
     channel = bot.get_channel(config.Channels.joinsleavesChannel)
@@ -82,108 +93,116 @@ async def on_guild_remove(guild):
     await channel.send(embed=embed)
     await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'{len(bot.guilds)} servers', emoji=None, type=discord.ActivityType.listening))
 
-
-
 ####################################################################################################
 ####################################################################################################
 ##Info Commands
 
+@bot.command(name='about', aliases=['info'])
+async def about(ctx):
+    embedI = discord.Embed(title=f'Information about Al3xis#4614', colour=config.Colors.blue, timestamp=ctx.message.created_at)
+    embedI.add_field(name='Owner', value='`Alex22#7756`')
+    embedI.add_field(name='Current Version', value='__[v1.3.7](https://github.com/Alex0622/Al3xis-Bot-dev/releases/tag/v1.3.7)__')
+    embedI.add_field(name='Guilds', value=f'`{len(bot.guilds)}`')
+    embedI.add_field(name='Prefix', value='`a!`, `A!`')
+    embedI.add_field(name='Developed since', value='`21/10/2020`')
+    embedI.add_field(name='Developed with', value='`Python`')
+    embedI.add_field(name='Useful links', value='[GitHub](https://github.com/Alex0622/Al3xis-Bot-dev/) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
+    embedI.add_field(name='Latest updates', value="Removed 'lock' and 'unlock' commands, added 'vote' and 'say' commands, updated 'announce' command and more.", inline=False)
+    embedI.set_thumbnail(url=ctx.me.avatar_url)
+    embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
+    await ctx.reply(embed=embedI, mention_author=False)
 
+
+@bot.command(name='help', aliases=['h'])
+async def help(ctx, arg = None):
+    if arg == None:
+        helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+        helpEmbed.add_field(name='Info commands', value='`about`, `help`, `invite`, `vote`')
+        helpEmbed.add_field(name='Utility commands', value='`announce`, `avatar`, `id`, `membercount`, `nick`, `ping`, `reminder`, `report`, `say`, `servericon`, `suggest`, `userinfo`')
+        helpEmbed.add_field(name='Math commands', value='`calc`, `mathadd`, `mathdiv`, `mathmult`, `mathrandom`, `mathsq`, `mathsqrt`, `mathsub`')
+        helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
+        helpEmbed.add_field(name='Owner commands', value='`DM`, `save`')
+        helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
+        await ctx.reply(embed=helpEmbed, mention_author=False)
+        return
+    else:
+        embed = discord.Embed(title=f'Command: `{arg}` | Aliases: `{getattr(config.AliasesCommands, arg)}`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+        embed.add_field(name=f'Information', value=getattr(config.InfoCommands, arg), inline=False)
+        embed.add_field(name='Usage', value=getattr(config.UsageCommands, arg), inline=False)
+        embed.add_field(name='Required permissions', value='`'+getattr(config.RequiredPermissions, arg)+'`', inline=False)
+        embed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
+        await ctx.reply(embed=embed, mention_author=False)
+        return
+        
+
+@bot.command(name='invite', aliases=['inv'])
+async def invite(ctx):
+    embed = discord.Embed(title='Links', colour=config.Colors.darkGreen, timestamp=ctx.message.created_at)
+    embed.add_field(name='Join our Discord server!', value="[Alex's bots](https://discord.gg/AAJPHqNXUy)", inline=False)
+    embed.add_field(name='Invite the bot to your server', value='[Admin permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8) \n[Required permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=134556758)')
+    embed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
+    await ctx.reply(embed=embed, mention_author=False)
+
+
+@bot.command(name='vote')
+async def vote(ctx):
+    voteEmbed = discord.Embed(description='''Hi, you can vote me on the following websites:
+    1. [Top.gg](https://top.gg/bot/768309916112650321)
+    2. [Discord Bot List](https://discordbotlist.com/bots/al3xis)
+    3. [Discord Boats](https://discord.boats/bot/768309916112650321)
+    4. [Discord Bot Labs](https://bots.discordlabs.org/bot/768309916112650321)
+     ''', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+    voteEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
+    await ctx.reply(embed=voteEmbed, mention_author=False)
+
+####################################################################################################
+####################################################################################################
+##Utility Commands
 
 @bot.command(name='announce', aliases=['announcement', 'ann'])
 @commands.guild_only()
 @commands.has_permissions(administrator=True)
 @commands.bot_has_permissions(manage_messages=True)
-async def announce(ctx, channelA: discord.TextChannel=None):
-    if channelA:
-        try:
-            botMsg = await ctx.send('Please provide the title for your announcement!')
-            await ctx.message.delete()
-            newTitle = await bot.wait_for('message', check=lambda message: message.author == ctx.author and message.channel == ctx.channel, timeout=120)
-            await newTitle.delete()
-
-            if newTitle.content == 'a!none':
-                await botMsg.edit(content='Now provide the message or description of your announcement!')
-
-                newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author and message.channel == ctx.channel, timeout=200)
-                await newContent.delete()
-
-                if newContent.content == 'a!none':
-                    embed = discord.Embed(description='**Error!** You cannot make an announcement without a title and description.', colour=config.Colors.red)
-                    await botMsg.edit(content='', embed=embed)
-                    return
-
-                if newContent.content == 'a!cancel':
-                    await botMsg.edit(content='Announcement cancelled succesfully.')
-                    return
-                else:
-                    await botMsg.edit(content='Preparing to make the announcement...')
-                    
-                    randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
-                    aEmbed = discord.Embed(description=newContent.content, colour=random.choice(randomColors)) 
-                    print(f'Preparing announcement... Description: {newContent.content}, Channel: {channelA.id}')
-                    aChannel = bot.get_channel(channelA.id)
-                    await asyncio.sleep(2)
-                    await aChannel.send(embed=aEmbed)
-                    await botMsg.edit(content='Announcement sent succesfully.')
-                    await botMsg.add_reaction(config.Emojis.whiteCheckMark)
-                    return
-
-            if newTitle.content == 'a!cancel':
-                await botMsg.edit(content='Announcement cancelled succesfully.')
-                return
-
-            else:      
-                await botMsg.edit(content='Now provide the message or description of your announcement!')
-
-                newContent = await bot.wait_for('message', check=lambda message: message.author == ctx.author and message.channel == ctx.channel, timeout=200)
-                await newContent.delete()
-
-                if newContent.content == 'a!none':
-
-                    await botMsg.edit(content='Preparing to make the announcement...')
-                    
-                    randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
-                    aEmbed = discord.Embed(title=newTitle.content, colour=random.choice(randomColors)) 
-                    print(f'Preparing announcement... Title: {newTitle.content}, Channel: {channelA.id}')
-                    aChannel = bot.get_channel(channelA.id)
-                    await asyncio.sleep(2)
-                    await aChannel.send(embed=aEmbed)
-                    await botMsg.edit(content='Announcement sent succesfully.')
-                    await botMsg.add_reaction(config.Emojis.whiteCheckMark)
-                    return
-
-                if newContent.content == 'a!cancel':
-                    await botMsg.edit(content='Announcement cancelled succesfully.')
-                    return
-
-                else:
-
-                    await botMsg.edit(content='Preparing to make the announcement...')
-                    
-                    randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
-                    aEmbed = discord.Embed(title=newTitle.content, description=newContent.content, colour=random.choice(randomColors)) 
-                    print(f'Preparing announcement... Title: {newTitle.content}, Description: {newContent.content}, Channel: {channelA.id}')
-                    aChannel = bot.get_channel(channelA.id)
-                    await asyncio.sleep(2)
-                    await aChannel.send(embed=aEmbed)
-                    await botMsg.edit(content='Announcement sent succesfully.')
-                    await botMsg.add_reaction(config.Emojis.whiteCheckMark)
-                    return
-
-        except asyncio.TimeoutError:
-            await botMsg.edit(content="You didn't send your message in time, please try again!")
+async def announce(ctx, channel : discord.TextChannel=None, *, announceMsg=None):
+    if not channel:
+        embed = discord.Embed(description='Please provide a Discord channel for the announcement!', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    if not announceMsg:
+        embed = discord.Embed(description='Please provide the text for the announcement!', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    try:
+        def check(reaction, user):
+            return user.id == ctx.author.id and reaction.message.id == botMsg.id
+        botMsg = await ctx.send('Do you want to send this message in an embed?')
+        await botMsg.add_reaction(config.Emojis.whiteCheckMark)
+        await botMsg.add_reaction(config.Emojis.x)
+        react, user = await bot.wait_for('reaction_add', check=check, timeout=120)
+        if str(react) == config.Emojis.whiteCheckMark:
+            try:
+                await botMsg.clear_reactions()
+            except Exception:
+                pass
+            randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+            AnnounceEmbed = discord.Embed(description=announceMsg, colour=random.choice(randomColors))
+            await channel.send(embed=AnnounceEmbed)
+            await botMsg.edit(content='Announcement sent sucessfully.')
             return
-        
-        except Exception as e:
+
+        if str(react) == config.Emojis.x:
+            try:
+                await botMsg.clear_reactions()
+            except Exception:
+                pass
+            await channel.send(announceMsg)
+            await botMsg.edit(content='Announcement sent sucessfully.')
+            return 
+    except Exception as e:
             errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
             await ctx.reply(embed=errorEmbed, mention_author=False)
             await ctx.message.add_reaction(config.Emojis.noEntry)
             return
-    else:
-        await ctx.send('Please specify a channel!')
-        return
-
 
 @announce.error
 async def announce_error(ctx, error):
@@ -197,38 +216,15 @@ async def announce_error(ctx, error):
         return
 
 
-
 @bot.command(name='avatar', aliases=['av'])
 @commands.guild_only()
 async def avatar(ctx, *, member: discord.Member = None):
     if member == None:
         member = ctx.author
-    embed = discord.Embed(title = f'Avatar of user {member}', colour=config.Colors.green, timestamp=ctx.message.created_at)
-    embed.set_image(url='{}'.format(member.avatar_url))
+    user = await bot.fetch_user(member.id)
+    embed = discord.Embed(title = f'Avatar of user {user}', colour=config.Colors.green, timestamp=ctx.message.created_at)
+    embed.set_image(url='{}'.format(user.avatar_url))
     await ctx.send(embed=embed)
-
-
-
-@bot.command(name='help', aliases=['h'])
-async def help(ctx, arg = None):
-    if arg == None:
-        helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        helpEmbed.add_field(name='Utility commands', value='`about`, `announce`, `avatar`, `help`, `id`, `invite`, `membercount`, `nick`, `ping`, `reminder`, `report`, `suggest`, `userinfo`')
-        helpEmbed.add_field(name='Math commands', value='`calc`, `mathadd`, `mathdiv`, `mathmult`, `mathrandom`, `mathsq`, `mathsqrt`, `mathsub`')
-        helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `lock`, `mute`, `pmute`, `purge`, `unban`, `unlock`, `unmute`')
-        helpEmbed.add_field(name='Owner commands', value='`DM`, `save`, `say`')
-        helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
-        await ctx.reply(embed=helpEmbed, mention_author=False)
-        return
-    else:
-        embed = discord.Embed(title=f'Command: `{arg}` | Aliases: `{getattr(config.AliasesCommands, arg)}`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        embed.add_field(name=f'Information', value=getattr(config.InfoCommands, arg), inline=False)
-        embed.add_field(name='Usage', value=getattr(config.UsageCommands, arg), inline=False)
-        embed.add_field(name='Required permissions', value='`'+getattr(config.RequiredPermissions, arg)+'`', inline=False)
-        embed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
-        await ctx.reply(embed=embed, mention_author=False)
-        return
-
 
 
 @bot.command(name='id', aliases=['ID'])
@@ -239,40 +235,11 @@ async def id(ctx, *, member: discord.Member = None):
     await ctx.reply(member.id, mention_author=False)
 
 
-
-@bot.command(name='info', aliases=['about'])
-async def info(ctx):
-    embedI = discord.Embed(title=f'Information about Al3xis#4614', colour=config.Colors.blue, timestamp=ctx.message.created_at)
-    embedI.add_field(name='Owner', value='`Alex22#7756`')
-    embedI.add_field(name='Current Version', value='__[v1.3.6.1](https://github.com/Alex0622/Al3xis-Bot-dev/releases/tag/v1.3.6.1)__')
-    embedI.add_field(name='Guilds', value=f'`{len(bot.guilds)}`')
-    embedI.add_field(name='Prefix', value='`a!`, `A!`')
-    embedI.add_field(name='Developed since', value='`21/10/2020`')
-    embedI.add_field(name='Developed with', value='`Python`')
-    embedI.add_field(name='Useful links', value='[GitHub](https://github.com/Alex0622/Al3xis-Bot-dev/) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
-    embedI.add_field(name='Important', value="Please do not try to lock private channels, for some reason it gives permissions for everyone to see that channel, I'm already looking on a fix.", inline=False)
-    embedI.set_thumbnail(url=ctx.me.avatar_url)
-    embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
-    await ctx.reply(embed=embedI, mention_author=False)
-
-
-
-@bot.command(name='invite', aliases=['inv'])
-async def invite(ctx):
-    embed = discord.Embed(title='Links', colour=config.Colors.darkGreen, timestamp=ctx.message.created_at)
-    embed.add_field(name='Join our Discord server!', value="[Alex's bots](https://discord.gg/AAJPHqNXUy)", inline=False)
-    embed.add_field(name='Invite the bot to your server', value='[Admin permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8) \n[Required permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=134556758)')
-    embed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
-    await ctx.reply(embed=embed, mention_author=False)
-
-
-
 @bot.command(name='membercount')
 @commands.guild_only()
 async def membercount(ctx):
     embed = discord.Embed(description=f'There are **{ctx.guild.member_count} members** in this server.', colour=config.Colors.lightBlue)
     await ctx.reply(embed=embed, mention_author=False)
-
 
 
 @bot.command(name='nick', aliases=['setnick'])
@@ -297,7 +264,6 @@ async def nick(ctx, *, new_nick=None):
         await ctx.channel.send(embed=embed)
         return
 
-
 @nick.error
 async def nick_error(ctx, error):
     if isinstance(error, commands.errors.MissingPermissions):
@@ -310,7 +276,6 @@ async def nick_error(ctx, error):
         return
 
 
-
 @bot.command(name='ping', aliases=['pong', 'latency'])
 async def ping(ctx):
     before = time.monotonic()
@@ -319,7 +284,6 @@ async def ping(ctx):
     ping = (time.monotonic() - before) * 1000
     await message.edit(content=f"**Bot's ping:**  `{int(ping)}ms`")
     print(f'Ping {int(ping)}ms')
-
 
     
 @bot.command(name='reminder', aliases=['remind'])
@@ -357,7 +321,6 @@ async def reminder(ctx, time=None, *, msg=None):
         await ctx.send(embed=embed)
         return
 
-
 @reminder.error
 async def reminder_error(ctx, error):
     if isinstance(error, commands.errors.CommandInvokeError):
@@ -370,7 +333,6 @@ async def reminder_error(ctx, error):
             return 
 
 
-
 @bot.command(name='report')
 async def report(ctx, *, msg=None):
     if msg != None:
@@ -381,7 +343,7 @@ async def report(ctx, *, msg=None):
             embed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
             print(f'{ctx.author} reported: {msg}')
             channel = bot.get_channel(config.Channels.reportsChannel)
-            await botMsg.edit(content='',embed=embed)
+            await channel.send(content='',embed=embed)
             
             await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
             await botMsg.edit(content='Thanks for your report!, and Admin will review your report as soon as possible.')
@@ -396,6 +358,30 @@ async def report(ctx, *, msg=None):
         return
 
 
+@bot.command(name='say')
+@commands.guild_only()
+@commands.cooldown(1, 10, commands.BucketType.user)
+async def say(ctx, *, sayMsg=None):
+    if not sayMsg:
+        embed = discord.Embed(description='Please provide a message!', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    try:
+        await ctx.message.delete()
+        await ctx.send(sayMsg)
+    except Exception as e:
+        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        await ctx.reply(embed=errorEmbed, mention_author=False)
+        await ctx.message.add_reaction(config.Emojis.noEntry)
+        return
+
+
+@bot.command(name='servericon')
+@commands.guild_only()
+async def servericon(ctx):
+    embed = discord.Embed(title = f'Icon of {ctx.guild}', colour=config.Colors.green, timestamp=ctx.message.created_at)
+    embed.set_image(url='{}'.format(ctx.guild.icon_url))
+    await ctx.send(embed=embed)
 
 suggestion = ''
 listSuggestions = ''
@@ -425,7 +411,6 @@ async def suggest(ctx, *, new_suggestion=None):
         await msg.edit(content='', embed=errorEmbed)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         return
-
 
 
 @bot.command(name='userinfo', aliases=['user', 'ui'])
@@ -460,12 +445,9 @@ async def userinfo(ctx, *, member: discord.Member=None):
         await ctx.message.add_reaction(config.Emojis.noEntry)
         return
 
-
-
 ####################################################################################################
 ####################################################################################################
 #Math commands
-
 
 def add(x:float, y:float):
     return x + y
@@ -481,7 +463,6 @@ def sqrt(x:float):
     return math.sqrt(x)
 def sq(x:float):
     return x * x
-
 
 @bot.command(name='calc', aliases=['calculator'])
 async def calc(ctx, x:float=None, arg=None, y:float=None):
@@ -521,12 +502,15 @@ async def calc(ctx, x:float=None, arg=None, y:float=None):
         await ctx.send(embed=embed)
         return 
 
-
 @calc.error
 async def calc_error(ctx, error):
     if str(error) == 'Command raised an exception: ZeroDivisionError: float division by zero':
         await ctx.reply('Math ERROR.')
         return
+    if str('Converting to "float"') in str(error):
+        embed = discord.Embed(description=f'Please provide a valid math equation. \nNote: Rememeber to add spaces between arguments. (e.g. `a!calc 1 + 1`)', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return 
 
 
 @bot.command(name='mathadd')
@@ -545,7 +529,6 @@ async def mathadd(ctx, x:float=None, y:float=None):
         return    
 
 
-
 @bot.command(name='mathdiv')
 async def mathdiv(ctx, x:float=None, y:float=None):
     if x != None:
@@ -561,13 +544,11 @@ async def mathdiv(ctx, x:float=None, y:float=None):
         await ctx.send(embed=embed)
         return 
 
-
 @mathdiv.error
 async def mathdiv_error(ctx, error):
     if str(error) == 'Command raised an exception: ZeroDivisionError: float division by zero':
         await ctx.reply('Math ERROR.')
         return
-
 
 
 @bot.command(name='mathmult')
@@ -586,7 +567,6 @@ async def mathmult(ctx, x:float=None, y:float=None):
         return    
 
 
-
 @bot.command(name='mathrandom')
 async def mathrandom(ctx, x:int=None, y:float=None):
     if x != None:
@@ -602,14 +582,12 @@ async def mathrandom(ctx, x:int=None, y:float=None):
         await ctx.send(embed=embed)
         return 
 
-
 @mathrandom.error
 async def mathrandom_error(ctx, error):
     if isinstance(error, commands.CommandInvokeError):
         embed = discord.Embed(description='The order of your values must be from lowest to highest. \n Note: Only use numbers.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return  
-
 
 
 @bot.command(name='mathsq')
@@ -623,7 +601,6 @@ async def mathsq(ctx, x:float=None):
         return  
 
 
-
 @bot.command(name='mathsqrt')
 async def mathsqrt(ctx, x:float=None):
     if x != None:          
@@ -633,7 +610,6 @@ async def mathsqrt(ctx, x:float=None):
         embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return  
-
 
 
 @bot.command(name='mathsub')
@@ -651,12 +627,9 @@ async def mathsub(ctx, x:float=None, y:float=None):
         await ctx.send(embed=embed)
         return     
 
-
-
 ####################################################################################################
 ####################################################################################################
 ##Moderation commands
-
 
 @bot.command(name='ban')
 @commands.guild_only()
@@ -711,7 +684,6 @@ async def ban(ctx, member : discord.Member, *, reason=None):
         embed = discord.Embed(description="You can't ban yourself.", colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
-    
 
 @ban.error
 async def ban_error(ctx, error):
@@ -727,7 +699,6 @@ async def ban_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
-
 
 
 @bot.command(name='kick', pass_context=True)
@@ -784,7 +755,6 @@ async def kick(ctx, member : discord.Member, *, reason=None):
         await ctx.send(embed=embed)
         return
 
-
 @kick.error
 async def kick_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
@@ -799,47 +769,6 @@ async def kick_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
-
-
-
-@bot.command(name='lock')
-@commands.has_permissions(manage_channels=True)
-@commands.bot_has_permissions(manage_channels=True)
-async def lock(ctx, channel: discord.TextChannel=None, *, msg=None):
-    if channel != None:
-        if msg !=None:
-            try:
-                await channel.set_permissions(ctx.guild.default_role, send_messages=False, add_reactions=False)
-                await ctx.channel.send('Locked ' + channel.mention)
-                embed = discord.Embed(title='This channel is locked.', description=msg, colour=config.Colors.red)
-                await channel.send(embed=embed)
-            except Exception as e:
-                errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                await ctx.reply(embed=errorEmbed, mention_author=False)
-                await ctx.message.add_reaction(config.Emojis.noEntry)
-                return
-        else:
-            await channel.set_permissions(ctx.guild.default_role, send_messages=False, add_reactions=False)
-            await ctx.channel.send('Locked ' + channel.mention)
-            embed = discord.Embed(title='This channel is locked.', colour=config.Colors.red)
-            await channel.send(embed=embed)
-    else:
-        embed = discord.Embed(description='Please specify a channel!', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return
-
-
-@lock.error
-async def lock_error(ctx, error):
-    if isinstance(error, commands.errors.MissingPermissions):
-        embed = discord.Embed(description='**Error!** You need the permission `MANAGE CHANNELS` to run this command.', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return
-    if isinstance(error, commands.BotMissingPermissions):
-        embed = discord.Embed(description='**Error!** I need the permission `MANAGE CHANNELS` to run this command.', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return
-
 
 
 @bot.command(name='mute')
@@ -942,8 +871,6 @@ async def mute(ctx, member: discord.Member, duration=None, *, reason=None):
         await ctx.send(embed=embed)
         return 
 
-
-
 @mute.error
 async def mute_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
@@ -963,7 +890,6 @@ async def mute_error(ctx, error):
             embed = discord.Embed(description=f'**Error!** Your message does not include a valid duration.', colour=config.Colors.red)
             await ctx.send(embed=embed)
             return 
-
 
 
 @bot.command(name='pmute', aliases= ['pm'])
@@ -1036,7 +962,6 @@ async def pmute(ctx, member: discord.Member, *, reason=None):
         await ctx.send(embed=embed)
         return   
 
-
 @pmute.error
 async def pmute_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
@@ -1051,7 +976,6 @@ async def pmute_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
-
 
 
 @bot.command(name='purge', aliases=['clear'])
@@ -1084,7 +1008,6 @@ async def purge(ctx, amount = 0):
         await ctx.send(embed=embed)
         return
 
-
 @purge.error
 async def purge_error(ctx, error):
     if isinstance(error, commands.errors.MissingPermissions):
@@ -1095,7 +1018,6 @@ async def purge_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `MANAGE MESSAGES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
-
 
 
 @bot.command(name='softban')
@@ -1153,7 +1075,6 @@ async def softban(ctx, member : discord.Member, *, reason=None):
         await ctx.send(embed=embed)
         return
 
-
 @softban.error
 async def softban_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
@@ -1168,7 +1089,6 @@ async def softban_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
-
 
 
 @bot.command(name='unban')
@@ -1223,7 +1143,6 @@ async def unban(ctx, UserID: int, *, reason=None):
         await ctx.send(embed=embed)
         return
 
-
 @unban.error
 async def unban_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
@@ -1238,47 +1157,6 @@ async def unban_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
-
-
-
-@bot.command(name='unlock')
-@commands.has_permissions(manage_channels=True)
-@commands.bot_has_permissions(manage_channels=True)
-async def unlock(ctx, channel: discord.TextChannel=None, *, msg=None):
-    if channel != None:
-        if msg !=None:
-            try:
-                await channel.set_permissions(ctx.guild.default_role, send_messages=True, add_reactions=True)
-                await ctx.channel.send('Unlocked ' + channel.mention)
-                embed = discord.Embed(title='This channel has been unlocked.', description=msg, colour=config.Colors.green)
-                await channel.send(embed=embed)
-            except Exception as e:
-                errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                await ctx.reply(embed=errorEmbed, mention_author=False)
-                await ctx.message.add_reaction(config.Emojis.noEntry)
-                return
-        else:
-            await channel.set_permissions(ctx.guild.default_role, send_messages=True, add_reactions=True)
-            await ctx.channel.send('Unlocked ' + channel.mention)
-            embed = discord.Embed(title='This channel has been unlocked.', colour=config.Colors.green)
-            await channel.send(embed=embed)
-    else:
-        embed = discord.Embed(description='Please specify a channel!', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return
-
-
-@unlock.error
-async def unlock_error(ctx, error):
-    if isinstance(error, commands.errors.MissingPermissions):
-        embed = discord.Embed(description='**Error!** You need the permission `MANAGE CHANNELS` to run this command.', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return
-    if isinstance(error, commands.BotMissingPermissions):
-        embed = discord.Embed(description='**Error!** I need the permission `MANAGE CHANNELS` to run this command.', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return
-
 
 
 @bot.command(name='unmute')
@@ -1335,7 +1213,6 @@ async def unmute(ctx, member: discord.Member, *, reason=None):
     else:
         await ctx.send("I can't find any muted role here. Guess nobody is muted.")
         return
- 
 
 @unmute.error
 async def unmute_error(ctx, error):
@@ -1352,13 +1229,9 @@ async def unmute_error(ctx, error):
         await ctx.send(embed=embed)
         return
 
-
-
 ####################################################################################################
 ####################################################################################################
 ##Owner commands
-
-
 
 @bot.command(name='DM', aliases=['dm', 'msg'])
 @commands.guild_only()
@@ -1393,16 +1266,33 @@ async def DM(ctx, member: discord.Member=None, *, msg=None):
         return
 
 
+@bot.command(name='embed')
+@commands.guild_only()
+@commands.is_owner()
+async def embed(ctx, *, embedMsg=None):
+    randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+    if embedMsg == None:
+        embed = discord.Embed(description=savedMessageSave, colour=random.choice(randomColors))
+        await ctx.send(embed=embed)
+        await ctx.message.delete()
+        return
+    else:
+        embed = discord.Embed(description=embedMsg  , colour=random.choice(randomColors))
+        await ctx.send(embed=embed)
+        await ctx.message.delete()
+        return
 
 
 savedMessageSave = ''
 @bot.command(name='save')
+@commands.guild_only()
 @commands.is_owner()
 async def save(ctx,*, saveMsg=None):
     global savedMessageSave
     savedMessageSave = saveMsg
     if saveMsg == None:
-        await ctx.send('Please provide a message to save!')
+        embed = discord.Embed(description='Please provide a description for your embed.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
         return
     else:
         try:
@@ -1420,25 +1310,6 @@ async def save(ctx,*, saveMsg=None):
             await ctx.reply(embed=errorEmbed, mention_author=False)
             await ctx.message.add_reaction(config.Emojis.noEntry)
             return
-
-
-
-@bot.command(name='say')
-@commands.guild_only()
-@commands.is_owner()
-async def say(ctx, *, sayMsg=None):
-    randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
-    if sayMsg == None:
-        embed = discord.Embed(description=savedMessageSave, colour=random.choice(randomColors))
-        await ctx.send(embed=embed)
-        await ctx.message.delete()
-        return
-    else:
-        embed = discord.Embed(description=sayMsg, colour=random.choice(randomColors))
-        await ctx.send(embed=embed)
-        await ctx.message.delete()
-        return
-
     
   
 ################################

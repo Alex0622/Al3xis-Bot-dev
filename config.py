@@ -12,6 +12,7 @@ class InfoCommands:
     clear =             'Delete an amount of messages. | Limit of messages deleted per command: `500`.'
     dm =                'Send direct messages to users (usually to reply to their reports).'
     DM =                'Send direct messages to users (usually to reply to their reports).'
+    embed =             'Send messages in embed.'
     id =                'Get the ID of the given member.'
     ID =                'Get the ID of the given member.' 
     info =              'Get information about the bot.'
@@ -41,8 +42,9 @@ class InfoCommands:
     remind =            'Set a reminder. | Duration: seconds, minutes, hours or days.'
     reminder =          'Set a reminder. | Duration: seconds, minutes, hours or days.'
     report =            'Report bugs, errors or problems related to the bot.'
-    save =              'Save messages to a channel.'
-    say =               'Send the latest saved message in an embed.'
+    save =              'Save messages to the secret channel.'
+    say =               'Send messages through the bot.'
+    servericon =        'Show the server icon.'
     setnick =           'Change your nickname on this guild.'
     softban =           'Ban and automatically unban a member.' 
     sug =               'Make a new suggestion for the bot.'
@@ -53,22 +55,24 @@ class InfoCommands:
     unmute =            'Remove `Muted` role from member.'
     user =              'Get information about a member.'
     userinfo =          'Get information about a member.'
+    vote =              'Vote Al3xis on Discord bot lists!'
 
 
 
 class UsageCommands:
     about =             '`a!about`'
-    ann =               '`a!ann #channel` | If you want to cancel the announcement use `a!cancel` and if you want an empty title or description use `a!none` when the bot asks for it.'
-    announce =          '`a!announce #channel` | If you want to cancel the announcement use `a!cancel` and if you want an empty title or description use `a!none` when the bot asks for it.'
-    announcement =      '`a!announcement #channel` | If you want to cancel the announcement use `a!cancel` and if you want an empty title or description use `a!none` when the bot asks for it.'
+    ann =               '`a!ann #channel (message)`'
+    announce =          '`a!announce (#channel) (message)`'
+    announcement =      '`a!announcement (#channel) (message)'
     av =                '`a!av (member)`'
     avatar =            '`a!avatar (member)`'
     ban =               '`a!ban (member) (reason)`'
-    calc =              '`a!calc (value 1) (+ - * /) (value 2)`'
-    calculator =        '`a!calculator (value 1) (+ - * /) (value 2)`' 
+    calc =              '`a!calc (value 1) (+ - / *) (value 2)`'
+    calculator =        '`a!calculator (value 1) (+ - / *) (value 2)`' 
     clear =             '`a!clear (amount of messages that will be purged)`'
     dm =                '`a!dm (member) (message)`'
     DM =                '`a!DM (member) (message)`'
+    embed =             '`a!embed (message)` | if there is no message, it will send the latest messaged saved.'
     id =                '`a!id (member)`'
     ID =                '`a!ID (member)`'
     info =              '`a!info`'
@@ -99,8 +103,9 @@ class UsageCommands:
     reminder =          '`a!reminder (time) (message)`'
     report =            '`a!report (message)`'
     save =              '`a!save (message)`' 
-    say =               '`a!say (message)` | if there is no message, it will send the latest messaged saved.'
+    say =               '`a!say (message)`'
     setnick =           '`a!setnick (new nickname)`'
+    servericon =        '`a!servericon`'
     sug =               '`a!sug (suggestion)`'
     softban =           '`a!softban (member) (reason)`' 
     suggest =           '`a!suggest (suggestion)`'
@@ -110,6 +115,7 @@ class UsageCommands:
     unmute =            '`a!unmute (member) (reason)`'
     user =              '`a!user (member)`'
     userinfo =          '`a!userinfo (member)`'
+    vote =              '`a!vote`'
     
     
     
@@ -126,6 +132,7 @@ class AliasesCommands:
     clear =             'purge'
     dm =                'DM, msg'
     DM =                'dm, msg'
+    embed =             'No aliases'
     id =                'ID'
     ID =                'id'
     info =              'No aliases'
@@ -157,6 +164,7 @@ class AliasesCommands:
     report =            'No aliases'
     save =              'No aliases'
     say =               'No aliases'
+    servericon =        'No aliases'
     setnick =           'nick'
     softban =           'No aliases'
     sug =               'suggest'
@@ -167,6 +175,7 @@ class AliasesCommands:
     unmute =            'No aliases'
     user =              'ui, userinfo'
     userinfo =          'ui, user'
+    vote =              'No aliases'
 
 
 
@@ -183,6 +192,7 @@ class RequiredPermissions:
     clear =             'MANAGE MESSAGES'
     dm =                "Bot's owner"
     DM =                "Bot's owner"
+    embed =             "Bot's owner"
     id =                'NO REQUIRED PERMISSION'
     ID =                'NO REQUIRED PERMISSION'
     info =              'NO REQUIRED PERMISSION'
@@ -213,7 +223,8 @@ class RequiredPermissions:
     reminder =          'NO REQUIRED PERMISSION'
     report =            'NO REQUIRED PERMISSION'
     save =              "BOT'S OWNER"
-    say =               "BOT'S OWNER"
+    say =               'NO REQUIRED PERMISSION'
+    servericon =        'NO REQUIRED PERMISSION'
     setnick =           'CHANGE NICKNAME'
     softban =           'BAN MEMBERS'
     sug =               'NO REQUIRED PERMISSION'
@@ -224,6 +235,7 @@ class RequiredPermissions:
     unmute =            'BAN MEMBERS'
     user =              'NO REQUIRED PERMISSION'
     userinfo =          'NO REQUIRED PERMISSION'
+    vote =              'NO REQUIRED PERMISSION'
 
 
     
@@ -265,4 +277,4 @@ class Emojis:
     loading =                   '<a:loading:823701755946074142>'
 
 
-BadWords = ["arse","bitch","cock","cunt","dick","fuck","nigg","pennis","pussy","shit"]
+BadWords = ["bitch","cock","cunt","dick","fuck","nigg","pennis","pussy","shit"]
