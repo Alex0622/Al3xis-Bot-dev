@@ -368,7 +368,7 @@ async def say(ctx, *, sayMsg=None):
         return
     try:
         await ctx.message.delete()
-        await ctx.send(sayMsg)
+        await ctx.send(sayMsg, allowed_mentions=discord.AllowedMentions.none())
     except Exception as e:
         errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
