@@ -83,7 +83,7 @@ async def on_guild_join(guild):
     embed = discord.Embed(title='Al3xis was added to a guild.', description=f'Guild name: {guild.name} \n Guild ID: {guild.id} \n Member count: {guild.member_count}', colour=config.Colors.green)
     embed.set_footer(text=f'{len(bot.guilds)} guilds now', icon_url=guild.icon_url)
     await channel.send(embed=embed)
-    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'{len(bot.guilds)} servers', emoji=None, type=discord.ActivityType.listening))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'{len(bot.guilds)} servers | a!help', emoji=None, type=discord.ActivityType.listening))
 
 @bot.event
 async def on_guild_remove(guild):
@@ -91,12 +91,15 @@ async def on_guild_remove(guild):
     embed = discord.Embed(title='Al3xis was removed from a guild.', description=f'Guild name: {guild.name} \n Guild ID: {guild.id} \n Member count: {guild.member_count}', colour=config.Colors.green)
     embed.set_footer(text=f'{len(bot.guilds)} guilds now', icon_url=guild.icon_url)
     await channel.send(embed=embed)
-    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'{len(bot.guilds)} servers', emoji=None, type=discord.ActivityType.listening))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'{len(bot.guilds)} servers | a!help', emoji=None, type=discord.ActivityType.listening))
 
 ####################################################################################################
 ####################################################################################################
 ##Info Commands
-
+@bot.command(name='countdown')
+@commands.is_owner()
+async def countdown(ctx):
+    await ctx.reply('The countdown ends in less than a day.', mention_author=False)
 @bot.command(name='about', aliases=['info'])
 async def about(ctx):
     embedI = discord.Embed(title=f'Information about Al3xis#4614', colour=config.Colors.blue, timestamp=ctx.message.created_at)
@@ -117,11 +120,11 @@ async def about(ctx):
 async def help(ctx, arg = None):
     if arg == None:
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        helpEmbed.add_field(name='Info commands', value='`about`, `help`, `invite`, `vote`')
-        helpEmbed.add_field(name='Utility commands', value='`announce`, `avatar`, `id`, `membercount`, `nick`, `ping`, `reminder`, `report`, `say`, `servericon`, `suggest`, `userinfo`')
+        helpEmbed.add_field(name='Info commands', value='`about`, `help`, `invite`, `ping`, `source`, `vote`')
+        helpEmbed.add_field(name='Utility commands', value='`announce`, `avatar`, `id`, `membercount`, `nick`, `reminder`, `report`, `say`, `servericon`, `suggest`, `userinfo`')
         helpEmbed.add_field(name='Math commands', value='`calc`, `mathadd`, `mathdiv`, `mathmult`, `mathrandom`, `mathsq`, `mathsqrt`, `mathsub`')
         helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
-        helpEmbed.add_field(name='Owner commands', value='`DM`, `save`')
+        helpEmbed.add_field(name='Owner commands', value='`DM`, `embed`, `save`')
         helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=helpEmbed, mention_author=False)
         return
@@ -141,6 +144,22 @@ async def invite(ctx):
     embed.add_field(name='Join our Discord server!', value="[Alex's bots](https://discord.gg/AAJPHqNXUy)", inline=False)
     embed.add_field(name='Invite the bot to your server', value='[Admin permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8) \n[Required permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=134556758)')
     embed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
+    await ctx.reply(embed=embed, mention_author=False)
+
+
+@bot.command(name='ping', aliases=['pong', 'latency'])
+async def ping(ctx):
+    before = time.monotonic()
+    message = await ctx.reply("Pong!", mention_author=False)
+    time.sleep(2)
+    ping = (time.monotonic() - before) * 1000
+    await message.edit(content=f"**Bot's ping:**  `{int(ping)}ms`")
+    print(f'Ping {int(ping)}ms')
+
+
+@bot.command(name='source')
+async def source(ctx):
+    embed = discord.Embed(title=f"{ctx.me.name}'s source", description='Hi!, you can find my source code [here](https://github.com/Alex0622/Al3xis-Bot-dev/).', colour=config.Colors.yellow)
     await ctx.reply(embed=embed, mention_author=False)
 
 
@@ -274,16 +293,6 @@ async def nick_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `MANAGE NICKNAMES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
-
-
-@bot.command(name='ping', aliases=['pong', 'latency'])
-async def ping(ctx):
-    before = time.monotonic()
-    message = await ctx.reply("Pong!", mention_author=False)
-    time.sleep(2)
-    ping = (time.monotonic() - before) * 1000
-    await message.edit(content=f"**Bot's ping:**  `{int(ping)}ms`")
-    print(f'Ping {int(ping)}ms')
 
     
 @bot.command(name='reminder', aliases=['remind'])
@@ -505,66 +514,12 @@ async def calc(ctx, x:float=None, arg=None, y:float=None):
 @calc.error
 async def calc_error(ctx, error):
     if str(error) == 'Command raised an exception: ZeroDivisionError: float division by zero':
-        await ctx.reply('Math ERROR.')
+        await ctx.reply('Math ERROR.', mention_author=False)
         return
     if str('Converting to "float"') in str(error):
         embed = discord.Embed(description=f'Please provide a valid math equation. \nNote: Rememeber to add spaces between arguments. (e.g. `a!calc 1 + 1`)', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return 
-
-
-@bot.command(name='mathadd')
-async def mathadd(ctx, x:float=None, y:float=None):
-    if x != None:
-        if y != None:
-            result = add(x, y)
-            await ctx.reply(result, mention_author=False)
-        else:
-            embed = discord.Embed(description='You are missing the argument "y".', colour=config.Colors.red)
-            await ctx.send(embed=embed)
-            return    
-    else:
-        embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return    
-
-
-@bot.command(name='mathdiv')
-async def mathdiv(ctx, x:float=None, y:float=None):
-    if x != None:
-        if y != None:
-            result = div(x, y)
-            await ctx.reply(result, mention_author=False)
-        else:
-            embed = discord.Embed(description='You are missing the argument "y".', colour=config.Colors.red)
-            await ctx.send(embed=embed)
-            return    
-    else:
-        embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return 
-
-@mathdiv.error
-async def mathdiv_error(ctx, error):
-    if str(error) == 'Command raised an exception: ZeroDivisionError: float division by zero':
-        await ctx.reply('Math ERROR.')
-        return
-
-
-@bot.command(name='mathmult')
-async def mathmult(ctx, x:float=None, y:float=None):
-    if x != None:
-        if y != None:
-            result = mult(x, y)
-            await ctx.reply(result, mention_author=False)
-        else:
-            embed = discord.Embed(description='You are missing the argument "y".', colour=config.Colors.red)
-            await ctx.send(embed=embed)
-            return    
-    else:
-        embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return    
 
 
 @bot.command(name='mathrandom')
@@ -611,21 +566,6 @@ async def mathsqrt(ctx, x:float=None):
         await ctx.send(embed=embed)
         return  
 
-
-@bot.command(name='mathsub')
-async def mathsub(ctx, x:float=None, y:float=None):
-    if x != None:
-        if y != None:
-            result = sub(x, y)
-            await ctx.reply(result, mention_author=False)
-        else:
-            embed = discord.Embed(description='You are missing the argument "y".', colour=config.Colors.red)
-            await ctx.send(embed=embed)
-            return    
-    else:
-        embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return     
 
 ####################################################################################################
 ####################################################################################################
