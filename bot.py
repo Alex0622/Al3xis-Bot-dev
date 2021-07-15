@@ -282,13 +282,16 @@ async def nick(ctx, *, new_nick=None):
                     color = config.Colors.green
                 embed2 = discord.Embed(description=embedDesc, colour=color)
                 await botmsg.edit(embed=embed2)
+                return
             if new_nick == ctx.author.nick:
                 embed3 = discord.Embed(description="You already have that nickname, please select a different one!", colour=config.Colors.red)
                 await botmsg.edit(embed=embed3)
+                return
             else:
                 await ctx.author.edit(nick=new_nick)
                 embed4 = discord.Embed(description=f'{config.Emojis.whiteCheckMark} Your new nickname is: {new_nick}', colour=config.Colors.green)
                 await botmsg.edit(embed=embed4)
+                return
     else:
         if ctx.author.nick == None:
             desc = 'You don\'t have a current nickname.'
