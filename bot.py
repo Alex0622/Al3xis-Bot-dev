@@ -96,10 +96,7 @@ async def on_guild_remove(guild):
 ####################################################################################################
 ####################################################################################################
 ##Info Commands
-@bot.command(name='countdown')
-@commands.is_owner()
-async def countdown(ctx):
-    await ctx.reply('The countdown ends in less than a day.', mention_author=False)
+
 @bot.command(name='about', aliases=['info'])
 async def about(ctx):
     embedI = discord.Embed(title=f'Information about Al3xis#4614', colour=config.Colors.blue, timestamp=ctx.message.created_at)
@@ -110,7 +107,7 @@ async def about(ctx):
     embedI.add_field(name='Developed since', value='`21/10/2020`')
     embedI.add_field(name='Developed with', value='`Python`')
     embedI.add_field(name='Useful links', value='[GitHub](https://github.com/Alex0622/Al3xis-Bot-dev/) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
-    embedI.add_field(name='Latest updates', value="Removed 'lock' and 'unlock' commands, added 'vote' and 'say' commands, updated 'announce' command and more.", inline=False)
+    embedI.add_field(name='Latest updates', value="Removed 'lock' and 'unlock' commands, added 'vote' and 'say' commands, updated 'announce' and 'nick' commands and more.", inline=False)
     embedI.set_thumbnail(url=ctx.me.avatar_url)
     embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
     await ctx.reply(embed=embedI, mention_author=False)
@@ -275,13 +272,33 @@ async def nick(ctx, *, new_nick=None):
             await botmsg.edit(embed=embed)
             return   
         else:         
-            await ctx.author.edit(nick=new_nick)
-            embed2 = discord.Embed(description=f'{config.Emojis.whiteCheckMark} Your new nickname is: {new_nick}', colour=config.Colors.green)
-            await botmsg.edit(embed=embed2)
+            if str(new_nick).lower() == 'reset':
+                if ctx.author.nick == None:
+                    embedDesc = "You don't have a nickname!"
+                    color = config.Colors.red
+                else:
+                    await ctx.author.edit(nick=ctx.author.name)
+                    embedDesc = f"{config.Emojis.whiteCheckMark} I've removed your nickname."
+                    color = config.Colors.green
+                embed2 = discord.Embed(description=embedDesc, colour=color)
+                await botmsg.edit(embed=embed2)
+            if new_nick == ctx.author.nick:
+                embed3 = discord.Embed(description="You already have that nickname, please select a different one!", colour=config.Colors.red)
+                await botmsg.edit(embed=embed3)
+            else:
+                await ctx.author.edit(nick=new_nick)
+                embed4 = discord.Embed(description=f'{config.Emojis.whiteCheckMark} Your new nickname is: {new_nick}', colour=config.Colors.green)
+                await botmsg.edit(embed=embed4)
     else:
-        embed = discord.Embed(description='Please provide a nickname for your message.', colour=config.Colors.red)
+        if ctx.author.nick == None:
+            desc = 'You don\'t have a current nickname.'
+            color = config.Colors.red
+        else:
+            desc = f'Your current nick is: {ctx.author.nick}'
+            color = config.Colors.orange
+        embed = discord.Embed(description=desc, colour=color)
         await ctx.channel.send(embed=embed)
-        return
+        return  
 
 @nick.error
 async def nick_error(ctx, error):
