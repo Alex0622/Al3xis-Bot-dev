@@ -138,7 +138,7 @@ async def on_member_remove(member):
 async def about(ctx):
     embedI = discord.Embed(title=f'Information about Al3xis#4614', colour=config.Colors.blue, timestamp=ctx.message.created_at)
     embedI.add_field(name='Owner', value='`Alex22#7756`')
-    embedI.add_field(name='Current Version', value='__[v1.3.7](https://github.com/Alex0622/Al3xis-Bot-dev/releases/tag/v1.3.7)__')
+    embedI.add_field(name='Current Version', value='__[v1.3.8](https://github.com/Alex0622/Al3xis-Bot-dev/releases/tag/v1.3.8)__')
     embedI.add_field(name='Guilds', value=f'`{len(bot.guilds)}`')
     embedI.add_field(name='Prefix', value='`a!`, `A!`')
     embedI.add_field(name='Developed since', value='`21/10/2020`')
@@ -154,15 +154,83 @@ async def about(ctx):
 async def help(ctx, arg = None):
     if arg == None:
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        helpEmbed.add_field(name='Info commands', value='`about`, `help`, `invite`, `ping`, `source`, `suggest`, `vote`')
-        helpEmbed.add_field(name='Utility commands', value='`announce`, `avatar`, `id`, `membercount`, `nick`, `reminder`, `report`, `say`, `servericon`, `userinfo`')
-        helpEmbed.add_field(name='Math commands', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`')
-        helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
-        helpEmbed.add_field(name='Owner commands', value='`DM`, `embed`, `save`, `updatesuggestion`')
+        helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `report`, `source`, `suggest`, `vote`')
+        helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `id`, `membercount`, `nick`, `reminder`, `say`, `servericon`, `userinfo`')
+        helpEmbed.add_field(name='Math', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`')
+        helpEmbed.add_field(name='Moderation', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
+        helpEmbed.add_field(name='Owner', value='`DM`, `embed`, `save`, `updatesuggestion`')
         helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=helpEmbed, mention_author=False)
         return
+    if str(arg).lower() == 'info':
+        titleEmbed = 'Info commands'
+        descEmbed = f'''
+        `about` - {config.InfoCommands.about}
+        `help` - {config.InfoCommands.help}
+        `invite` - {config.InfoCommands.invite}
+        `ping` - {config.InfoCommands.ping}
+        `report` - {config.InfoCommands.report}
+        `source` - {config.InfoCommands.source}
+        `suggest` - {config.InfoCommands.suggest}
+        `vote` - {config.InfoCommands.vote}'''
+        infoEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+        infoEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
+        await ctx.reply(embed=infoEmbed, mention_author=False)
+        return
+    if str(arg).lower() == 'utility':
+        titleEmbed = 'Utility commands'
+        descEmbed = f'''
+        `announce` - {config.InfoCommands.announce}
+        `avatar` - {config.InfoCommands.avatar}
+        `id` - {config.InfoCommands.id}
+        `membercount` - {config.InfoCommands.membercount}
+        `nick` - {config.InfoCommands.nick}
+        `reminder` - {config.InfoCommands.reminder}
+        `say` - {config.InfoCommands.say}
+        `servericon` - {config.InfoCommands.servericon}
+        `userinfo`- {config.InfoCommands.userinfo}'''
+        utilityEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+        utilityEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
+        await ctx.reply(embed=utilityEmbed, mention_author=False)
+        return
+    if str(arg).lower() == 'math':
+        titleEmbed = 'Math commands'
+        descEmbed = f'''
+        `calc` - {config.InfoCommands.calc}
+        `mathrandom` - {config.InfoCommands.mathrandom}
+        `mathsq` - {config.InfoCommands.mathsq}
+        `mathsqrt` - {config.InfoCommands.mathsqrt}'''
+        mathEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+        mathEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
+        await ctx.reply(embed=mathEmbed, mention_author=False)
+        return
+    if str(arg).lower() == 'moderation':
+        titleEmbed = 'Moderation commands'
+        descEmbed = f'''
+        `ban` - {config.InfoCommands.ban}
+        `kick`- {config.InfoCommands.kick}
+        `mute` - {config.InfoCommands.mute}
+        `pmute` - {config.InfoCommands.pmute}
+        `purge` - {config.InfoCommands.purge}
+        `unban` - {config.InfoCommands.unban}
+        `unmute` - {config.InfoCommands.unmute}'''
+        moderationEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+        moderationEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
+        await ctx.reply(embed=moderationEmbed, mention_author=False)
+        return
+    if str(arg).lower() == 'owner':
+        titleEmbed = 'Owner commands'
+        descEmbed = f'''
+        `DM` - {config.InfoCommands.DM}
+        `embed` - {config.InfoCommands.embed}
+        `save` - {config.InfoCommands.save}
+        `updatesuggestion` -{config.InfoCommands.updatesuggestion}'''
+        ownerEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
+        ownerEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
+        await ctx.reply(embed=ownerEmbed, mention_author=False)
+        return
     else:
+        arg = str(arg).lower()
         embed = discord.Embed(title=f'Command: `{arg}` | Aliases: `{getattr(config.AliasesCommands, arg)}`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
         embed.add_field(name=f'Information', value=getattr(config.InfoCommands, arg), inline=False)
         embed.add_field(name='Usage', value=getattr(config.UsageCommands, arg), inline=False)
@@ -189,6 +257,31 @@ async def ping(ctx):
     ping = (time.monotonic() - before) * 1000
     await message.edit(content=f"**Bot's ping:**  `{int(ping)}ms`")
     print(f'Ping {int(ping)}ms')
+
+
+@bot.command(name='report')
+async def report(ctx, *, msg=None):
+    if msg != None:
+        try:
+            botMsg = await ctx.reply(f'Saving report {config.Emojis.loading}', mention_author=False)
+            await asyncio.sleep(2)
+            embed = discord.Embed(title=f'Report made by {ctx.author.name}', description=msg, colour=config.Colors.purple, timestamp=ctx.message.created_at)
+            embed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+            print(f'{ctx.author} reported: {msg}')
+            channel = bot.get_channel(config.Channels.reportsChannel)
+            await channel.send(content='',embed=embed)
+            
+            await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
+            await botMsg.edit(content='Thanks for your report!, and Admin will review your report as soon as possible.')
+        except Exception as e:
+            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            await botMsg.edit(content='', embed=errorEmbed, mention_author=False)
+            await ctx.message.add_reaction(config.Emojis.noEntry)
+            return
+    else:
+        embed = discord.Embed(description="Please provide a description for your report.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
 
 
 @bot.command(name='source')
@@ -426,31 +519,6 @@ async def reminder_error(ctx, error):
             embed = discord.Embed(description=f'**Error!** Your message does not include a valid duration.', colour=config.Colors.red)
             await ctx.send(embed=embed)
             return 
-
-
-@bot.command(name='report')
-async def report(ctx, *, msg=None):
-    if msg != None:
-        try:
-            botMsg = await ctx.reply(f'Saving report {config.Emojis.loading}', mention_author=False)
-            await asyncio.sleep(2)
-            embed = discord.Embed(title=f'Report made by {ctx.author.name}', description=msg, colour=config.Colors.purple, timestamp=ctx.message.created_at)
-            embed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-            print(f'{ctx.author} reported: {msg}')
-            channel = bot.get_channel(config.Channels.reportsChannel)
-            await channel.send(content='',embed=embed)
-            
-            await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
-            await botMsg.edit(content='Thanks for your report!, and Admin will review your report as soon as possible.')
-        except Exception as e:
-            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-            await botMsg.edit(content='', embed=errorEmbed, mention_author=False)
-            await ctx.message.add_reaction(config.Emojis.noEntry)
-            return
-    else:
-        embed = discord.Embed(description="Please provide a description for your report.", colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return
 
 
 @bot.command(name='say')
@@ -1329,7 +1397,7 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
         await ctx.send(embed=embed)
         return
     try:    
-        if str(type).lower() == 'a' or 'accept':
+        if str(type).lower() == 'accept':
             Suggestionschannel = await bot.fetch_channel(config.Channels.suggestionsChannel)
             msg = await Suggestionschannel.fetch_message(msgID)
             await msg.edit(content=f'Status: **Accepted** {config.Emojis.whiteCheckMark} | Reason: {reason}')
@@ -1342,7 +1410,7 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
             await asyncio.sleep(5)
             await botMsg.delete()
             return
-        if str(type).lower() == 'd' or 'deny':
+        if str(type).lower() == 'deny':
             Suggestionschannel = await bot.fetch_channel(config.Channels.suggestionsChannel)
             msg = await Suggestionschannel.fetch_message(msgID)
             await msg.edit(content=f'Status: **Denied** {config.Emojis.noEntry} | Reason: {reason}')
