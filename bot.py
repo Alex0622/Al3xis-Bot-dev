@@ -117,11 +117,11 @@ async def about(ctx):
 async def help(ctx, arg = None):
     if arg == None:
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-        helpEmbed.add_field(name='Info commands', value='`about`, `help`, `invite`, `ping`, `source`, `vote`')
-        helpEmbed.add_field(name='Utility commands', value='`announce`, `avatar`, `id`, `membercount`, `nick`, `reminder`, `report`, `say`, `servericon`, `suggest`, `userinfo`')
+        helpEmbed.add_field(name='Info commands', value='`about`, `help`, `invite`, `ping`, `source`, `suggest`, `vote`')
+        helpEmbed.add_field(name='Utility commands', value='`announce`, `avatar`, `id`, `membercount`, `nick`, `reminder`, `report`, `say`, `servericon`, `userinfo`')
         helpEmbed.add_field(name='Math commands', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`')
         helpEmbed.add_field(name='Moderation commands', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
-        helpEmbed.add_field(name='Owner commands', value='`DM`, `embed`, `save`')
+        helpEmbed.add_field(name='Owner commands', value='`DM`, `embed`, `save`, `updatesuggestion`')
         helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=helpEmbed, mention_author=False)
         return
@@ -160,13 +160,42 @@ async def source(ctx):
     await ctx.reply(embed=embed, mention_author=False)
 
 
+suggestion = ''
+listSuggestions = ''
+@bot.command(name='suggest', aliases=['sug'])
+async def suggest(ctx, *, new_suggestion=None):
+    if new_suggestion == None:
+        embed = discord.Embed(description='Please add a suggestion in your message.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    try:
+        global suggestion
+        suggestion =  new_suggestion
+        description = suggestion 
+        msg = await ctx.reply('Saving suggestion...', mention_author=False)
+        time.sleep(2)
+        embed = discord.Embed(title=f'New suggestion made by {ctx.author}!', description=description, colour=config.Colors.green, timestamp=ctx.message.created_at)
+        embed.set_footer(text=ctx.author.id)
+        suggestions_channel = bot.get_channel(config.Channels.suggestionsChannel)
+        message = await suggestions_channel.send(embed=embed)
+        await message.add_reaction(config.Emojis.ballotBoxWithCheck)
+        await message.add_reaction(config.Emojis.x)
+        print('New suggestion: ' + suggestion)      
+        await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
+        await msg.edit(content=f'Thanks for your suggestion: {suggestion}', allowed_mentions=discord.AllowedMentions.none())
+    except Exception as e:
+        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        await msg.edit(content='', embed=errorEmbed)
+        await ctx.message.add_reaction(config.Emojis.noEntry)
+        return
+        
+
 @bot.command(name='vote')
 async def vote(ctx):
     voteEmbed = discord.Embed(description='''Hi, you can vote me on the following websites:
     1. [Top.gg](https://top.gg/bot/768309916112650321)
     2. [Discord Bot List](https://discordbotlist.com/bots/al3xis)
     3. [Discord Boats](https://discord.boats/bot/768309916112650321)
-    4. [Discord Bot Labs](https://bots.discordlabs.org/bot/768309916112650321)
      ''', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
     voteEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
     await ctx.reply(embed=voteEmbed, mention_author=False)
@@ -414,35 +443,6 @@ async def servericon(ctx):
     embed = discord.Embed(title = f'Icon of {ctx.guild}', colour=config.Colors.green, timestamp=ctx.message.created_at)
     embed.set_image(url='{}'.format(ctx.guild.icon_url))
     await ctx.send(embed=embed)
-
-suggestion = ''
-listSuggestions = ''
-@bot.command(name='suggest', aliases=['sug'])
-async def suggest(ctx, *, new_suggestion=None):
-    if new_suggestion == None:
-        embed = discord.Embed(description='Please add a suggestion in your message.', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return
-    try:
-        global suggestion
-        suggestion =  new_suggestion
-        description = suggestion 
-        msg = await ctx.reply('Saving suggestion...', mention_author=False)
-        time.sleep(2)
-        embed = discord.Embed(title=f'New suggestion made by {ctx.author}!', description=description, colour=config.Colors.green, timestamp=ctx.message.created_at)
-        embed.set_footer(text=ctx.author.id)
-        suggestions_channel = bot.get_channel(config.Channels.suggestionsChannel)
-        message = await suggestions_channel.send(embed=embed)
-        await message.add_reaction(config.Emojis.ballotBoxWithCheck)
-        await message.add_reaction(config.Emojis.x)
-        print('New suggestion: ' + suggestion)      
-        await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
-        await msg.edit(content=f'Thanks for your suggestion: {suggestion}', allowed_mentions=discord.AllowedMentions.none())
-    except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-        await msg.edit(content='', embed=errorEmbed)
-        await ctx.message.add_reaction(config.Emojis.noEntry)
-        return
 
 
 @bot.command(name='userinfo', aliases=['user', 'ui'])
@@ -1273,6 +1273,46 @@ async def save(ctx,*, saveMsg=None):
             await ctx.reply(embed=errorEmbed, mention_author=False)
             await ctx.message.add_reaction(config.Emojis.noEntry)
             return
+
+
+@bot.command(name='us', aliases=['updatesuggestion'])
+@commands.guild_only()
+@commands.is_owner()
+async def us(ctx, msgID:int=None, type=None, *, reason=None):
+    if msgID == None:
+        embed = discord.Embed(description="Please provide the message ID.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    if type == None:
+        embed = discord.Embed(description="Please provide if the suggestion should be approved `(a)` or denied `(d)`.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    if reason == None:
+        embed = discord.Embed(description="You need to provide a reason.", colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    try:    
+        if str(type).lower() == 'a' or 'accept':
+            status = 'accepted'
+        if str(type).lower() == 'd' or 'deny':
+            status = 'denied'
+        Suggestionschannel = await bot.fetch_channel(config.Channels.suggestionsChannel)
+        msg = await Suggestionschannel.fetch_message(msgID)
+        await msg.edit(content=f'Suggestion was **{status}**: {reason}')
+        user = ctx.me
+        emoji1 = config.Emojis.ballotBoxWithCheck
+        emoji2 = config.Emojis.x
+        await msg.remove_reaction(emoji1, user)
+        await msg.remove_reaction(emoji2, user)
+        botMsg = await ctx.reply(f'{config.Emojis.whiteCheckMark} Suggestion was successfully updated.', mention_author=False)
+        await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
+        await asyncio.sleep(5)
+        await botMsg.delete()
+    except Exception as e:
+        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        await ctx.reply(embed=errorEmbed, mention_author=False)
+        await ctx.message.add_reaction(config.Emojis.noEntry)
+        return
     
   
 ################################

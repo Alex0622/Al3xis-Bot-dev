@@ -49,6 +49,8 @@ class InfoCommands:
     unlock =            'Unlock channels.'
     unban =             'Remove ban from member.'
     unmute =            'Remove `Muted` role from member.'
+    updatesuggestion =  'Accept/Deny suggestions.'
+    us =                'Accept/Deny suggestions.'
     user =              'Get information about a member.'
     userinfo =          'Get information about a member.'
     vote =              'Vote Al3xis on Discord bot lists!'
@@ -106,6 +108,8 @@ class UsageCommands:
     unlock =            '`a!unlock (channel) (reason)`'
     unban =             '`a!unban ID (reason)`'
     unmute =            '`a!unmute (member) (reason)`'
+    updatesuggestion =  '`a!updatesuggestion (message ID) (accept/deny) (reason)`'
+    us =                '`a!us (message ID) (accept/deny) (reason)`'
     user =              '`a!user (member)`'
     userinfo =          '`a!userinfo (member)`'
     vote =              '`a!vote`'
@@ -163,6 +167,8 @@ class AliasesCommands:
     unlock =            'No aliases'
     unban =             'No aliases'
     unmute =            'No aliases'
+    updatesuggestion =  'us'
+    us =                'updatesuggestion'
     user =              'ui, userinfo'
     userinfo =          'ui, user'
     vote =              'No aliases'
@@ -220,6 +226,8 @@ class RequiredPermissions:
     unlock =            'MANAGE CHANNELS'
     unban =             'BAN MEMBERS'
     unmute =            'BAN MEMBERS'
+    updatesuggestion =  "Bot's owner"
+    us =                "Bot's owner"
     user =              'NO REQUIRED PERMISSION'
     userinfo =          'NO REQUIRED PERMISSION'
     vote =              'NO REQUIRED PERMISSION'
@@ -264,4 +272,4 @@ class Emojis:
     loading =                   '<a:loading:823701755946074142>'
 
 
-BadWords = ["bitch","cock","cunt","dick","fuck","nigg","pennis","pussy","shit"]
+BadWords = ["bitch","fuck","nigg","shit"]
