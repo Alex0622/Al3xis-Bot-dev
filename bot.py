@@ -6,7 +6,9 @@ import config, os
 import time, random, math
     
 #Bot (our bot)
-bot = commands.Bot(command_prefix=commands.when_mentioned_or('a!', 'A!')) #Set the prefix of the bot and removes the default help command.
+intents=discord.Intents.default()
+intents.members=True
+bot = commands.Bot(command_prefix=commands.when_mentioned_or('a!', 'A!'), intents=intents) #Set the prefix of the bot and removes the default help command.
 bot.remove_command(name='help')
 
 
