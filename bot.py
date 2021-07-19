@@ -214,7 +214,7 @@ async def suggest(ctx, *, new_suggestion=None):
         embed = discord.Embed(title=f'New suggestion made by {ctx.author}!', description=description, colour=config.Colors.green, timestamp=ctx.message.created_at)
         embed.set_footer(text=ctx.author.id)
         suggestions_channel = bot.get_channel(config.Channels.suggestionsChannel)
-        message = await suggestions_channel.send(embed=embed)
+        message = await suggestions_channel.send(f'Status: **Pending** {config.Emojis.loading}', embed=embed)
         await message.add_reaction(config.Emojis.ballotBoxWithCheck)
         await message.add_reaction(config.Emojis.x)
         print('New suggestion: ' + suggestion)      
@@ -1332,7 +1332,7 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
         if str(type).lower() == 'a' or 'accept':
             Suggestionschannel = await bot.fetch_channel(config.Channels.suggestionsChannel)
             msg = await Suggestionschannel.fetch_message(msgID)
-            await msg.edit(content=f'Status: **accepted** | Reason: {reason}')
+            await msg.edit(content=f'Status: **Accepted** {config.Emojis.whiteCheckMark} | Reason: {reason}')
             emoji1 = config.Emojis.ballotBoxWithCheck
             emoji2 = config.Emojis.x
             await msg.clear_reaction(emoji1)
@@ -1345,7 +1345,7 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
         if str(type).lower() == 'd' or 'deny':
             Suggestionschannel = await bot.fetch_channel(config.Channels.suggestionsChannel)
             msg = await Suggestionschannel.fetch_message(msgID)
-            await msg.edit(content=f'Status: **denied** | Reason: {reason}')
+            await msg.edit(content=f'Status: **Denied** {config.Emojis.noEntry} | Reason: {reason}')
             emoji1 = config.Emojis.ballotBoxWithCheck
             emoji2 = config.Emojis.x
             await msg.clear_reaction(emoji1)
