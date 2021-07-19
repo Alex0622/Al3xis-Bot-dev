@@ -236,6 +236,7 @@ class RequiredPermissions:
     
 class Channels:
     suggestionsChannel =    793989328602791946
+    chatChannel =           821782500375265281
     botChannel =            822135281511694386
     joinsleavesChannel =    832320231325696070
     ownerChannel =          793989996494192692

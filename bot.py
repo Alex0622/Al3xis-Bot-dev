@@ -47,6 +47,17 @@ async def on_command(ctx):
 
 @bot.event
 async def on_message(message):
+    if message.content == '<@!768309916112650321>':
+        titleMsg = f'Information about Al3xis'
+        descriptionMsg = f'''
+        Hello, I'm Al3xis, a Discord bot developed by Alex22#7756.
+        If you want my list of commands, use the command `a!help`.
+        If you have any questions related to the bot you can [join my support server](https://discord.com/invite/AAJPHqNXUy).
+        Have you found a bug? You can report it using the command `a!report`
+        Do you have any suggestion? use the command `a!suggest`
+        '''
+        infoEmbed = discord.Embed(title=titleMsg, description=descriptionMsg, colour=config.Colors.blue)
+        await message.reply(embed=infoEmbed, mention_author=False)
     if message.guild == bot.get_guild(793987455149408309):
         for word in config.BadWords:
             if word in message.content.lower():
@@ -92,6 +103,30 @@ async def on_guild_remove(guild):
     embed.set_footer(text=f'{len(bot.guilds)} guilds now', icon_url=guild.icon_url)
     await channel.send(embed=embed)
     await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'{len(bot.guilds)} servers | a!help', emoji=None, type=discord.ActivityType.listening))
+
+@bot.event
+async def on_member_join(member):
+    if member.guild == bot.get_guild(793987455149408309):
+        memberRole = discord.utils.get(member.guild.roles, id=829793629236494417)
+        await member.add_roles(memberRole, reason='Member Join Event')
+        chatChannel = bot.get_channel(config.Channels.chatChannel)
+        randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen, config.Colors.gray]
+        embed = discord.Embed(description=f'Welcome {member.mention} to the **Alex\'s bots** server!', colour=random.choice(randomColors))
+        await chatChannel.send(embed=embed)
+        return
+    else:
+        return
+
+@bot.event
+async def on_member_remove(member):
+    if member.guild == bot.get_guild(793987455149408309):
+        chatChannel = bot.get_channel(config.Channels.chatChannel)
+        randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen, config.Colors.gray]
+        embed = discord.Embed(description=f'{member.mention} left the server.', colour=random.choice(randomColors))
+        await chatChannel.send(embed=embed)
+        return
+    else:
+        return
 
 ####################################################################################################
 ####################################################################################################
