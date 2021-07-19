@@ -188,7 +188,7 @@ async def suggest(ctx, *, new_suggestion=None):
         await msg.edit(content='', embed=errorEmbed)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         return
-        
+
 
 @bot.command(name='vote')
 async def vote(ctx):
@@ -1293,21 +1293,31 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
         return
     try:    
         if str(type).lower() == 'a' or 'accept':
-            status = 'accepted'
+            Suggestionschannel = await bot.fetch_channel(config.Channels.suggestionsChannel)
+            msg = await Suggestionschannel.fetch_message(msgID)
+            await msg.edit(content=f'Status: **accepted** | Reason: {reason}')
+            emoji1 = config.Emojis.ballotBoxWithCheck
+            emoji2 = config.Emojis.x
+            await msg.clear_reaction(emoji1)
+            await msg.clear_reaction(emoji2)
+            botMsg = await ctx.reply(f'{config.Emojis.whiteCheckMark} Suggestion was successfully accepted.', mention_author=False)
+            await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
+            await asyncio.sleep(5)
+            await botMsg.delete()
+            return
         if str(type).lower() == 'd' or 'deny':
-            status = 'denied'
-        Suggestionschannel = await bot.fetch_channel(config.Channels.suggestionsChannel)
-        msg = await Suggestionschannel.fetch_message(msgID)
-        await msg.edit(content=f'Suggestion was **{status}**: {reason}')
-        user = ctx.me
-        emoji1 = config.Emojis.ballotBoxWithCheck
-        emoji2 = config.Emojis.x
-        await msg.remove_reaction(emoji1, user)
-        await msg.remove_reaction(emoji2, user)
-        botMsg = await ctx.reply(f'{config.Emojis.whiteCheckMark} Suggestion was successfully updated.', mention_author=False)
-        await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
-        await asyncio.sleep(5)
-        await botMsg.delete()
+            Suggestionschannel = await bot.fetch_channel(config.Channels.suggestionsChannel)
+            msg = await Suggestionschannel.fetch_message(msgID)
+            await msg.edit(content=f'Status: **denied** | Reason: {reason}')
+            emoji1 = config.Emojis.ballotBoxWithCheck
+            emoji2 = config.Emojis.x
+            await msg.clear_reaction(emoji1)
+            await msg.clear_reaction(emoji2)
+            botMsg = await ctx.reply(f'{config.Emojis.whiteCheckMark} Suggestion was successfully denied.', mention_author=False)
+            await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
+            await asyncio.sleep(5)
+            await botMsg.delete()
+            return
     except Exception as e:
         errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
