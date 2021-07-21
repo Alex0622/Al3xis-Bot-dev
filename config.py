@@ -18,11 +18,11 @@ class InfoCommands:
     info =              'Get information about the bot.'
     inv =               'Invite the bot to your server or join our Discord server.'
     invite =            'Invite the bot to your server or join our Discord server.'
-    h =                 'Display the list of commands.'
-    help =              'Display the list of commands.'
+    h =                 'List all commands or get information for a single command/category.'
+    help =              'List all commands or get information for a single command/category.'
     kick =              'Kick a member from the server.'
     latency =           "Shows the bot's latency/ping."
-    mathrandom =        '`a!mathrandom (value1) (value2)`'
+    mathrandom =        'Choose a random number between two values.'
     mathsq =            "Find the square of a number."
     mathsqrt =          "Find the square root of a number."
     membercount =       'Get how many members are in your server.'
@@ -75,8 +75,8 @@ class UsageCommands:
     info =              '`a!info`'
     inv =               '`a!inv`'
     invite =            '`a!invite`'
-    h =                 '`a!h (command)` | If you do not mention a command, it will show the general help command.'
-    help =              '`a!help (command)` | If you do not mention a command, it will show the general help command.'
+    h =                 '`a!h (command/category)`'
+    help =              '`a!help (command/category)`'
     kick =              '`a!kick (member) (reason)`'
     latency =           '`a!latency`'
     mathrandom =        '`a!mathrandom (value1) (value2)`'

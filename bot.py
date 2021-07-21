@@ -224,7 +224,7 @@ async def help(ctx, arg = None):
         `DM` - {config.InfoCommands.DM}
         `embed` - {config.InfoCommands.embed}
         `save` - {config.InfoCommands.save}
-        `updatesuggestion` -{config.InfoCommands.updatesuggestion}'''
+        `updatesuggestion` - {config.InfoCommands.updatesuggestion}'''
         ownerEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
         ownerEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=ownerEmbed, mention_author=False)
