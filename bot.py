@@ -31,6 +31,10 @@ async def on_command_error(ctx, error):
         embed = discord.Embed(description='**Error!** I cannot find that channel.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.RoleNotFound):
+        embed = discord.Embed(description=f'**Error!** I cannot find that role.', colour=config.Colors.red)
+        await ctx.reply(embed=embed, mention_author=False)
+        return
     if isinstance(error, commands.errors.MissingPermissions) or isinstance(error, commands.errors.BadArgument) or isinstance(error, commands.errors.BotMissingPermissions) or isinstance(error, commands.errors.CommandNotFound) or isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.CommandInvokeError):
         pass  
     else:
@@ -144,7 +148,7 @@ async def about(ctx):
     embedI.add_field(name='Developed since', value='`21/10/2020`')
     embedI.add_field(name='Developed with', value='`Python`')
     embedI.add_field(name='Useful links', value='[GitHub](https://github.com/Alex0622/Al3xis-Bot-dev/) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
-    embedI.add_field(name='Latest updates', value="Removed 'lock' and 'unlock' commands, added 'vote' and 'say' commands, updated 'announce' and 'nick' commands and more.", inline=False)
+    embedI.add_field(name='Latest updates', value="Added 'roleinfo' and 'say' commands, updated 'announce' and 'nick' commands and more.", inline=False)
     embedI.set_thumbnail(url=ctx.me.avatar_url)
     embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
     await ctx.reply(embed=embedI, mention_author=False)
@@ -155,7 +159,7 @@ async def help(ctx, arg = None):
     if arg == None:
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
         helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `report`, `source`, `suggest`, `vote`')
-        helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `id`, `membercount`, `nick`, `reminder`, `say`, `servericon`, `userinfo`')
+        helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `id`, `membercount`, `nick`, `reminder`, `roleinfo`, `say`, `servericon`, `userinfo`')
         helpEmbed.add_field(name='Math', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`')
         helpEmbed.add_field(name='Moderation', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
         helpEmbed.add_field(name='Owner', value='`DM`, `embed`, `save`, `updatesuggestion`')
@@ -186,6 +190,7 @@ async def help(ctx, arg = None):
         `membercount` - {config.InfoCommands.membercount}
         `nick` - {config.InfoCommands.nick}
         `reminder` - {config.InfoCommands.reminder}
+        `roleinfo` - {config.InfoCommands.roleinfo} 
         `say` - {config.InfoCommands.say}
         `servericon` - {config.InfoCommands.servericon}
         `userinfo`- {config.InfoCommands.userinfo}'''
@@ -519,6 +524,48 @@ async def reminder_error(ctx, error):
             embed = discord.Embed(description=f'**Error!** Your message does not include a valid duration.', colour=config.Colors.red)
             await ctx.send(embed=embed)
             return 
+
+
+@bot.command('roleinfo', aliases=['ri', 'role'])
+@commands.guild_only()
+async def roleinfo(ctx, role:discord.Role=None):
+    if not role:
+        embed = discord.Embed(description='Please provide a role ID.', colour=config.Colors.red)
+        await ctx.reply(embed=embed, mention_author=False)
+        return
+    try:
+        guild = ctx.guild
+        roleinfoTitle = f'About {role.name}'
+        permissions = dict(role.permissions)
+        perms = []
+        for perm in permissions.keys():
+            if permissions[perm] is True and not role.permissions.administrator:
+                perms.append(perm.lower().replace('_', ' ').title())
+
+        if role.permissions.administrator:
+            perms.append("Administrator")
+        roleinfoDesc = f'''
+        **Role name:** {role.name} ({role.id})
+        **Created on** {role.created_at.strftime("%A %d %B %Y, %H:%M")}
+        **Position:** {len(guild.roles)-role.position}
+        **Is managed?** {role.managed}
+        **Is hoisted?** {role.hoist}
+        **Color:** {role.color}
+        **Permissions:** {', '.join(perms)}'''
+
+        roleinfoEmbed = discord.Embed(title=roleinfoTitle, description=roleinfoDesc, colour=role.color)
+        await ctx.reply(embed=roleinfoEmbed, mention_author=False)
+    except Exception as e:
+        if e == "'NoneType' object has no attribute 'name'":
+            errorEmbed = discord.Embed(description=f'**Error!** I cannot find that role.', colour=config.Colors.red)
+            await ctx.reply(embed=errorEmbed, mention_author=False)
+            await ctx.message.add_reaction(config.Emojis.noEntry)
+            return
+        else:
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            await ctx.reply(embed=errorEmbed, mention_author=False)
+            await ctx.message.add_reaction(config.Emojis.noEntry)
+            return
 
 
 @bot.command(name='say')
