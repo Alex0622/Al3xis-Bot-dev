@@ -342,7 +342,6 @@ async def vote(ctx):
 @bot.command(name='announce', aliases=['announcement', 'ann'])
 @commands.guild_only()
 @commands.has_permissions(administrator=True)
-@commands.bot_has_permissions(manage_messages=True)
 async def announce(ctx, channel : discord.TextChannel=None, *, announceMsg=None):
     if not channel:
         embed = discord.Embed(description='Please provide a Discord channel for the announcement!', colour=config.Colors.red)
@@ -355,10 +354,10 @@ async def announce(ctx, channel : discord.TextChannel=None, *, announceMsg=None)
     try:
         def check(reaction, user):
             return user.id == ctx.author.id and reaction.message.id == botMsg.id
-        botMsg = await ctx.send('Do you want to send this message in an embed?')
+        botMsg = await ctx.reply('Do you want to send this message in an embed?', mention_author=False)
         await botMsg.add_reaction(config.Emojis.whiteCheckMark)
         await botMsg.add_reaction(config.Emojis.x)
-        react, user = await bot.wait_for('reaction_add', check=check, timeout=120)
+        react, user = await bot.wait_for('reaction_add', check=check, timeout=30)
         if str(react) == config.Emojis.whiteCheckMark:
             try:
                 await botMsg.clear_reactions()
@@ -378,6 +377,13 @@ async def announce(ctx, channel : discord.TextChannel=None, *, announceMsg=None)
             await channel.send(announceMsg)
             await botMsg.edit(content='Announcement sent sucessfully.')
             return 
+    except asyncio.TimeoutError:
+        try:
+            await botMsg.clear_reactions()
+        except Exception:
+            pass
+        await botMsg.edit(content="You didn't reply in time, please try again.")
+        return
     except Exception as e:
             errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
             await ctx.reply(embed=errorEmbed, mention_author=False)
@@ -388,10 +394,6 @@ async def announce(ctx, channel : discord.TextChannel=None, *, announceMsg=None)
 async def announce_error(ctx, error):
     if isinstance(error,commands.errors.MissingPermissions):
         embed = discord.Embed(description='**Error!** Only administrators of this server can use that command!', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return
-    if isinstance(error, commands.BotMissingPermissions):
-        embed = discord.Embed(description='**Error!** I need the permission `MANAGE MESSAGES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
 
