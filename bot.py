@@ -857,7 +857,7 @@ async def ban_error(ctx, error):
 
 @bot.command(name='kick', pass_context=True)
 @commands.guild_only()
-@commands.bot_has_permissions(ban_members=True)
+@commands.bot_has_permissions(kick_members=True)
 @commands.has_permissions(ban_members=True)
 async def kick(ctx, member : discord.Member, *, reason=None):
     guild = ctx.guild
@@ -920,7 +920,7 @@ async def kick_error(ctx, error):
         await ctx.send(embed=embed)
         return
     if isinstance(error, commands.BotMissingPermissions):
-        embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        embed = discord.Embed(description='**Error!** I need the permission `KICK MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
 
@@ -981,8 +981,11 @@ async def mute(ctx, member: discord.Member, duration=None, *, reason=None):
                                 logChannel=bot.get_channel(config.Channels.logChannel)
                                 await logChannel.send(embed=logEmbed)   
 
-                                await asyncio.sleep(seconds) 
-                                await member.remove_roles(mutedRole, reason='Temporary mute completed!')
+                                await asyncio.sleep(seconds)
+                                if mutedRole in member.roles:
+                                    await member.remove_roles(mutedRole, reason='Temporary mute completed!')
+                                if not mutedRole in member.roles:
+                                    return
                                 reason = 'Temporary mute completed!'
                                 try:
                                     await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
@@ -992,7 +995,7 @@ async def mute(ctx, member: discord.Member, duration=None, *, reason=None):
                                 logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
                                 logEmbed.add_field(name='User', value=member.mention)
                                 logEmbed.add_field(name='Reason', value=reason) 
-                                logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                                logEmbed.set_footer(text=f'Guild: {guild}')
                                 logChannel=bot.get_channel(config.Channels.logChannel)
                                 await logChannel.send(embed=logEmbed)
                                 return
@@ -1048,7 +1051,6 @@ async def mute_error(ctx, error):
 
 @bot.command(name='pmute', aliases= ['pm'])
 @commands.guild_only()
-@commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def pmute(ctx, member: discord.Member, *, reason=None):
     guild = ctx.guild
@@ -1127,7 +1129,7 @@ async def pmute_error(ctx, error):
         await ctx.send(embed=embed)
         return
     if isinstance(error, commands.BotMissingPermissions):
-        embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        embed = discord.Embed(description='**Error!** Looks like I\'m missing permissions.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
 
@@ -1315,7 +1317,6 @@ async def unban_error(ctx, error):
 
 @bot.command(name='unmute')
 @commands.guild_only()
-@commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
 async def unmute(ctx, member: discord.Member, *, reason=None):
     guild = ctx.guild
@@ -1379,7 +1380,7 @@ async def unmute_error(ctx, error):
         await ctx.send(embed=embed)
         return
     if isinstance(error, commands.BotMissingPermissions):
-        embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        embed = discord.Embed(description='**Error!** Looks like I\'m missing permissions.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
 
