@@ -148,7 +148,7 @@ async def about(ctx):
     embedI.add_field(name='Developed since', value='`21/10/2020`')
     embedI.add_field(name='Developed with', value='`Python`')
     embedI.add_field(name='Useful links', value='[GitHub](https://github.com/Alex0622/Al3xis-Bot-dev/) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
-    embedI.add_field(name='Latest updates', value="Added 'roleinfo' and 'say' commands, updated 'announce' and 'nick' commands and more.", inline=False)
+    embedI.add_field(name='Latest updates', value="Added `roleinfo`, `serverinfo` and `say` commands, updated `announce` and `nick` commands and more.", inline=False)
     embedI.set_thumbnail(url=ctx.me.avatar_url)
     embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
     await ctx.reply(embed=embedI, mention_author=False)
@@ -159,7 +159,7 @@ async def help(ctx, arg = None):
     if arg == None:
         helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
         helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `report`, `source`, `suggest`, `vote`')
-        helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `id`, `membercount`, `nick`, `reminder`, `roleinfo`, `say`, `servericon`, `userinfo`')
+        helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `id`, `membercount`, `nick`, `reminder`, `roleinfo`, `say`, `servericon`, `serverinfo`, `userinfo`')
         helpEmbed.add_field(name='Math', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`')
         helpEmbed.add_field(name='Moderation', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
         helpEmbed.add_field(name='Owner', value='`DM`, `embed`, `save`, `updatesuggestion`')
@@ -193,6 +193,7 @@ async def help(ctx, arg = None):
         `roleinfo` - {config.InfoCommands.roleinfo} 
         `say` - {config.InfoCommands.say}
         `servericon` - {config.InfoCommands.servericon}
+        `serverinfo` - {config.InfoCommands.serverinfo}
         `userinfo`- {config.InfoCommands.userinfo}'''
         utilityEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
         utilityEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
@@ -597,6 +598,42 @@ async def servericon(ctx):
     embed = discord.Embed(title = f'Icon of {ctx.guild}', colour=config.Colors.green, timestamp=ctx.message.created_at)
     embed.set_image(url='{}'.format(ctx.guild.icon_url))
     await ctx.send(embed=embed)
+
+
+@bot.command(name='serverinfo', aliases=['si'])
+@commands.guild_only()
+async def serverinfo(ctx):
+    try:
+        guild = ctx.guild
+        owner = await bot.fetch_user(guild.owner.id)
+        general = f'''
+        **Owner:** {owner}
+        **Owner ID:** {owner.id}
+        **Guild ID:** {guild.id}
+        **Created:** {guild.created_at.strftime("%d %B %Y, %H:%M")}
+        '''
+        statistics = f'''
+        **Members:** {guild.member_count} members
+        **Channels:** 
+            {len(guild.text_channels)} text channels
+            {len(guild.voice_channels)} voice channels
+        '''
+        serverinfoEmbed = discord.Embed(title=f"{guild}'s information", colour=config.Colors.blue, timestamp=ctx.message.created_at)
+        serverinfoEmbed.add_field(name='**__General__**', value=general)
+        serverinfoEmbed.add_field(name='**__Statistics__**', value=statistics)
+        if not guild.is_icon_animated():
+            serverinfoEmbed.set_thumbnail(url=guild.icon_url_as(format="png"))
+        elif guild.is_icon_animated():
+            serverinfoEmbed.set_thumbnail(url=guild.icon_url_as(format="gif"))
+        if guild.banner:
+            serverinfoEmbed.set_image(url=guild.banner_url_as(format="png"))
+        serverinfoEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.reply(embed=serverinfoEmbed, mention_author=False)
+    except Exception as e:
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        await ctx.reply(embed=errorEmbed, mention_author=False)
+        await ctx.message.add_reaction(config.Emojis.noEntry)
+        return
 
 
 @bot.command(name='userinfo', aliases=['user', 'ui'])
