@@ -613,10 +613,12 @@ async def serverinfo(ctx):
         **Created:** {guild.created_at.strftime("%d %B %Y, %H:%M")}
         '''
         statistics = f'''
-        **Members:** {guild.member_count} members
+        **Members:** 
+            `[{guild.member_count}]` Members
+        **Roles:** 
+            `[{len(guild.roles)}]` Roles
         **Channels:** 
-            {len(guild.text_channels)} text channels
-            {len(guild.voice_channels)} voice channels
+            `[{len(guild.text_channels)}]` Text channels | `[{len(guild.voice_channels)}]` Voice channels
         '''
         serverinfoEmbed = discord.Embed(title=f"{guild}'s information", colour=config.Colors.blue, timestamp=ctx.message.created_at)
         serverinfoEmbed.add_field(name='**__General__**', value=general)
