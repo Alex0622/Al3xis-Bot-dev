@@ -258,7 +258,7 @@ class Channels:
     reportsChannel =        826158056173469727
     logCommandsChannel =    826133121573191681
     DMsChannel =            830496524530221067
-    
+    logErrorsChannel =      857408961837924383
 
 
 
