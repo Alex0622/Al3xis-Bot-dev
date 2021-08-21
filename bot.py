@@ -54,15 +54,8 @@ async def on_command(ctx):
 @bot.event
 async def on_message(message):
     if message.content == '<@!768309916112650321>':
-        titleMsg = f'Information about Al3xis'
-        descriptionMsg = f'''
-        Hello, I'm Al3xis, a Discord bot developed by Alex22#7756.
-        If you want my list of commands, use the command `a!help`.
-        If you have any questions related to the bot you can [join my support server](https://discord.com/invite/AAJPHqNXUy).
-        Have you found a bug? You can report it using the command `a!report`
-        Do you have any suggestion? use the command `a!suggest`
-        '''
-        infoEmbed = discord.Embed(title=titleMsg, description=descriptionMsg, colour=config.Colors.blue)
+        descriptionMsg = f'Hi!, my prefixes are `a!` and `A!`'
+        infoEmbed = discord.Embed(description=descriptionMsg, colour=config.Colors.blue)
         await message.reply(embed=infoEmbed, mention_author=False)
     if message.guild == bot.get_guild(793987455149408309):
         for word in config.BadWords:
@@ -393,7 +386,7 @@ async def suggest(ctx, *, new_suggestion=None):
         await msg.edit(content=f'Thanks for your suggestion: {suggestion}', allowed_mentions=discord.AllowedMentions.none())
     except Exception as e:
         errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-        await ctx.reply(embed=errorEmbed, mention_author=False)
+        await msg.edit(content='', embed=errorEmbed)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
         description=f"""Error while using `suggest` command:
@@ -1210,7 +1203,7 @@ async def mute(ctx, member: discord.Member, duration=None, *, reason=None):
         embed = discord.Embed(description="I cannot mute that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
-    mutedRole = discord.utils.get(guild.roles, name='muted')
+    mutedRole = discord.utils.get(guild.roles, name='Muted')
     
     if mutedRole:
         if member != ctx.author:
