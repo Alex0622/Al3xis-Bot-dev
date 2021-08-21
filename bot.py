@@ -57,6 +57,12 @@ async def on_message(message):
         descriptionMsg = f'Hi!, my prefixes are `a!` and `A!`'
         infoEmbed = discord.Embed(description=descriptionMsg, colour=config.Colors.blue)
         await message.reply(embed=infoEmbed, mention_author=False)
+        return
+    if message.content == '<@768309916112650321>':
+        descriptionMsg = f'Hi!, my prefixes are `a!` and `A!`'
+        infoEmbed = discord.Embed(description=descriptionMsg, colour=config.Colors.blue)
+        await message.reply(embed=infoEmbed, mention_author=False)
+        return
     if message.guild == bot.get_guild(793987455149408309):
         for word in config.BadWords:
             if word in message.content.lower():
