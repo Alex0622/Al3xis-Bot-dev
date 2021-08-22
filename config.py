@@ -12,7 +12,7 @@ class InfoCommands:
     clear =             'Delete an amount of messages. | Limit of messages deleted per command: `500`.'
     dm =                'Send direct messages to users (usually to reply to their reports).'
     DM =                'Send direct messages to users (usually to reply to their reports).'
-    embed =             'Send messages in embed.'
+    embed =             'Send messages in embeds.'
     id =                'Get the ID of the given member.'
     ID =                'Get the ID of the given member.' 
     info =              'Get information about the bot.'
@@ -74,7 +74,7 @@ class UsageCommands:
     clear =             '`a!clear (amount of messages that will be purged)`'
     dm =                '`a!dm (member) (message)`'
     DM =                '`a!DM (member) (message)`'
-    embed =             '`a!embed (message)` | if there is no message, it will send the latest messaged saved.'
+    embed =             '`a!embed (message)`'
     id =                '`a!id (member)`'
     ID =                '`a!ID (member)`'
     info =              '`a!info`'
@@ -198,7 +198,7 @@ class RequiredPermissions:
     clear =             'MANAGE MESSAGES'
     dm =                "Bot's owner"
     DM =                "Bot's owner"
-    embed =             "Bot's owner"
+    embed =             "NO REQUIRED PERMISSION"
     id =                'NO REQUIRED PERMISSION'
     ID =                'NO REQUIRED PERMISSION'
     info =              'NO REQUIRED PERMISSION'
