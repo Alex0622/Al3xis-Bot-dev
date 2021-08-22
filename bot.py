@@ -142,13 +142,13 @@ async def about(ctx):
     try:
         embedI = discord.Embed(title=f'Information about Al3xis#4614', colour=config.Colors.blue, timestamp=ctx.message.created_at)
         embedI.add_field(name='Owner', value='`Alex22#7756`')
-        embedI.add_field(name='Current Version', value='__[v1.3.8](https://github.com/Alex0622/Al3xis-Bot-dev/releases/tag/v1.3.8)__')
+        embedI.add_field(name='Current Version', value='__[v1.4.0](https://github.com/Alex0622/Al3xis-Bot-dev/releases/tag/v1.4.0)__')
         embedI.add_field(name='Guilds', value=f'`{len(bot.guilds)}`')
         embedI.add_field(name='Prefix', value='`a!`, `A!`')
         embedI.add_field(name='Developed since', value='`21/10/2020`')
         embedI.add_field(name='Developed with', value='`Python`')
         embedI.add_field(name='Useful links', value='[GitHub](https://github.com/Alex0622/Al3xis-Bot-dev/) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
-        embedI.add_field(name='Latest updates', value="Added `roleinfo`, `serverinfo` and `say` commands, updated `announce` and `nick` commands and more.", inline=False)
+        embedI.add_field(name='Latest updates', value="New commands: say, embed, serverinfo, roleinfo.", inline=False)
         embedI.set_thumbnail(url=ctx.me.avatar_url)
         embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=embedI, mention_author=False)
@@ -171,11 +171,11 @@ async def help(ctx, arg = None):
     try:
         if arg == None:
             helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-            helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `report`, `source`, `suggest`, `vote`')
-            helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `id`, `membercount`, `nick`, `reminder`, `roleinfo`, `say`, `servericon`, `serverinfo`, `userinfo`')
-            helpEmbed.add_field(name='Math', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`')
-            helpEmbed.add_field(name='Moderation', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`')
-            helpEmbed.add_field(name='Owner', value='`DM`, `embed`, `save`, `updatesuggestion`')
+            helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `report`, `source`, `suggest`, `vote`', inline=True)
+            helpEmbed.add_field(name='Math', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`', inline=True)
+            helpEmbed.add_field(name='Moderation', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`', inline=True)
+            helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `embed`, `id`, `membercount`, `nick`, `reminder`, `roleinfo`, `say`, `servericon`, `serverinfo`, `userinfo`', inline=False)
+            helpEmbed.add_field(name='Owner', value='`DM`, `save`, `updatesuggestion`', inline=True)
             helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
             await ctx.reply(embed=helpEmbed, mention_author=False)
             return
@@ -199,6 +199,7 @@ async def help(ctx, arg = None):
             descEmbed = f'''
             `announce` - {config.InfoCommands.announce}
             `avatar` - {config.InfoCommands.avatar}
+            `embed` - {config.InfoCommands.embed}
             `id` - {config.InfoCommands.id}
             `membercount` - {config.InfoCommands.membercount}
             `nick` - {config.InfoCommands.nick}
@@ -238,10 +239,9 @@ async def help(ctx, arg = None):
             await ctx.reply(embed=moderationEmbed, mention_author=False)
             return
         if str(arg).lower() == 'owner':
-            titleEmbed = 'Owner commands'
+            titleEmbed = 'Bot\'s owner commands'
             descEmbed = f'''
             `DM` - {config.InfoCommands.DM}
-            `embed` - {config.InfoCommands.embed}
             `save` - {config.InfoCommands.save}
             `updatesuggestion` - {config.InfoCommands.updatesuggestion}'''
             ownerEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
@@ -367,8 +367,6 @@ async def source(ctx):
         return
 
 
-suggestion = ''
-listSuggestions = ''
 @bot.command(name='suggest', aliases=['sug'])
 async def suggest(ctx, *, new_suggestion=None):
     if new_suggestion == None:
@@ -376,20 +374,21 @@ async def suggest(ctx, *, new_suggestion=None):
         await ctx.send(embed=embed)
         return
     try:
-        global suggestion
-        suggestion =  new_suggestion
-        description = suggestion 
         msg = await ctx.reply('Saving suggestion...', mention_author=False)
         time.sleep(2)
-        embed = discord.Embed(title=f'New suggestion made by {ctx.author}!', description=description, colour=config.Colors.green, timestamp=ctx.message.created_at)
-        embed.set_footer(text=ctx.author.id)
+        embed = discord.Embed(title=f'New suggestion made by {ctx.author}!', description=new_suggestion, colour=config.Colors.green, timestamp=ctx.message.created_at)
+        embed.set_footer(text=ctx.author.id, icon_url=ctx.author.avatar_url)
         suggestions_channel = bot.get_channel(config.Channels.suggestionsChannel)
         message = await suggestions_channel.send(f'Status: **Pending** {config.Emojis.loading}', embed=embed)
         await message.add_reaction(config.Emojis.ballotBoxWithCheck)
         await message.add_reaction(config.Emojis.x)
-        print('New suggestion: ' + suggestion)      
+        desc = f'''Thanks for your suggestion **{ctx.author}**!
+        Your suggestion is currently waiting for approval, make sure to join our [support server](https://discord.com/invite/AAJPHqNXUy) to know when it gets approved or denied.
+        `[Suggestion:]` {new_suggestion}'''
+        embed2 = discord.Embed(description=desc, colour=config.Colors.green, timestamp=ctx.message.created_at)
+        embed2.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
-        await msg.edit(content=f'Thanks for your suggestion: {suggestion}', allowed_mentions=discord.AllowedMentions.none())
+        await msg.edit(content='', embed=embed2, allowed_mentions=discord.AllowedMentions.none())
     except Exception as e:
         errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await msg.edit(content='', embed=errorEmbed)
@@ -520,6 +519,36 @@ async def avatar(ctx, *, member: discord.Member = None):
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
 
+
+@bot.command(name='embed')
+@commands.guild_only()
+async def embed(ctx, *, embedMsg=None):
+    randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
+    try:
+        if embedMsg == None:
+            embed = discord.Embed(description="Please provide a message!", colour=config.Colors.red)
+            await ctx.reply(embed=embed, mention_author=False)
+            return
+        else:
+            embed = discord.Embed(description=embedMsg, colour=random.choice(randomColors))
+            embed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+            await ctx.send(embed=embed)
+            try:
+                await ctx.message.delete()
+            except Exception:
+                pass
+    except Exception as e:
+        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        await ctx.reply(embed=errorEmbed, mention_author=False)
+        await ctx.message.add_reaction(config.Emojis.noEntry)
+        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+        description=f"""Error while using `embed` command:
+            `[Content]` {ctx.message.content} 
+            `[Error]` {e}"""
+        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await logErrorsChannel.send(embed=logErrorsEmbed)
+        return
 
 @bot.command(name='id', aliases=['ID'])
 @commands.guild_only()
@@ -1754,43 +1783,10 @@ async def DM(ctx, member: discord.Member=None, *, msg=None):
         return
 
 
-@bot.command(name='embed')
-@commands.guild_only()
-@commands.is_owner()
-async def embed(ctx, *, embedMsg=None):
-    randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
-    try:
-        if embedMsg == None:
-            embed = discord.Embed(description=savedMessageSave, colour=random.choice(randomColors))
-            await ctx.send(embed=embed)
-            await ctx.message.delete()
-            return
-        else:
-            embed = discord.Embed(description=embedMsg  , colour=random.choice(randomColors))
-            await ctx.send(embed=embed)
-            await ctx.message.delete()
-            return
-    except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-        await ctx.reply(embed=errorEmbed, mention_author=False)
-        await ctx.message.add_reaction(config.Emojis.noEntry)
-        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-        description=f"""Error while using `embed` command:
-            `[Content]` {ctx.message.content} 
-            `[Error]` {e}"""
-        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-        await logErrorsChannel.send(embed=logErrorsEmbed)
-        return
-
-
-savedMessageSave = ''
 @bot.command(name='save')
 @commands.guild_only()
 @commands.is_owner()
 async def save(ctx,*, saveMsg=None):
-    global savedMessageSave
-    savedMessageSave = saveMsg
     if saveMsg == None:
         embed = discord.Embed(description='Please provide a description for your embed.', colour=config.Colors.red)
         await ctx.send(embed=embed)
@@ -1798,13 +1794,15 @@ async def save(ctx,*, saveMsg=None):
     else:
         try:
             firstMessage = await ctx.send('Saving message...')
-            await ctx.message.delete()
-            time.sleep(3)
-            embed = discord.Embed(title=f'{ctx.author} saved a new message.', description=savedMessageSave, colour=config.Colors.green, timestamp=ctx.message.created_at)
-            embed.set_footer(text=f'Guild: {ctx.guild}')
+            try:
+                await ctx.message.delete()
+            except Exception:
+                pass
+            time.sleep(2)
+            embed = discord.Embed(title=f'{ctx.author} saved a new message.', description=saveMsg, colour=config.Colors.green, timestamp=ctx.message.created_at)
+            embed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
             savedMessagesChannel = bot.get_channel(config.Channels.ownerChannel)
             await savedMessagesChannel.send(embed=embed)
-            print(f'New message saved sent by {ctx.author} | {savedMessageSave}')
             await firstMessage.edit(content=f'**{ctx.author}** Your message has been saved!')
         except Exception as e:
             errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
