@@ -1830,16 +1830,19 @@ async def save(ctx,*, saveMsg=None):
 async def us(ctx, msgID:int=None, type=None, *, reason=None):
     if msgID == None:
         embed = discord.Embed(description="Please provide the message ID.", colour=config.Colors.red)
-        await ctx.send(embed=embed)
+        await ctx.reply(embed=embed, mention_author=False)
         return
     if type == None:
-        embed = discord.Embed(description="Please provide if the suggestion should be approved `(a)` or denied `(d)`.", colour=config.Colors.red)
-        await ctx.send(embed=embed)
+        embed = discord.Embed(description="Please specify if the status should be accepted, denied or pending.", colour=config.Colors.red)
+        await ctx.reply(embed=embed, mention_author=False)
         return
     if reason == None:
-        embed = discord.Embed(description="You need to provide a reason.", colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return
+        if str(type).lower() == 'pending':
+            pass
+        else:
+            embed = discord.Embed(description="You need to provide a reason.", colour=config.Colors.red)
+            await ctx.reply(embed=embed, mention_author=False)
+            return
     try:    
         if str(type).lower() == 'accept':
             Suggestionschannel = await bot.fetch_channel(config.Channels.suggestionsChannel)
@@ -1867,6 +1870,24 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
             await asyncio.sleep(5)
             await botMsg.delete()
             return
+        if str(type).lower() == 'pending':
+            Suggestionschannel = await bot.fetch_channel(config.Channels.suggestionsChannel)
+            msg = await Suggestionschannel.fetch_message(msgID)
+            await msg.edit(content=f'Status: **Pending** {config.Emojis.loading}')
+            emoji1 = config.Emojis.ballotBoxWithCheck
+            emoji2 = config.Emojis.x
+            await msg.add_reaction(emoji1)
+            await msg.add_reaction(emoji2)
+            botMsg = await ctx.reply(f'{config.Emojis.whiteCheckMark} Suggestion is now pending.', mention_author=False)
+            await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
+            await asyncio.sleep(5)
+            await botMsg.delete()
+            return
+        else:
+            botMsg = await ctx.reply(f'{config.Emojis.x} `{type}` is not a valid option.', mention_author=False)
+            await ctx.message.add_reaction(config.Emojis.x)
+            await asyncio.sleep(5)
+            await botMsg.delete()
     except Exception as e:
         errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
