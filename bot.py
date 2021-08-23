@@ -147,7 +147,7 @@ async def about(ctx):
         embedI.add_field(name='Prefix', value='`a!`, `A!`')
         embedI.add_field(name='Developed since', value='`21/10/2020`')
         embedI.add_field(name='Developed with', value='`Python`')
-        embedI.add_field(name='Useful links', value='[GitHub](https://github.com/Alex0622/Al3xis-Bot-dev/) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
+        embedI.add_field(name='Useful links', value='[GitHub](https://github.com/Alex0622/Al3xis-Bot-dev/) | [Support Server](https://discord.com/invite/AAJPHqNXUy) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
         embedI.add_field(name='Latest updates', value="New commands: say, embed, serverinfo, roleinfo.", inline=False)
         embedI.set_thumbnail(url=ctx.me.avatar_url)
         embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
@@ -591,6 +591,7 @@ async def membercount(ctx):
         return
 
 
+
 @bot.command(name='nick', aliases=['setnick'])
 @commands.guild_only()
 @commands.has_permissions(change_nickname=True)
@@ -598,7 +599,7 @@ async def membercount(ctx):
 async def nick(ctx, *, new_nick=None):
     embed = discord.Embed(description=f'Updating nick {config.Emojis.loading}', colour=config.Colors.gray)
     if new_nick:
-        botmsg = await ctx.send(embed=embed)
+        botmsg = await ctx.reply(embed=embed, mention_author=False)
         await asyncio.sleep(1)
         if ctx.author.top_role.position >= ctx.guild.me.top_role.position:
             embed = discord.Embed(description="I cannot change your nickname because you have the same role as me or your top role is above mine.", colour=config.Colors.red)
@@ -627,17 +628,22 @@ async def nick(ctx, *, new_nick=None):
                     await botmsg.edit(embed=embed4)
                     return
             except Exception as e:
-                errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                await ctx.reply(embed=errorEmbed, mention_author=False)
-                await ctx.message.add_reaction(config.Emojis.noEntry)
-                logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                description=f"""Error while using `nick` command:
-                    `[Content]` {ctx.message.content} 
-                    `[Error]` {e}"""
-                logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                await logErrorsChannel.send(embed=logErrorsEmbed)
-                return
+                if str(e) == "403 Forbidden (error code: 50013): Missing Permissions":
+                    errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions to change your nickname.", colour=config.Colors.red)
+                    await botmsg.edit(embed=errorEmbed)
+                    return
+                else:
+                    errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                    await botmsg.edit(embed=errorEmbed)
+                    await ctx.message.add_reaction(config.Emojis.noEntry)
+                    logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                    description=f"""Error while using `nick` command:
+                        `[Content]` {ctx.message.content} 
+                        `[Error]` {e}"""
+                    logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                    logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                    await logErrorsChannel.send(embed=logErrorsEmbed)
+                    return
     else:
         if ctx.author.nick == None:
             desc = 'You don\'t have a current nickname.'
