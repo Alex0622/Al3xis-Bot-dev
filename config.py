@@ -286,4 +286,5 @@ class Emojis:
     loading =                   '<a:loading:823701755946074142>'
 
 
+
 BadWords = ["bitch","fuck","nigg","shit"]

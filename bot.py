@@ -582,7 +582,7 @@ async def membercount(ctx):
         await ctx.reply(embed=errorEmbed, mention_author=False)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-        description=f"""Error while using `suggest` command:
+        description=f"""Error while using `membercount` command:
             `[Content]` {ctx.message.content} 
             `[Error]` {e}"""
         logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
@@ -675,16 +675,16 @@ async def reminder(ctx, time=None, *, msg=None):
                 await asyncio.sleep(0.5)
                 seconds = 0
                 if time.lower().endswith("d"):
-                    seconds += int(time[:-1]) * 60 * 60 * 24
+                    seconds += float(time[:-1]) * 60 * 60 * 24
                     counter = f"{seconds // 60 // 60 // 24} days"
                 elif time.lower().endswith("h"):
-                    seconds += int(time[:-1]) * 60 * 60
+                    seconds += float(time[:-1]) * 60 * 60
                     counter = f"{seconds // 60 // 60} hours"
                 elif time.lower().endswith("m"):
-                    seconds += int(time[:-1]) * 60
+                    seconds += float(time[:-1]) * 60
                     counter = f"{seconds // 60} minutes"
                 elif time.lower().endswith("s"):
-                    seconds += int(time[:-1])
+                    seconds += float(time[:-1])
                     counter = f"{seconds} seconds"
                 else:
                     embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration.', colour=config.Colors.red)
@@ -695,17 +695,22 @@ async def reminder(ctx, time=None, *, msg=None):
                 await asyncio.sleep(seconds)
                 await ctx.reply(f'Hey! {msg}', mention_author=True, allowed_mentions=discord.AllowedMentions.none())
             except Exception as e:
-                errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                await ctx.reply(embed=errorEmbed, mention_author=False)
-                await ctx.message.add_reaction(config.Emojis.noEntry)
-                logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                description=f"""Error while using `reminder` command:
-                    `[Content]` {ctx.message.content} 
-                    `[Error]` {e}"""
-                logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                await logErrorsChannel.send(embed=logErrorsEmbed)
-                return
+                if str(e).startswith("could not convert string to float"):
+                    embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration.', colour=config.Colors.red)
+                    await ctx.reply(embed=embed, mention_author=False)
+                    return  
+                else:
+                    errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                    await ctx.reply(embed=errorEmbed, mention_author=False)
+                    await ctx.message.add_reaction(config.Emojis.noEntry)
+                    logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                    description=f"""Error while using `reminder` command:
+                        `[Content]` {ctx.message.content} 
+                        `[Error]` {e}"""
+                    logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                    logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                    await logErrorsChannel.send(embed=logErrorsEmbed)
+                    return
         else: 
             embed = discord.Embed(description="Please provide a message for your reminder.", colour=config.Colors.red)
             await ctx.send(embed=embed)
@@ -1257,16 +1262,16 @@ async def mute(ctx, member: discord.Member, duration=None, *, reason=None):
                                     time.sleep(0.5)
                                     seconds = 0
                                     if duration.lower().endswith("d"):
-                                        seconds += int(duration[:-1]) * 60 * 60 * 24
+                                        seconds += float(duration[:-1]) * 60 * 60 * 24
                                         counter = f"{seconds // 60 // 60 // 24} days"
                                     elif duration.lower().endswith("h"):
-                                        seconds += int(duration[:-1]) * 60 * 60
+                                        seconds += float(duration[:-1]) * 60 * 60
                                         counter = f"{seconds // 60 // 60} hours"
                                     elif duration.lower().endswith("m"):
-                                        seconds += int(duration[:-1]) * 60
+                                        seconds += float(duration[:-1]) * 60
                                         counter = f"{seconds // 60} minutes"
                                     elif duration.lower().endswith("s"):
-                                        seconds += int(duration[:-1])
+                                        seconds += float(duration[:-1])
                                         counter = f"{seconds} seconds"
                                     else:
                                         embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration.', colour=config.Colors.red)
@@ -1308,17 +1313,22 @@ async def mute(ctx, member: discord.Member, duration=None, *, reason=None):
                                     await logChannel.send(embed=logEmbed)
                                     return
                                 except Exception as e:
-                                    errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                                    await ctx.reply(embed=errorEmbed, mention_author=False)
-                                    await ctx.message.add_reaction(config.Emojis.noEntry)
-                                    logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                                    description=f"""Error while using `mute` command:
-                                        `[Content]` {ctx.message.content} 
-                                        `[Error]` {e}"""
-                                    logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                                    logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                                    await logErrorsChannel.send(embed=logErrorsEmbed)
-                                    return
+                                    if str(e).startswith("could not convert string to float"):
+                                        embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration.', colour=config.Colors.red)
+                                        await ctx.reply(embed=embed, mention_author=False)
+                                        return  
+                                    else:
+                                        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                                        await ctx.reply(embed=errorEmbed, mention_author=False)
+                                        await ctx.message.add_reaction(config.Emojis.noEntry)
+                                        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                                        description=f"""Error while using `mute` command:
+                                            `[Content]` {ctx.message.content} 
+                                            `[Error]` {e}"""
+                                        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                                        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                                        await logErrorsChannel.send(embed=logErrorsEmbed)
+                                        return
                             else:
                                 embed = discord.Embed(description='Please specify an amount of time to mute that member.', colour=config.Colors.red)
                                 await ctx.send(embed=embed)
