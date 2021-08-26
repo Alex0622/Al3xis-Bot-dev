@@ -998,24 +998,29 @@ async def calc_error(ctx, error):
 
 
 @bot.command(name='mathrandom')
-async def mathrandom(ctx, x:int=None, y:float=None):
+async def mathrandom(ctx, x=None, y=None):
     if x != None:
         if y != None:
             try:
                 result = rando(x, y)
                 await ctx.reply(result, mention_author=False)
             except Exception as e:
-                errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                await ctx.reply(embed=errorEmbed, mention_author=False)
-                await ctx.message.add_reaction(config.Emojis.noEntry)
-                logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                description=f"""Error while using `mathrandom` command:
-                    `[Content]` {ctx.message.content} 
-                    `[Error]` {e}"""
-                logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                await logErrorsChannel.send(embed=logErrorsEmbed)
-                return
+                if str(e).startswith('can only concatenate str'):
+                    embed = discord.Embed(description="**Error!** Make sure to only provide numbers (e.g. `a!mathrandom 1 6`).", colour=config.Colors.red)
+                    await ctx.reply(embed=embed, mention_author=False)
+                    return
+                else:
+                    errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                    await ctx.reply(embed=errorEmbed, mention_author=False)
+                    await ctx.message.add_reaction(config.Emojis.noEntry)
+                    logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                    description=f"""Error while using `mathrandom` command:
+                        `[Content]` {ctx.message.content} 
+                        `[Error]` {e}"""
+                    logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                    logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                    await logErrorsChannel.send(embed=logErrorsEmbed)
+                    return
         else:
             embed = discord.Embed(description='You are missing the argument "y".', colour=config.Colors.red)
             await ctx.send(embed=embed)
@@ -1028,7 +1033,7 @@ async def mathrandom(ctx, x:int=None, y:float=None):
 @mathrandom.error
 async def mathrandom_error(ctx, error):
     if isinstance(error, commands.CommandInvokeError):
-        embed = discord.Embed(description='The order of your values must be from lowest to highest. \n Note: Only use numbers.', colour=config.Colors.red)
+        embed = discord.Embed(description='The order of your values must be from lowest to highest. \n Note: Only use numbers (e.g. `a!mathrandom 1 6`).', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return  
 
