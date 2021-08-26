@@ -1588,7 +1588,7 @@ async def purge_error(ctx, error):
         return
 
 
-bot.command(name='removerole')
+@bot.command(name='removerole')
 @commands.has_permissions(manage_roles=True)
 @commands.bot_has_permissions(manage_roles=True)
 async def removerole(ctx, role:discord.Role=None, *, member:discord.Member=None):
