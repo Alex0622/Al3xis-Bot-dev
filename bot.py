@@ -148,7 +148,7 @@ async def about(ctx):
         embedI.add_field(name='Developed since', value='`21/10/2020`')
         embedI.add_field(name='Developed with', value='`Python`')
         embedI.add_field(name='Useful links', value='[GitHub](https://github.com/Alex0622/Al3xis-Bot-dev/) | [Support Server](https://discord.com/invite/AAJPHqNXUy) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
-        embedI.add_field(name='Latest updates', value="New commands: say, embed, serverinfo, roleinfo.", inline=False)
+        embedI.add_field(name='Latest updates', value="New commands: say, embed, serverinfo, roleinfo, addrole, removerole.", inline=False)
         embedI.set_thumbnail(url=ctx.me.avatar_url)
         embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=embedI, mention_author=False)
@@ -173,7 +173,7 @@ async def help(ctx, arg = None):
             helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
             helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `report`, `source`, `suggest`, `vote`', inline=True)
             helpEmbed.add_field(name='Math', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`', inline=True)
-            helpEmbed.add_field(name='Moderation', value='`ban`, `kick`, `mute`, `pmute`, `purge`, `unban`, `unmute`', inline=True)
+            helpEmbed.add_field(name='Moderation', value='`addrole`, `ban`, `kick`, `mute`, `pmute`, `purge`, `removerole`, `unban`, `unmute`', inline=True)
             helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `embed`, `id`, `membercount`, `nick`, `reminder`, `roleinfo`, `say`, `servericon`, `serverinfo`, `userinfo`', inline=False)
             helpEmbed.add_field(name='Owner', value='`DM`, `save`, `updatesuggestion`', inline=True)
             helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
@@ -227,11 +227,13 @@ async def help(ctx, arg = None):
         if str(arg).lower() == 'moderation':
             titleEmbed = 'Moderation commands'
             descEmbed = f'''
+            `addrole` - {config.InfoCommands.addrole} 
             `ban` - {config.InfoCommands.ban}
             `kick`- {config.InfoCommands.kick}
             `mute` - {config.InfoCommands.mute}
             `pmute` - {config.InfoCommands.pmute}
             `purge` - {config.InfoCommands.purge}
+            `removerole` - {config.InfoCommands.removerole}
             `unban` - {config.InfoCommands.unban}
             `unmute` - {config.InfoCommands.unmute}'''
             moderationEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
@@ -1083,6 +1085,66 @@ async def mathsqrt(ctx, x:float=None):
 ####################################################################################################
 ##Moderation commands
 
+@bot.command(name='addrole')
+@commands.has_permissions(manage_roles=True)
+@commands.bot_has_permissions(manage_roles=True)
+async def addrole(ctx, role:discord.Role=None, *, member:discord.Member=None):
+    if role == None:
+        notRoleEmbed = discord.Embed(description="Please provided a Discord role.", colour=config.Colors.red)
+        await ctx.reply(embed=notRoleEmbed, mention_author=False)
+    if member == None:
+        notMembersEmbed = discord.Embed(description="Please provide a member that will get the role.", colour=config.Colors.red)
+        await ctx.reply(embed=notMembersEmbed, mention_author=False)
+    try:
+        if member.top_role > ctx.me.top_role:
+            embed = discord.Embed(description="I cannot add the role to that member because they have the same role as me or their top role is above mine.", colour=role.color)
+            await ctx.reply(embed=embed, mention_author=False)
+            return
+        if role.position >= ctx.guild.me.top_role.position:
+            embed = discord.Embed(description="It seems like I cannot access that role in the role hierarchy.", colour=role.color)
+            await ctx.reply(embed=embed, mention_author=False)
+            return
+        if role.position >= ctx.author.top_role.position and ctx.author != ctx.guild.owner:
+            embed = discord.Embed(description="It seems like you cannot access that role in the role hierarchy.", colour=role.color)
+            await ctx.reply(embed=embed, mention_author=False)
+            return
+        if role in member.roles:
+            embed = discord.Embed(description="That member already has that role.", colour=role.color)
+            await ctx.reply(embed=embed, mention_author=False)
+            return
+        await member.add_roles(role, reason=f"{ctx.author} used command `addrole`.")
+        embed = discord.Embed(description=f"{config.Emojis.whiteCheckMark} I've successfully added the role {role.mention} to {member.mention}", colour=role.color)
+        await ctx.reply(embed=embed, mention_author=False)
+    except Exception as e:
+        if str(e) == "403 Forbidden (error code: 50013): Missing Permissions":
+            errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions to add that role.", colour=config.Colors.red)
+            await ctx.reply(embed=errorEmbed, mention_author=False)
+            return
+        else:
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            await ctx.reply(embed=errorEmbed, mention_author=False)
+            await ctx.message.add_reaction(config.Emojis.noEntry)
+            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+            description=f"""Error while using `addrole` command:
+                `[Content]` {ctx.message.content} 
+                `[Error]` {e}"""
+            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+            await logErrorsChannel.send(embed=logErrorsEmbed)
+            return
+
+@addrole.error
+async def addrole_error(ctx, error):
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+
+
 @bot.command(name='ban')
 @commands.guild_only()
 @commands.bot_has_permissions(ban_members=True)
@@ -1522,6 +1584,53 @@ async def purge_error(ctx, error):
         return
     if isinstance(error, commands.BotMissingPermissions):
         embed = discord.Embed(description='**Error!** I need the permission `MANAGE MESSAGES` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+
+
+bot.command(name='removerole')
+@commands.has_permissions(manage_roles=True)
+@commands.bot_has_permissions(manage_roles=True)
+async def removerole(ctx, role:discord.Role=None, *, member:discord.Member=None):
+    if role == None:
+        notRoleEmbed = discord.Embed(description="Please provided a Discord role.", colour=config.Colors.red)
+        await ctx.reply(embed=notRoleEmbed, mention_author=False)
+    if member == None:
+        notMembersEmbed = discord.Embed(description="Please provide a member to remove their role.", colour=config.Colors.red)
+        await ctx.reply(embed=notMembersEmbed, mention_author=False)
+    try:
+        if member.top_role > ctx.me.top_role:
+            embed = discord.Embed(description="I cannot remove the role from that member because they have the same role as me or their top role is above mine.", colour=role.color)
+            await ctx.reply(embed=embed, mention_author=False)
+            return   
+        if not role in member.roles:
+            embed = discord.Embed(description="That member does not have that role.", colour=role.color)
+            await ctx.reply(embed=embed, mention_author=False)
+            return
+        await member.remove_roles(role, reason=f"{ctx.author} used command `removerole`.")
+        embed = discord.Embed(description=f"{config.Emojis.whiteCheckMark} I've successfully removed the role {role.mention} from {member.mention}", colour=role.color)
+        await ctx.reply(embed=embed, mention_author=False)
+    except Exception as e:
+        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        await ctx.reply(embed=errorEmbed, mention_author=False)
+        await ctx.message.add_reaction(config.Emojis.noEntry)
+        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+        description=f"""Error while using `removerole` command:
+            `[Content]` {ctx.message.content} 
+            `[Error]` {e}"""
+        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await logErrorsChannel.send(embed=logErrorsEmbed)
+        return
+
+@removerole.error
+async def removerole_error(ctx, error):
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
 

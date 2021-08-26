@@ -1,6 +1,7 @@
 
 class InfoCommands:
     about =             'Get information about the bot.'
+    addrole =           'Add a role to a member.'
     ann =               'Make announcements.'
     announce =          'Make announcements.'
     announcement =      'Make announcements.'
@@ -36,6 +37,7 @@ class InfoCommands:
     purge =             'Delete an amount of messages. | Limit of messages deleted per command: `500`.'
     remind =            'Set a reminder. | Duration: seconds, minutes, hours or days.'
     reminder =          'Set a reminder. | Duration: seconds, minutes, hours or days.'
+    removerole =        'Remove a role from a member.'
     report =            'Report bugs, errors or problems related to the bot.'
     ri =                'Get information about a role.'
     role =              'Get information about a role.'
@@ -63,6 +65,7 @@ class InfoCommands:
 
 class UsageCommands:
     about =             '`a!about`'
+    addrole =           '`a!addrole (role) (member)`'
     ann =               '`a!ann #channel (message)`'
     announce =          '`a!announce (#channel) (message)`'
     announcement =      '`a!announcement (#channel) (message)'
@@ -98,6 +101,7 @@ class UsageCommands:
     purge =             '`a!purge (amount of messages that will be purged)`'
     remind =            '`a!remind (time) (message)`'
     reminder =          '`a!reminder (time) (message)`'
+    removerole =        '`a!removerole (role) (member)`'
     report =            '`a!report (message)`'
     ri =                '`a!ri (role)`'
     role =              '`a!role (role)`'
@@ -125,6 +129,7 @@ class UsageCommands:
     
 class AliasesCommands:
     about =             'info'
+    addrole =           'No aliases'
     ann =               'announce, announcement'
     announce =          'announcement, ann'
     announcement =      'ann, announce'
@@ -160,6 +165,7 @@ class AliasesCommands:
     pong =              'ping, latency'
     remind =            'reminder'
     reminder =          'remind'
+    removerole =        'No aliases'
     report =            'No aliases'
     ri =                'role, roleinfo'
     role =              'ri, roleinfo'
@@ -187,6 +193,7 @@ class AliasesCommands:
 
 class RequiredPermissions:
     about =             'NO REQUIRED PERMISSION'
+    addrole =           'MANAGE ROLES'
     ann =               'ADMINISTRATOR'
     announce =          'ADMINISTRATOR'
     announcement =      'ADMINISTRATOR'
@@ -222,6 +229,7 @@ class RequiredPermissions:
     pong =              'NO REQUIRED PERMISSION'
     remind =            'NO REQUIRED PERMISSION'
     reminder =          'NO REQUIRED PERMISSION'
+    removerole =        'NO REQUIRED PERMISSION'
     report =            'NO REQUIRED PERMISSION'
     ri =                'NO REQUIRED PERMISSION'
     role =              'NO REQUIRED PERMISSION'
