@@ -300,7 +300,7 @@ async def ping(ctx):
     try:
         before = time.monotonic()
         message = await ctx.reply("Pong!", mention_author=False)
-        time.sleep(2)
+        await asyncio.sleep(2)
         ping = (time.monotonic() - before) * 1000
         await message.edit(content=f"**Bot's ping:**  `{int(ping)}ms`")
         print(f'Ping {int(ping)}ms')
@@ -377,7 +377,7 @@ async def suggest(ctx, *, new_suggestion=None):
         return
     try:
         msg = await ctx.reply('Saving suggestion...', mention_author=False)
-        time.sleep(2)
+        await asyncio.sleep(2)
         embed = discord.Embed(title=f'New suggestion made by {ctx.author}!', description=new_suggestion, colour=config.Colors.green, timestamp=ctx.message.created_at)
         embed.set_footer(text=ctx.author.id, icon_url=ctx.author.avatar_url)
         suggestions_channel = bot.get_channel(config.Channels.suggestionsChannel)
@@ -1163,7 +1163,7 @@ async def ban(ctx, member : discord.Member, *, reason=None):
                         return 
                     else:
                         try:
-                            time.sleep(0.5)    
+                            await asyncio.sleep(0.5)    
                             await ctx.send(f'**{member}** was banned | `{reason}`')
                             try:
                                 await member.send(f'You were banned in server: **{guild.name}** | `{reason}`')
@@ -1245,7 +1245,7 @@ async def kick(ctx, member : discord.Member=None, *, reason=None):
                         return
                     else:
                         try:
-                            time.sleep(0.5)
+                            await asyncio.sleep(0.5)
                             await ctx.send(f'**{member}** was kicked | `{reason}`')
                             try:
                                 await member.send(f'You were kicked from server: **{guild.name}** | `{reason}`')
@@ -1328,7 +1328,7 @@ async def mute(ctx, member: discord.Member=None, duration=None, *, reason=None):
                             if not mutedRole in member.roles:
                                 if duration:
                                     try:
-                                        time.sleep(0.5)
+                                        await asyncio.sleep(0.5)
                                         seconds = 0
                                         if duration.lower().endswith("d"):
                                             seconds += float(duration[:-1]) * 60 * 60 * 24
@@ -1469,7 +1469,7 @@ async def pmute(ctx, member: discord.Member=None, *, reason=None):
                         else:
                             if not mutedRole in member.roles:
                                 try:
-                                    time.sleep(0.5)
+                                    await asyncio.sleep(0.5)
                                     await member.add_roles(mutedRole, reason=f'{ctx.author}: {reason}')
                                     await ctx.send(f'**{member}** was permanently muted | `{reason}`')
                                     try:
@@ -1661,7 +1661,7 @@ async def softban(ctx, member:discord.Member=None, *, reason=None):
                         return
                     else:
                         try:
-                            time.sleep(0.5)
+                            await asyncio.sleep(0.5)
                             await ctx.send(f'**{member}** was softbanned | `{reason}`')
                             try:
                                 await member.send(f'You were softbanned in server: **{guild.name}** | `{reason}`')
@@ -1733,7 +1733,7 @@ async def unban(ctx, UserID: int, *, reason=None):
                 try:
                     await ctx.guild.fetch_ban(discord.Object(id=member.id))
                     try:
-                        time.sleep(0.5)
+                        await asyncio.sleep(0.5)
                         await ctx.guild.unban(member, reason=f'{ctx.author}: {reason}')
                         await ctx.send(f'**{member}** was unbanned | `{reason}`')
                         try:
@@ -1811,7 +1811,7 @@ async def unmute(ctx, member: discord.Member=None, *, reason=None):
                 if not member.bot:
                     if mutedRole in member.roles:
                         try:
-                            time.sleep(0.5)
+                            await asyncio.sleep(0.5)
                             await member.remove_roles(mutedRole, reason=f'{ctx.author}: {reason}')
                             await ctx.send(f'**{member}** was unmuted | `{reason}`')
                             try:
@@ -1928,7 +1928,7 @@ async def save(ctx,*, saveMsg=None):
                 await ctx.message.delete()
             except Exception:
                 pass
-            time.sleep(2)
+            await asyncio.sleep(2)
             embed = discord.Embed(title=f'{ctx.author} saved a new message.', description=saveMsg, colour=config.Colors.green, timestamp=ctx.message.created_at)
             embed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
             savedMessagesChannel = bot.get_channel(config.Channels.ownerChannel)
