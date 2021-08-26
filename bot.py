@@ -1163,7 +1163,6 @@ async def ban(ctx, member : discord.Member, *, reason=None):
                         return 
                     else:
                         try:
-                            await member.send(f'You were banned in server: **{guild.name}** | `{reason}`')
                             time.sleep(0.5)    
                             await ctx.send(f'**{member}** was banned | `{reason}`')
                             try:
