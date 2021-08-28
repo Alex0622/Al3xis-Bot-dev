@@ -1092,9 +1092,11 @@ async def addrole(ctx, role:discord.Role=None, *, member:discord.Member=None):
     if role == None:
         notRoleEmbed = discord.Embed(description="Please provided a Discord role.", colour=config.Colors.red)
         await ctx.reply(embed=notRoleEmbed, mention_author=False)
+        return
     if member == None:
         notMembersEmbed = discord.Embed(description="Please provide a member that will get the role.", colour=config.Colors.red)
         await ctx.reply(embed=notMembersEmbed, mention_author=False)
+        return
     try:
         if member.top_role > ctx.me.top_role:
             embed = discord.Embed(description="I cannot add the role to that member because they have the same role as me or their top role is above mine.", colour=role.color)
@@ -1598,10 +1600,12 @@ async def purge_error(ctx, error):
 async def removerole(ctx, role:discord.Role=None, *, member:discord.Member=None):
     if role == None:
         notRoleEmbed = discord.Embed(description="Please provided a Discord role.", colour=config.Colors.red)
+        return
         await ctx.reply(embed=notRoleEmbed, mention_author=False)
     if member == None:
         notMembersEmbed = discord.Embed(description="Please provide a member to remove their role.", colour=config.Colors.red)
         await ctx.reply(embed=notMembersEmbed, mention_author=False)
+        return
     try:
         if member.top_role > ctx.me.top_role:
             embed = discord.Embed(description="I cannot remove the role from that member because they have the same role as me or their top role is above mine.", colour=role.color)
