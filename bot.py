@@ -1119,7 +1119,7 @@ async def addrole(ctx, role:discord.Role=None, *, member:discord.Member=None):
         await ctx.reply(embed=embed, mention_author=False)
     except Exception as e:
         if str(e) == "403 Forbidden (error code: 50013): Missing Permissions":
-            errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions to add that role.", colour=config.Colors.red)
+            errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions to access that role.", colour=config.Colors.red)
             await ctx.reply(embed=errorEmbed, mention_author=False)
             return
         else:
@@ -1151,7 +1151,11 @@ async def addrole_error(ctx, error):
 @commands.guild_only()
 @commands.bot_has_permissions(ban_members=True)
 @commands.has_permissions(ban_members=True)
-async def ban(ctx, member : discord.Member, *, reason=None):
+async def ban(ctx, member:discord.Member=None, *, reason=None):
+    if member == None:
+        embed = discord.Embed(description='Please specify a member to ban.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
     guild = ctx.guild
     if reason == None:
         reason = 'No reason provided.'  
@@ -1211,10 +1215,6 @@ async def ban(ctx, member : discord.Member, *, reason=None):
 
 @ban.error
 async def ban_error(ctx, error):
-    if isinstance(error, commands.errors.MissingRequiredArgument):
-        embed = discord.Embed(description='Please specify a member to ban.', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return
     if isinstance(error, commands.errors.MissingPermissions):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
@@ -1611,6 +1611,14 @@ async def removerole(ctx, role:discord.Role=None, *, member:discord.Member=None)
             embed = discord.Embed(description="I cannot remove the role from that member because they have the same role as me or their top role is above mine.", colour=role.color)
             await ctx.reply(embed=embed, mention_author=False)
             return   
+        if role.position >= ctx.guild.me.top_role.position:
+            embed = discord.Embed(description="It seems like I cannot access that role in the role hierarchy.", colour=role.color)
+            await ctx.reply(embed=embed, mention_author=False)
+            return
+        if role.position >= ctx.author.top_role.position and ctx.author != ctx.guild.owner:
+            embed = discord.Embed(description="It seems like you cannot access that role in the role hierarchy.", colour=role.color)
+            await ctx.reply(embed=embed, mention_author=False)
+            return
         if not role in member.roles:
             embed = discord.Embed(description="That member does not have that role.", colour=role.color)
             await ctx.reply(embed=embed, mention_author=False)
@@ -1619,17 +1627,22 @@ async def removerole(ctx, role:discord.Role=None, *, member:discord.Member=None)
         embed = discord.Embed(description=f"{config.Emojis.whiteCheckMark} I've successfully removed the role {role.mention} from {member.mention}", colour=role.color)
         await ctx.reply(embed=embed, mention_author=False)
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-        await ctx.reply(embed=errorEmbed, mention_author=False)
-        await ctx.message.add_reaction(config.Emojis.noEntry)
-        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-        description=f"""Error while using `removerole` command:
-            `[Content]` {ctx.message.content} 
-            `[Error]` {e}"""
-        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-        await logErrorsChannel.send(embed=logErrorsEmbed)
-        return
+        if str(e) == "403 Forbidden (error code: 50013): Missing Permissions":
+            errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions to access that role.", colour=config.Colors.red)
+            await ctx.reply(embed=errorEmbed, mention_author=False)
+            return
+        else:
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            await ctx.reply(embed=errorEmbed, mention_author=False)
+            await ctx.message.add_reaction(config.Emojis.noEntry)
+            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+            description=f"""Error while using `removerole` command:
+                `[Content]` {ctx.message.content} 
+                `[Error]` {e}"""
+            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+            await logErrorsChannel.send(embed=logErrorsEmbed)
+            return
 
 @removerole.error
 async def removerole_error(ctx, error):
