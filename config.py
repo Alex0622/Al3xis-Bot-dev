@@ -291,7 +291,7 @@ class Emojis:
     whiteCheckMark =            '✅'
     octagonalSign =             '🛑'
     eyes =                      '👀'
-    loading =                   '<a:loading:823701755946074142>'
+    loading =                   '<a:loading:882124504451653652>'
 
 
 
