@@ -1,4 +1,11 @@
 
+class General:
+    botAvatarURL =          "https://i.imgur.com/8PqN7yq.jpg"
+    botInviteURL =          "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot%20applications.commands&permissions=134556758"
+    botInviteURLAdmin =     "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot%20applications.commands&permissions=134556758"
+    supportServerURL =      "https://discord.com/invite/AAJPHqNXUy"
+    githubURL =             "https://github.com/Alex0622/Al3xis-Bot-dev"
+
 class InfoCommands:
     about =             'Get information about the bot.'
     addrole =           'Add a role to a member.'
@@ -23,6 +30,7 @@ class InfoCommands:
     help =              'List all commands or get information for a single command/category.'
     kick =              'Kick a member from the server.'
     latency =           "Shows the bot's latency/ping."
+    logout =            "Disconnect the bot from Discord."
     mathrandom =        'Choose a random number between two values.'
     mathsq =            "Find the square of a number."
     mathsqrt =          "Find the square root of a number."
@@ -87,6 +95,7 @@ class UsageCommands:
     help =              '`a!help (command/category)`'
     kick =              '`a!kick (member) (reason)`'
     latency =           '`a!latency`'
+    logout =            '`a!logout`'
     mathrandom =        '`a!mathrandom (value1) (value2)`'
     mathsq =            '`a!mathsq (value)`'
     mathsqrt =          '`a!mathsqrt (value)`'
@@ -151,6 +160,7 @@ class AliasesCommands:
     help =              'h'
     kick =              'No aliases'
     latency =           'ping, pong'
+    logout =            'No aliases'
     membercount =       'No aliases'
     mathrandom =        'No aliases'
     mathsq =            'No aliases'
@@ -215,6 +225,7 @@ class RequiredPermissions:
     help =              'NO REQUIRED PERMISSION'
     kick =              'BAN MEMBERS'
     latency =           'NO REQUIRED PERMISSION'
+    logout =            "Bot's owner"
     mathrandom =        'NO REQUIRED PERMISSION'
     mathsq =            'NO REQUIRED PERMISSION'
     mathsqrt =          'NO REQUIRED PERMISSION'
@@ -291,8 +302,8 @@ class Emojis:
     whiteCheckMark =            '✅'
     octagonalSign =             '🛑'
     eyes =                      '👀'
+    wave =                      '👋'
     loading =                   '<a:loading:882124504451653652>'
-
 
 
 BadWords = ["bitch","fuck","nigg","shit"]

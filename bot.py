@@ -147,7 +147,7 @@ async def about(ctx):
         embedI.add_field(name='Prefix', value='`a!`, `A!`')
         embedI.add_field(name='Developed since', value='`21/10/2020`')
         embedI.add_field(name='Developed with', value='`Python`')
-        embedI.add_field(name='Useful links', value='[GitHub](https://github.com/Alex0622/Al3xis-Bot-dev/) | [Support Server](https://discord.com/invite/AAJPHqNXUy) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
+        embedI.add_field(name='Useful links', value=f'[GitHub]({config.General.githubURL} | [Support Server]({config.General.supportServerURL})) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
         embedI.add_field(name='Latest updates', value="New commands: say, embed, serverinfo, roleinfo, addrole, removerole.", inline=False)
         embedI.set_thumbnail(url=ctx.me.avatar_url)
         embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
@@ -175,7 +175,7 @@ async def help(ctx, arg = None):
             helpEmbed.add_field(name='Math', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`', inline=True)
             helpEmbed.add_field(name='Moderation', value='`addrole`, `ban`, `kick`, `mute`, `pmute`, `purge`, `removerole`, `unban`, `unmute`', inline=True)
             helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `embed`, `id`, `membercount`, `nick`, `reminder`, `roleinfo`, `say`, `servericon`, `serverinfo`, `userinfo`', inline=False)
-            helpEmbed.add_field(name='Owner', value='`DM`, `save`, `updatesuggestion`', inline=True)
+            helpEmbed.add_field(name='Owner', value='`DM`, `logout`, `save`, `updatesuggestion`', inline=True)
             helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
             await ctx.reply(embed=helpEmbed, mention_author=False)
             return
@@ -244,6 +244,7 @@ async def help(ctx, arg = None):
             titleEmbed = 'Bot\'s owner commands'
             descEmbed = f'''
             `DM` - {config.InfoCommands.DM}
+            `logout` - {config.InfoCommands.logout}
             `save` - {config.InfoCommands.save}
             `updatesuggestion` - {config.InfoCommands.updatesuggestion}'''
             ownerEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
@@ -277,8 +278,8 @@ async def help(ctx, arg = None):
 async def invite(ctx):
     try:
         embed = discord.Embed(title='Links', colour=config.Colors.darkGreen, timestamp=ctx.message.created_at)
-        embed.add_field(name='Join our Discord server!', value="[Alex's bots](https://discord.gg/AAJPHqNXUy)", inline=False)
-        embed.add_field(name='Invite the bot to your server', value='[Admin permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8) \n[Required permissions](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=134556758)')
+        embed.add_field(name='Join our Discord server!', value=f"[Alex's bots]({config.General.supportServerURL})", inline=False)
+        embed.add_field(name='Invite the bot to your server', value=f'[Admin permissions]({config.General.botInviteURLAdmin}) \n[Required permissions]({config.General.botInviteURL})')
         embed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=embed, mention_author=False)
     except Exception as e:
@@ -1929,6 +1930,25 @@ async def DM(ctx, member: discord.Member=None, *, msg=None):
         await ctx.send(embed=embed)
         return
 
+@bot.command(name="logout")
+@commands.is_owner()
+async def logout(ctx):
+    try:
+        await ctx.reply(f"Guess it's time to say goodbye!, for now {config.Emojis.wave}", mention_author=False)
+        await bot.close()
+        print(f"{ctx.author} has disconnected the bot from Discord today at {ctx.message.created_at}")
+    except Exception as e:
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        await ctx.reply(embed=errorEmbed, mention_author=False)
+        await ctx.message.add_reaction(config.Emojis.noEntry)
+        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+        description=f"""Error while using `logout` command:
+            `[Content]` {ctx.message.content} 
+            `[Error]` {e}"""
+        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await logErrorsChannel.send(embed=logErrorsEmbed)
+        return
 
 @bot.command(name='save')
 @commands.guild_only()
@@ -1963,7 +1983,6 @@ async def save(ctx,*, saveMsg=None):
             logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
             await logErrorsChannel.send(embed=logErrorsEmbed)
             return
-
 
 @bot.command(name='us', aliases=['updatesuggestion'])
 @commands.guild_only()
@@ -2041,8 +2060,7 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
-    
-  
+
 ################################
 ####################################################################################################
 ####################################################################################################
