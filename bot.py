@@ -147,7 +147,7 @@ async def about(ctx):
         embedI.add_field(name='Prefix', value='`a!`, `A!`')
         embedI.add_field(name='Developed since', value='`21/10/2020`')
         embedI.add_field(name='Developed with', value='`Python`')
-        embedI.add_field(name='Useful links', value=f'[GitHub]({config.General.githubURL} | [Support Server]({config.General.supportServerURL})) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
+        embedI.add_field(name='Useful links', value=f'[GitHub]({config.General.githubURL}) | [Support Server]({config.General.supportServerURL})) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
         embedI.add_field(name='Latest updates', value="New commands: say, embed, serverinfo, roleinfo, addrole, removerole.", inline=False)
         embedI.set_thumbnail(url=ctx.me.avatar_url)
         embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
