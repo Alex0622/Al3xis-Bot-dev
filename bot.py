@@ -262,6 +262,8 @@ async def help(ctx, arg = None):
             return
     except Exception as e:
         if "type object" in str(e):
+            notFoundEmbed = discord.Embed(description=f"Command/Category `{arg}` not found.", colour=config.Colors.red)
+            await ctx.reply(embed=notFoundEmbed, mention_author=False)
             return
         else:
             errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
