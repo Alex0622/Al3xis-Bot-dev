@@ -261,17 +261,20 @@ async def help(ctx, arg = None):
             await ctx.reply(embed=embed, mention_author=False)
             return
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-        await ctx.reply(embed=errorEmbed, mention_author=False)
-        await ctx.message.add_reaction(config.Emojis.noEntry)
-        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-        description=f"""Error while using `help` command:
-            `[Content]` {ctx.message.content} 
-            `[Error]` {e}"""
-        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-        await logErrorsChannel.send(embed=logErrorsEmbed)
-        return
+        if "type object" in str(e):
+            return
+        else:
+            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            await ctx.reply(embed=errorEmbed, mention_author=False)
+            await ctx.message.add_reaction(config.Emojis.noEntry)
+            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+            description=f"""Error while using `help` command:
+                `[Content]` {ctx.message.content} 
+                `[Error]` {e}"""
+            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+            await logErrorsChannel.send(embed=logErrorsEmbed)
+            return
         
 
 @bot.command(name='invite', aliases=['inv'])
