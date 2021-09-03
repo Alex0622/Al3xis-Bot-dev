@@ -63,7 +63,9 @@ class InfoCommands:
     ui =                'Get information about a member.'
     unban =             'Remove ban from member.'
     unmute =            'Remove `Muted` role from member.'
+    updatereport =      'Update the status of a report.'
     updatesuggestion =  'Update the status of a suggestion.'
+    ur =                'Update the status of a report.'
     us =                'Update the status of a suggestion.'
     user =              'Get information about a member.'
     userinfo =          'Get information about a member.'
@@ -128,7 +130,9 @@ class UsageCommands:
     ui =                '`a!ui (member)`'
     unban =             '`a!unban ID (reason)`'
     unmute =            '`a!unmute (member) (reason)`'
+    updatereport =      '`a!updatereport (message ID) (comment)`'
     updatesuggestion =  '`a!updatesuggestion (message ID) (accept/deny/pending) (reason)`'
+    ur =                '`a!ur (message ID) (comment)`'
     us =                '`a!us (message ID) (accept/deny/pending) (reason)`'
     user =              '`a!user (member)`'
     userinfo =          '`a!userinfo (member)`'
@@ -193,7 +197,9 @@ class AliasesCommands:
     ui =                'user, userinfo'
     unban =             'No aliases'
     unmute =            'No aliases'
+    updatereport =      'ur'
     updatesuggestion =  'us'
+    ur =                'updatereport'
     us =                'updatesuggestion'
     user =              'ui, userinfo'
     userinfo =          'ui, user'
@@ -258,7 +264,9 @@ class RequiredPermissions:
     ui =                'NO REQUIRED PERMISSION'
     unban =             'BAN MEMBERS'
     unmute =            'BAN MEMBERS'
+    updatereport =      "Bot's owner"
     updatesuggestion =  "Bot's owner"
+    ur =                "Bot's owner"
     us =                "Bot's owner"
     user =              'NO REQUIRED PERMISSION'
     userinfo =          'NO REQUIRED PERMISSION'
