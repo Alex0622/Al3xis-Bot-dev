@@ -1,8 +1,8 @@
 
 class General:
     botAvatarURL =          "https://i.imgur.com/8PqN7yq.jpg"
-    botInviteURL =          "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot%20applications.commands&permissions=134556758"
-    botInviteURLAdmin =     "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot%20applications.commands&permissions=134556758"
+    botInviteURL =          "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=134556758"
+    botInviteURLAdmin =     "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8"
     supportServerURL =      "https://discord.com/invite/AAJPHqNXUy"
     githubURL =             "https://github.com/Alex0622/Al3xis-Bot-dev"
 
