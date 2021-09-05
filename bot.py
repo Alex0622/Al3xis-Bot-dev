@@ -325,16 +325,28 @@ async def ping(ctx):
 async def report(ctx, *, msg=None):
     if msg != None:
         try:
-            botMsg = await ctx.reply(f'Saving report {config.Emojis.loading}', mention_author=False)
+            botEmbed = discord.Embed(description=f"Saving report {config.Emojis.loading}", colour=config.Colors.gray)
+            botMsg = await ctx.reply(embed=botEmbed, mention_author=False)
             await asyncio.sleep(2)
+            reportsChannel = bot.get_channel(config.Channels.reportsChannel)
+            lastMessageID = reportsChannel.last_message_id
+            latestMessage = await reportsChannel.fetch_message(lastMessageID)
+            embeds = latestMessage.embeds
+            for embed in embeds:
+                reportID = embed.author.name[-1:]
             embed = discord.Embed(title=f'Report made by {ctx.author}', description=msg, colour=config.Colors.purple, timestamp=ctx.message.created_at)
+            embed.set_author(name=f"Report #{int(reportID)+1}")
             embed.set_footer(text=ctx.author.id, icon_url=ctx.author.avatar_url)
             print(f'{ctx.author} reported: {msg}')
-            channel = bot.get_channel(config.Channels.reportsChannel)
-            await channel.send(content='',embed=embed)
-            
+            await reportsChannel.send(content='',embed=embed)
             await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
-            await botMsg.edit(content='Thanks for your report!, and Admin will review your report as soon as possible.\nYou will get a response in DM when your report\'s status gets updated.')
+            desc = '''Thanks for your report!
+            An Admin will review your report as soon as possible.
+            You will get a respoonse in DMs when your report's status gets updated.
+            '''
+            reportedEmbed = discord.Embed(description=desc, colour=config.Colors.green)
+            reportedEmbed.set_author(name=f"Report #{reportID}")
+            await botMsg.edit(embed=reportedEmbed)
         except Exception as e:
             errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
             await ctx.reply(embed=errorEmbed, mention_author=False)
@@ -1991,6 +2003,7 @@ async def updatereport(ctx, messageID=None, *, comment=None):
             user = await bot.fetch_user(embed.footer.text)
             desc = f'''Hello {user}
             This message was sent to you because the status of your report was updated.
+            Report ID: #{embed.author.name[-1:]}
             Report message: {embed.description}
             Comment: {comment}
             Commented by: {ctx.author}'''
@@ -2170,7 +2183,6 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
             logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
             await logErrorsChannel.send(embed=logErrorsEmbed)
             return
-
 ################################
 ####################################################################################################
 ####################################################################################################
