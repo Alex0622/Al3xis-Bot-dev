@@ -1539,8 +1539,8 @@ async def purge(ctx, am=None):
             embed = discord.Embed(description=f'You can only purge **500** messages at a time and you tried to delete **{amount}**.', colour=config.Colors.red)
             await ctx.reply(embed=embed, mention_author=False)
             return
-        if amount < 0:
-            notIntEmbed = discord.Embed(description=f"**Error!** Do not use negavite numbers.", colour=config.Colors.red)
+        if amount <= 0:
+            notIntEmbed = discord.Embed(description=f"**Error!** Amount of messages cannot be negative numbers or 0.", colour=config.Colors.red)
             await ctx.reply(embed=notIntEmbed, mention_author=False)
             return
         if amount <= 500:
