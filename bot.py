@@ -153,7 +153,7 @@ async def about(ctx):
         embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=embedI, mention_author=False)
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -174,7 +174,7 @@ async def help(ctx, arg = None):
             helpEmbed.add_field(name='Math', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`', inline=True)
             helpEmbed.add_field(name='Moderation', value='`addrole`, `ban`, `kick`, `mute`, `pmute`, `purge`, `removerole`, `unban`, `unmute`', inline=True)
             helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `embed`, `id`, `membercount`, `nick`, `reminder`, `roleinfo`, `say`, `servericon`, `serverinfo`, `userinfo`', inline=False)
-            helpEmbed.add_field(name='Owner', value='`DM`, `logout`, `save`, `updatesuggestion`', inline=True)
+            helpEmbed.add_field(name='Owner', value='`DM`, `logout`, `save`, `updatereport`, `updatesuggestion`', inline=True)
             helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
             await ctx.reply(embed=helpEmbed, mention_author=False)
             return
@@ -245,6 +245,7 @@ async def help(ctx, arg = None):
             `DM` - {config.InfoCommands.DM}
             `logout` - {config.InfoCommands.logout}
             `save` - {config.InfoCommands.save}
+            `updatereport` - {config.InfoCommands.updatereport}
             `updatesuggestion` - {config.InfoCommands.updatesuggestion}'''
             ownerEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
             ownerEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
@@ -265,7 +266,7 @@ async def help(ctx, arg = None):
             await ctx.reply(embed=notFoundEmbed, mention_author=False)
             return
         else:
-            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
             await ctx.reply(embed=errorEmbed, mention_author=False)
             await ctx.message.add_reaction(config.Emojis.noEntry)
             logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -286,7 +287,7 @@ async def invite(ctx):
         embed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=embed, mention_author=False)
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -308,7 +309,7 @@ async def ping(ctx):
         await message.edit(content=f"**Bot's ping:**  `{int(ping)}ms`")
         print(f'Ping {int(ping)}ms')
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -335,7 +336,7 @@ async def report(ctx, *, msg=None):
             await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
             await botMsg.edit(content='Thanks for your report!, and Admin will review your report as soon as possible.\nYou will get a response in DM when your report\'s status gets updated.')
         except Exception as e:
-            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
             await ctx.reply(embed=errorEmbed, mention_author=False)
             await ctx.message.add_reaction(config.Emojis.noEntry)
             logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -357,7 +358,7 @@ async def source(ctx):
         embed = discord.Embed(title=f"{ctx.me.name}'s source", description='Hi!, you can find my source code [here](https://github.com/Alex0622/Al3xis-Bot-dev/).', colour=config.Colors.yellow)
         await ctx.reply(embed=embed, mention_author=False)
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -392,7 +393,7 @@ async def suggest(ctx, *, new_suggestion=None):
         await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
         await msg.edit(content='', embed=embed2, allowed_mentions=discord.AllowedMentions.none())
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await msg.edit(content='', embed=errorEmbed)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -415,7 +416,7 @@ async def vote(ctx):
         voteEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=voteEmbed, mention_author=False)
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -477,7 +478,7 @@ async def announce(ctx, channel : discord.TextChannel=None, *, announceMsg=None)
         await botMsg.edit(content="You didn't reply in time, please try again.")
         return
     except Exception as e:
-            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
             await ctx.reply(embed=errorEmbed, mention_author=False)
             await ctx.message.add_reaction(config.Emojis.noEntry)
             logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -506,7 +507,7 @@ async def avatar(ctx, *, member: discord.Member = None):
         embed.set_image(url='{}'.format(user.avatar_url))
         await ctx.send(embed=embed)
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -536,7 +537,7 @@ async def embed(ctx, *, embedMsg=None):
             except Exception:
                 pass
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -556,7 +557,7 @@ async def id(ctx, *, member: discord.Member = None):
             member = ctx.author
         await ctx.reply(member.id, mention_author=False)
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -575,7 +576,7 @@ async def membercount(ctx):
         embed = discord.Embed(description=f'There are **{ctx.guild.member_count} members** in this server.', colour=config.Colors.lightBlue)
         await ctx.reply(embed=embed, mention_author=False)
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -628,7 +629,7 @@ async def nick(ctx, *, new_nick=None):
                     await botmsg.edit(embed=errorEmbed)
                     return
                 else:
-                    errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                    errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
                     await botmsg.edit(embed=errorEmbed)
                     await ctx.message.add_reaction(config.Emojis.noEntry)
                     logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -759,7 +760,7 @@ async def roleinfo(ctx, role:discord.Role=None):
             await ctx.message.add_reaction(config.Emojis.noEntry)
             return
         else:
-            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
             await ctx.reply(embed=errorEmbed, mention_author=False)
             await ctx.message.add_reaction(config.Emojis.noEntry)
             logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -786,7 +787,7 @@ async def say(ctx, *, sayMsg=None):
            pass
         await ctx.send(sayMsg, allowed_mentions=discord.AllowedMentions.none())
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -806,7 +807,7 @@ async def servericon(ctx):
         embed.set_image(url='{}'.format(ctx.guild.icon_url))
         await ctx.send(embed=embed)
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -850,7 +851,7 @@ async def serverinfo(ctx):
         serverinfoEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=serverinfoEmbed, mention_author=False)
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -889,7 +890,7 @@ async def userinfo(ctx, *, member: discord.Member=None):
         userinfoEmbed.add_field(name='**Roles**', value=ROLES)
         await ctx.reply(embed=userinfoEmbed, mention_author=False)
     except Exception as e:
-        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
         await ctx.reply(embed=errorEmbed, mention_author=False)
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -947,7 +948,7 @@ async def calc(ctx, x:float=None, arg=None, y:float=None):
                         await ctx.send(embed=embed)
                         return   
                 except Exception as e:
-                    errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                    errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
                     await ctx.reply(embed=errorEmbed, mention_author=False)
                     await ctx.message.add_reaction(config.Emojis.noEntry)
                     logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -981,84 +982,99 @@ async def calc_error(ctx, error):
         return 
 
 @bot.command(name='mathrandom')
-async def mathrandom(ctx, x:int=None, y:float=None):
-    if x != None:
-        if y != None:
-            try:
-                result = rando(x, y)
-                await ctx.reply(result, mention_author=False)
-            except Exception as e:
-                errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+async def mathrandom(ctx, x=None, y=None):
+    try:
+        if x == None:
+            embed = discord.Embed(description='You are missing the arguments "x" and "y". \nUse `a!help mathrandom` for more information.', colour=config.Colors.red)
+            await ctx.reply(embed=embed, mention_author=False)
+            return
+        if y == None:
+            embed = discord.Embed(description='You are missing the argument "y". \nUse `a!help mathrandom` for more information.', colour=config.Colors.red)
+            await ctx.reply(embed=embed, mention_author=False)
+            return
+        x = int(x)
+        y = int(y)
+        result = rando(x, y)
+        await ctx.reply(result, mention_author=False) 
+    except Exception as e:
+        if "invalid literal" in str(e):
+            notIntEmbed = discord.Embed(description=f"**Error!** Please use valid arguments (numbers) e.g. `a!mathrandom 1 5`", colour=config.Colors.red)
+            await ctx.reply(embed=notIntEmbed, mention_author=False)
+            return
+        elif "empty range for" in str(e):
+            notValid = discord.Embed(description=f"**Error!** The order of your values must be from lowest to highest. \n Note: Only use numbers, e.g. `a!mathrandom 1 5`", colour=config.Colors.red)
+            await ctx.reply(embed=notValid, mention_author=False)
+            return
+        else:
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            await ctx.reply(embed=errorEmbed, mention_author=False)
+            await ctx.message.add_reaction(config.Emojis.noEntry)
+            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+            description=f"""Error while using `mathrandom` command:
+                `[Content]` {ctx.message.content} 
+                `[Error]` {e}"""
+            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+            await logErrorsChannel.send(embed=logErrorsEmbed)
+            return
+
+@bot.command(name='mathsq')
+async def mathsq(ctx, x=None):
+    if x == None:    
+        embed = discord.Embed(description='You are missing the argument "x". \nUse `a!help mathsq` for more information.', colour=config.Colors.red)
+        await ctx.reply(embed=embed, mention_author=False)
+        return 
+    else:
+        try:  
+            x = float(x)
+            result = sq(x)
+            await ctx.reply(result, mention_author=False)
+        except Exception as e:
+            if "could not convert string to float" in str(e):
+                notIntEmbed = discord.Embed(description=f"**Error!** Please use a valid argument (number) e.g. `a!mathsq 2`", colour=config.Colors.red)
+                await ctx.reply(embed=notIntEmbed, mention_author=False)
+                return
+            else:
+                errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
                 await ctx.reply(embed=errorEmbed, mention_author=False)
                 await ctx.message.add_reaction(config.Emojis.noEntry)
                 logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                description=f"""Error while using `mathrandom` command:
+                description=f"""Error while using `mathsq` command:
                     `[Content]` {ctx.message.content} 
                     `[Error]` {e}"""
                 logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
                 logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
                 await logErrorsChannel.send(embed=logErrorsEmbed)
-                return
-        else:
-            embed = discord.Embed(description='You are missing the argument "y".', colour=config.Colors.red)
-            await ctx.send(embed=embed)
-            return    
-    else:
-        embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return 
-@mathrandom.error
-async def mathrandom_error(ctx, error):
-    if isinstance(error, commands.CommandInvokeError):
-        embed = discord.Embed(description='The order of your values must be from lowest to highest. \n Note: Only use numbers.', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return  
-
-@bot.command(name='mathsq')
-async def mathsq(ctx, x:float=None):
-    if x != None:    
-        try:  
-            result = sq(x)
-            await ctx.reply(result, mention_author=False)
-        except Exception as e:
-            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-            await ctx.reply(embed=errorEmbed, mention_author=False)
-            await ctx.message.add_reaction(config.Emojis.noEntry)
-            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-            description=f"""Error while using `mathsq` command:
-                `[Content]` {ctx.message.content} 
-                `[Error]` {e}"""
-            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-            await logErrorsChannel.send(embed=logErrorsEmbed)
-            return
-    else:
-        embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return  
+                return 
 
 @bot.command(name='mathsqrt')
-async def mathsqrt(ctx, x:float=None):
-    if x != None:      
+async def mathsqrt(ctx, x=None):
+    if x == None:    
+        embed = discord.Embed(description='You are missing the argument "x". \nUse `a!help mathsqrt` for more information.', colour=config.Colors.red)
+        await ctx.reply(embed=embed, mention_author=False)
+        return  
+    else:     
         try:    
+            x = float(x)
             result = sqrt(x)
             await ctx.reply(result, mention_author=False)
         except Exception as e:
-            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-            await ctx.reply(embed=errorEmbed, mention_author=False)
-            await ctx.message.add_reaction(config.Emojis.noEntry)
-            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-            description=f"""Error while using `mathsqrt` command:
-                `[Content]` {ctx.message.content} 
-                `[Error]` {e}"""
-            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-            await logErrorsChannel.send(embed=logErrorsEmbed)
-            return
-    else:
-        embed = discord.Embed(description='You are missing the argument "x".', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return  
+            if "could not convert string to float" in str(e):
+                notIntEmbed = discord.Embed(description=f"**Error!** Please use a valid argument (number) e.g. `a!mathsqrt 4`", colour=config.Colors.red)
+                await ctx.reply(embed=notIntEmbed, mention_author=False)
+                return
+            else:
+                errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                await ctx.reply(embed=errorEmbed, mention_author=False)
+                await ctx.message.add_reaction(config.Emojis.noEntry)
+                logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                description=f"""Error while using `mathsqrt` command:
+                    `[Content]` {ctx.message.content} 
+                    `[Error]` {e}"""
+                logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                await logErrorsChannel.send(embed=logErrorsEmbed)
+                return 
 
 ####################################################################################################
 ####################################################################################################
@@ -1162,7 +1178,7 @@ async def ban(ctx, member:discord.Member=None, *, reason=None):
                             logChannel=bot.get_channel(config.Channels.logChannel)
                             await logChannel.send(embed=logEmbed)     
                         except Exception as e:
-                            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
                             await ctx.reply(embed=errorEmbed, mention_author=False)
                             await ctx.message.add_reaction(config.Emojis.noEntry)
                             logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -1238,7 +1254,7 @@ async def kick(ctx, member : discord.Member=None, *, reason=None):
                             logChannel = bot.get_channel(config.Channels.logChannel)
                             await logChannel.send(embed=logEmbed)       
                         except Exception as e:
-                            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
                             await ctx.reply(embed=errorEmbed, mention_author=False)
                             await ctx.message.add_reaction(config.Emojis.noEntry)
                             logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -1318,7 +1334,7 @@ async def mute(ctx, member: discord.Member=None, duration=None, *, reason=None):
                                             seconds += float(duration[:-1])
                                             counter = f"{seconds} seconds"
                                         else:
-                                            embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration.', colour=config.Colors.red)
+                                            embed = discord.Embed(description=f'**Error!** "{duration}" is not a valid duration.', colour=config.Colors.red)
                                             await ctx.send(embed=embed)
                                             return 
                                         
@@ -1362,7 +1378,7 @@ async def mute(ctx, member: discord.Member=None, duration=None, *, reason=None):
                                             await ctx.reply(embed=embed, mention_author=False)
                                             return  
                                         else:
-                                            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                                            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
                                             await ctx.reply(embed=errorEmbed, mention_author=False)
                                             await ctx.message.add_reaction(config.Emojis.noEntry)
                                             logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -1461,7 +1477,7 @@ async def pmute(ctx, member: discord.Member=None, *, reason=None):
                                     return
 
                                 except Exception as e:
-                                    errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                                    errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
                                     await ctx.reply(embed=errorEmbed, mention_author=False)
                                     await ctx.message.add_reaction(config.Emojis.noEntry)
                                     logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -1512,13 +1528,26 @@ async def pmute_error(ctx, error):
 @commands.guild_only()
 @commands.bot_has_permissions(manage_messages=True)
 @commands.has_permissions(manage_messages = True)
-async def purge(ctx, amount = 0):
+async def purge(ctx, am=None):
     guild = ctx.guild
-    if amount <= 500:
-        if amount >=1:
-            try:
+    try:
+        if am == None:
+            amount = 20
+        elif am != None:
+            amount = int(am)
+        if amount > 500:
+            embed = discord.Embed(description=f'You can only purge **500** messages at a time and you tried to delete **{amount}**.', colour=config.Colors.red)
+            await ctx.reply(embed=embed, mention_author=False)
+            return
+        if amount < 0:
+            notIntEmbed = discord.Embed(description=f"**Error!** Do not use negavite numbers.", colour=config.Colors.red)
+            await ctx.reply(embed=notIntEmbed, mention_author=False)
+            return
+        if amount <= 500:
+            if amount >=1:
+                await ctx.message.delete()
                 await ctx.channel.purge(limit=amount)
-                e = discord.Embed(description=f'Deleted {amount} messages {config.Emojis.loading}', colour=config.Colors.red)
+                e = discord.Embed(description=f'Deleted {amount} message(s) {config.Emojis.loading}', colour=config.Colors.red)
                 botMsg = await ctx.send(embed=e)
                 await asyncio.sleep(5)
                 await botMsg.delete()
@@ -1529,27 +1558,23 @@ async def purge(ctx, amount = 0):
                 logEmbed.set_footer(text=f'Guild: {ctx.guild}')
                 logChannel=bot.get_channel(config.Channels.logChannel)
                 await logChannel.send(embed=logEmbed)
-                print(f'{ctx.message.author} deleted {amount} messages using the purge command in server {guild.name}.')
-            except Exception as e:
-                errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                await ctx.reply(embed=errorEmbed, mention_author=False)
-                await ctx.message.add_reaction(config.Emojis.noEntry)
-                logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                description=f"""Error while using `purge` command:
-                    `[Content]` {ctx.message.content} 
-                    `[Error]` {e}"""
-                logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                await logErrorsChannel.send(embed=logErrorsEmbed)
-                return
-    if amount > 500:
-        await ctx.send(f'You can only purge **500** messages at a time and you tried to delete **{amount}**.')
-        print(f'{ctx.message.author} tried to delete {amount} messages with the purge command in server {guild.name}.')
-        return
-    if amount == 0:
-        embed = discord.Embed(description='Select an amount of messages to purge.', colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return
+    except Exception as e:
+        if "invalid literal" in str(e):
+            notIntEmbed = discord.Embed(description=f"**Error!** `{am}` is not valid amount of messages.", colour=config.Colors.red)
+            await ctx.reply(embed=notIntEmbed, mention_author=False)
+            return
+        else:
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            await ctx.reply(embed=errorEmbed, mention_author=False)
+            await ctx.message.add_reaction(config.Emojis.noEntry)
+            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+            description=f"""Error while using `purge` command:
+                `[Content]` {ctx.message.content} 
+                `[Error]` {e}"""
+            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+            await logErrorsChannel.send(embed=logErrorsEmbed)
+            return
 @purge.error
 async def purge_error(ctx, error):
     if isinstance(error, commands.errors.MissingPermissions):
@@ -1660,7 +1685,7 @@ async def softban(ctx, member:discord.Member=None, *, reason=None):
                             logChannel = bot.get_channel(config.Channels.logChannel)
                             await logChannel.send(embed=logEmbed)       
                         except Exception as e:
-                            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
                             await ctx.reply(embed=errorEmbed, mention_author=False)
                             await ctx.message.add_reaction(config.Emojis.noEntry)
                             logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -1729,7 +1754,7 @@ async def unban(ctx, UserID: int, *, reason=None):
                         logChannel=bot.get_channel(config.Channels.logChannel)
                         await logChannel.send(embed=logEmbed)     
                     except Exception as e:
-                        errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
                         await ctx.reply(embed=errorEmbed, mention_author=False)
                         await ctx.message.add_reaction(config.Emojis.noEntry)
                         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -1805,7 +1830,7 @@ async def unmute(ctx, member: discord.Member=None, *, reason=None):
                             logChannel=bot.get_channel(config.Channels.logChannel)
                             await logChannel.send(embed=logEmbed)     
                         except Exception as e:
-                            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
                             await ctx.reply(embed=errorEmbed, mention_author=False)
                             await ctx.message.add_reaction(config.Emojis.noEntry)
                             logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -1868,7 +1893,7 @@ async def DM(ctx, member: discord.Member=None, *, msg=None):
                 await DMs_channel.send(embed=logEmbed)
                 await botMsg.edit(content=f'DM sent successfully! {config.Emojis.whiteCheckMark}')
             except Exception as e:
-                errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
                 await ctx.reply(embed=errorEmbed, mention_author=False)
                 await ctx.message.add_reaction(config.Emojis.noEntry)
                 logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -1931,7 +1956,7 @@ async def save(ctx,*, saveMsg=None):
             await savedMessagesChannel.send(embed=embed)
             await firstMessage.edit(content=f'**{ctx.author}** Your message has been saved!')
         except Exception as e:
-            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
             await ctx.reply(embed=errorEmbed, mention_author=False)
             await ctx.message.add_reaction(config.Emojis.noEntry)
             logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
@@ -2134,7 +2159,7 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
             await botMsg.edit(embed=notOwnedMessage)
             return
         else:
-            errorEmbed= discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
             await ctx.reply(embed=errorEmbed, mention_author=False)
             await ctx.message.add_reaction(config.Emojis.noEntry)
             logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
