@@ -345,7 +345,7 @@ async def report(ctx, *, msg=None):
             You will get a respoonse in DMs when your report's status gets updated.
             '''
             reportedEmbed = discord.Embed(description=desc, colour=config.Colors.green)
-            reportedEmbed.set_author(name=f"Report #{reportID}")
+            reportedEmbed.set_author(name=f"Report #{int(reportID)+1}")
             await botMsg.edit(embed=reportedEmbed)
         except Exception as e:
             errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
