@@ -846,15 +846,27 @@ async def serverinfo(ctx):
         **Guild ID:** {guild.id}
         **Created:** {guild.created_at.strftime("%d %B %Y, %H:%M")}
         '''
-        statistics = f'''
-        **Members:** 
-            `[{guild.member_count}]` Members
-        **Roles:** 
-            `[{len(guild.roles)}]` Roles
+        bots = []
+        humans = []
+        bans = len(await guild.bans())
+        members = guild.members
+        for member in members:
+            if member.bot:
+                bots.append('bot')
+            if not member.bot:
+                humans.append('human')
+        statistics = f'''  
+        **Boosts:** `{guild.premium_subscription_count}`
+        **Banned users:** `{bans}`
+        **Total members:** `{guild.member_count}`
+            `{len(humans)}` Humans | `{len(bots)}` Bots
+        **Roles:** `{len(guild.roles)}`
         **Channels:** 
-            `[{len(guild.text_channels)}]` Text channels | `[{len(guild.voice_channels)}]` Voice channels
+            `{len(guild.text_channels)}` Text channels | `{len(guild.voice_channels)}` Voice channels
         '''
         serverinfoEmbed = discord.Embed(title=f"{guild}'s information", colour=config.Colors.blue, timestamp=ctx.message.created_at)
+        if ctx.guild.description != None:
+            serverinfoEmbed.description = ctx.guild.description
         serverinfoEmbed.add_field(name='**__General__**', value=general)
         serverinfoEmbed.add_field(name='**__Statistics__**', value=statistics)
         if not guild.is_icon_animated():
