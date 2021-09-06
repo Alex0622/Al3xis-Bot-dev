@@ -322,6 +322,7 @@ async def ping(ctx):
         return
 
 @bot.command(name='report')
+@commands.cooldown(1, 600, type=commands.BucketType.user)
 async def report(ctx, *, msg=None):
     if msg != None:
         try:
@@ -383,6 +384,7 @@ async def source(ctx):
         return
 
 @bot.command(name='suggest', aliases=['sug'])
+@commands.cooldown(1, 600, type=commands.BucketType.user)
 async def suggest(ctx, *, new_suggestion=None):
     if new_suggestion == None:
         embed = discord.Embed(description='Please add a suggestion in your message.', colour=config.Colors.red)
@@ -532,6 +534,7 @@ async def avatar(ctx, *, member: discord.Member = None):
         return
 
 @bot.command(name='embed')
+@commands.cooldown(1, 10, commands.BucketType.user)
 @commands.guild_only()
 async def embed(ctx, *, embedMsg=None):
     randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen]
