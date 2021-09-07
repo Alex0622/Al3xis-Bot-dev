@@ -1312,7 +1312,7 @@ async def kick_error(ctx, error):
 
 @bot.command(name='mute')
 @commands.guild_only()
-@commands.bot_has_permissions(ban_members=True)
+@commands.bot_has_permissions(manage_roles=True)
 @commands.has_permissions(ban_members=True)
 async def mute(ctx, member: discord.Member=None, duration=None, *, reason=None):
     if member == None:
@@ -1435,7 +1435,7 @@ async def mute_error(ctx, error):
         await ctx.send(embed=embed)
         return
     if isinstance(error, commands.BotMissingPermissions):
-        embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        embed = discord.Embed(description='**Error!** I need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
     if isinstance(error, commands.errors.CommandInvokeError):
@@ -1446,6 +1446,7 @@ async def mute_error(ctx, error):
 
 @bot.command(name='pmute', aliases= ['pm'])
 @commands.guild_only()
+@commands.bot_has_permissions(manage_roles=True)
 @commands.has_permissions(ban_members=True)
 async def pmute(ctx, member: discord.Member=None, *, reason=None):
     if member == None:
@@ -1525,7 +1526,7 @@ async def pmute_error(ctx, error):
         await ctx.send(embed=embed)
         return
     if isinstance(error, commands.BotMissingPermissions):
-        embed = discord.Embed(description='**Error!** Looks like I\'m missing permissions.', colour=config.Colors.red)
+        embed = discord.Embed(description='**Error!** I need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
 
@@ -1791,6 +1792,7 @@ async def unban_error(ctx, error):
 
 @bot.command(name='unmute')
 @commands.guild_only()
+@commands.bot_has_permissions(manage_roles=True)
 @commands.has_permissions(ban_members=True)
 async def unmute(ctx, member: discord.Member=None, *, reason=None):
     if member == None:
@@ -1854,7 +1856,7 @@ async def unmute_error(ctx, error):
         await ctx.send(embed=embed)
         return
     if isinstance(error, commands.BotMissingPermissions):
-        embed = discord.Embed(description='**Error!** Looks like I\'m missing permissions.', colour=config.Colors.red)
+        embed = discord.Embed(description='**Error!** I need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
 
