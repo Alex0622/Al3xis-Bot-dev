@@ -1882,11 +1882,11 @@ async def DM(ctx, member: discord.Member=None, *, msg=None):
             except Exception as e:
                 if "'ClientUser' object has no attribute 'create_dm'" in str(e):
                     embed = discord.Embed(description="I can't DM myself.", colour=config.Colors.red)
-                    await ctx.reply(embed=embed, mention_author=False)
+                    await botMsg.edit(embed=embed)
                     return
                 else:
                     errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                    await ctx.reply(embed=errorEmbed, mention_author=False)
+                    await botMsg.edit(embed=errorEmbed)
                     await ctx.message.add_reaction(config.Emojis.noEntry)
                     logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
                     description=f"""Error while using `DM` command:
