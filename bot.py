@@ -1832,17 +1832,22 @@ async def unmute(ctx, member: discord.Member=None, *, reason=None):
                         logChannel=bot.get_channel(config.Channels.logChannel)
                         await logChannel.send(embed=logEmbed)     
                     except Exception as e:
-                        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                        await ctx.reply(embed=errorEmbed, mention_author=False)
-                        await ctx.message.add_reaction(config.Emojis.noEntry)
-                        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                        description=f"""Error while using `unmute` command:
-                            `[Content]` {ctx.message.content} 
-                            `[Error]` {e}"""
-                        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                        await logErrorsChannel.send(embed=logErrorsEmbed)
-                        return
+                        if str(e) == "403 Forbidden (error code: 50013): Missing Permissions":
+                            errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions to access the Muted role.", colour=config.Colors.red)
+                            await ctx.reply(embed=errorEmbed, mention_author=False)
+                            return
+                        else:
+                            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                            await ctx.reply(embed=errorEmbed, mention_author=False)
+                            await ctx.message.add_reaction(config.Emojis.noEntry)
+                            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                            description=f"""Error while using `unmute` command:
+                                `[Content]` {ctx.message.content} 
+                                `[Error]` {e}"""
+                            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                            await logErrorsChannel.send(embed=logErrorsEmbed)
+                            return
                 else:
                     embed = discord.Embed(description=f'{member.mention} is not muted.', colour=config.Colors.red)
                     await ctx.send(embed=embed)
