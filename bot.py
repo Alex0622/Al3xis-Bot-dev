@@ -116,7 +116,8 @@ async def on_member_join(member):
         await member.add_roles(memberRole, reason='Member Join Event')
         chatChannel = bot.get_channel(config.Channels.chatChannel)
         randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen, config.Colors.gray]
-        embed = discord.Embed(description=f'Welcome {member.mention} to the **Alex\'s bots** server!', colour=random.choice(randomColors))
+        embed = discord.Embed(description=f'Welcome **{member}** to the **Alex\'s bots** server!', colour=random.choice(randomColors))
+        embed.set_footer(text=member.id, icon_url=member.avatar_url)
         await chatChannel.send(embed=embed)
         return
     else:
@@ -127,7 +128,8 @@ async def on_member_remove(member):
     if member.guild == bot.get_guild(793987455149408309):
         chatChannel = bot.get_channel(config.Channels.chatChannel)
         randomColors = [config.Colors.red, config.Colors.lightBlue, config.Colors.green, config.Colors.blue, config.Colors.yellow, config.Colors.orange, config.Colors.purple, config.Colors.darkGreen, config.Colors.gray]
-        embed = discord.Embed(description=f'{member.mention} left the server.', colour=random.choice(randomColors))
+        embed = discord.Embed(description=f'**{member}** left the server.', colour=random.choice(randomColors))
+        embed.set_footer(text=member.id, icon_url=member.avatar_url)
         await chatChannel.send(embed=embed)
         return
     else:
@@ -338,7 +340,6 @@ async def report(ctx, *, msg=None):
             embed = discord.Embed(title=f'Report made by {ctx.author}', description=msg, colour=config.Colors.purple, timestamp=ctx.message.created_at)
             embed.set_author(name=f"Report #{int(reportID)+1}")
             embed.set_footer(text=ctx.author.id, icon_url=ctx.author.avatar_url)
-            print(f'{ctx.author} reported: {msg}')
             await reportsChannel.send(content='',embed=embed)
             await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
             desc = '''Thanks for your report!
@@ -754,9 +755,11 @@ async def roleinfo(ctx, role:discord.Role=None):
         for perm in permissions.keys():
             if permissions[perm] is True and not role.permissions.administrator:
                 perms.append(perm.lower().replace('_', ' ').title())
-
         if role.permissions.administrator:
             perms.append("Administrator")
+        members = []
+        for member in role.members:
+            members.append("member")
         roleinfoDesc = f'''
         **Role name:** {role.name} ({role.id})
         **Created on** {role.created_at.strftime("%A %d %B %Y, %H:%M")}
@@ -764,8 +767,8 @@ async def roleinfo(ctx, role:discord.Role=None):
         **Is managed?** {role.managed}
         **Is hoisted?** {role.hoist}
         **Color:** {role.color}
+        **Members:** {len(members)}
         **Permissions:** {', '.join(perms)}'''
-
         roleinfoEmbed = discord.Embed(title=roleinfoTitle, description=roleinfoDesc, colour=role.color)
         await ctx.reply(embed=roleinfoEmbed, mention_author=False)
     except Exception as e:
@@ -1181,47 +1184,41 @@ async def ban(ctx, member:discord.Member=None, *, reason=None):
         reason = 'No reason provided.'  
     if member != ctx.author:
         if member != ctx.me:
-            if not member.bot:
-                if not member.guild_permissions.ban_members:
-                    if member.top_role > ctx.me.top_role:
-                        embed = discord.Embed(description="I cannot ban that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
-                        await ctx.send(embed=embed)
-                        return 
-                    else:
-                        try:
-                            await asyncio.sleep(0.5)    
-                            await ctx.send(f'**{member}** was banned | `{reason}`')
-                            try:
-                                await member.send(f'You were banned in server: **{guild.name}** | `{reason}`')
-                            except Exception:
-                                pass
-                            await member.ban(reason=f'{ctx.author}: {reason}')
-                            print(f'User {ctx.author} banned {member} | {reason}')
-                            logEmbed = discord.Embed(title=f'Case: `ban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                            logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                            logEmbed.add_field(name='User', value=member.mention)
-                            logEmbed.add_field(name='Reason', value=reason) 
-                            logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                            logChannel=bot.get_channel(config.Channels.logChannel)
-                            await logChannel.send(embed=logEmbed)     
-                        except Exception as e:
-                            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                            await ctx.reply(embed=errorEmbed, mention_author=False)
-                            await ctx.message.add_reaction(config.Emojis.noEntry)
-                            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                            description=f"""Error while using `ban` command:
-                                `[Content]` {ctx.message.content} 
-                                `[Error]` {e}"""
-                            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                            await logErrorsChannel.send(embed=logErrorsEmbed)
-                            return
-                else:
-                    embed = discord.Embed(description="**Error!** You don't have permissions to ban that member.", colour=config.Colors.red)
+            if not member.guild_permissions.ban_members:
+                if member.top_role > ctx.me.top_role:
+                    embed = discord.Embed(description="I cannot ban that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
                     await ctx.send(embed=embed)
-                    return
+                    return 
+                else:
+                    try:
+                        await asyncio.sleep(0.5)    
+                        await ctx.send(f'**{member}** was banned | `{reason}`')
+                        try:
+                            await member.send(f'You were banned in server: **{guild.name}** | `{reason}`')
+                        except Exception:
+                            pass
+                        await member.ban(reason=f'{ctx.author}: {reason}')
+                        logEmbed = discord.Embed(title=f'Case: `ban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                        logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                        logEmbed.add_field(name='User', value=member.mention)
+                        logEmbed.add_field(name='Reason', value=reason) 
+                        logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                        logChannel=bot.get_channel(config.Channels.logChannel)
+                        await logChannel.send(embed=logEmbed)     
+                    except Exception as e:
+                        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                        await ctx.reply(embed=errorEmbed, mention_author=False)
+                        await ctx.message.add_reaction(config.Emojis.noEntry)
+                        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                        description=f"""Error while using `ban` command:
+                            `[Content]` {ctx.message.content} 
+                            `[Error]` {e}"""
+                        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                        await logErrorsChannel.send(embed=logErrorsEmbed)
+                        return
             else:
-                embed = discord.Embed(description="I can't interact with bots.", colour=config.Colors.red)
+                embed = discord.Embed(description="**Error!** You don't have permissions to ban that member.", colour=config.Colors.red)
                 await ctx.send(embed=embed)
                 return
         else: 
@@ -1257,47 +1254,41 @@ async def kick(ctx, member : discord.Member=None, *, reason=None):
         reason = 'No reason provided'
     if member != ctx.author:
         if member != ctx.me:
-            if not member.bot:
-                if not member.guild_permissions.ban_members:
-                    if member.top_role > ctx.me.top_role:
-                        embed = discord.Embed(description="I cannot kick that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
-                        await ctx.send(embed=embed)
-                        return
-                    else:
-                        try:
-                            await asyncio.sleep(0.5)
-                            await ctx.send(f'**{member}** was kicked | `{reason}`')
-                            try:
-                                await member.send(f'You were kicked from server: **{guild.name}** | `{reason}`')
-                            except Exception:
-                                pass
-                            await member.kick(reason=f'{ctx.author}: {reason}')
-                            print(f'User {ctx.author} kicked {member} in server {guild.name}| {reason}')
-                            logEmbed = discord.Embed(title=f'Case: `kick`', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                            logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                            logEmbed.add_field(name='User', value=member.mention)
-                            logEmbed.add_field(name='Reason', value=reason) 
-                            logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                            logChannel = bot.get_channel(config.Channels.logChannel)
-                            await logChannel.send(embed=logEmbed)       
-                        except Exception as e:
-                            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                            await ctx.reply(embed=errorEmbed, mention_author=False)
-                            await ctx.message.add_reaction(config.Emojis.noEntry)
-                            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                            description=f"""Error while using `kick` command:
-                                `[Content]` {ctx.message.content} 
-                                `[Error]` {e}"""
-                            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                            await logErrorsChannel.send(embed=logErrorsEmbed)
-                            return
-                else:
-                    embed = discord.Embed(description="**Error!** You don't have permissions to kick that member.", colour=config.Colors.red)
+            if not member.guild_permissions.ban_members:
+                if member.top_role > ctx.me.top_role:
+                    embed = discord.Embed(description="I cannot kick that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
                     await ctx.send(embed=embed)
                     return
+                else:
+                    try:
+                        await asyncio.sleep(0.5)
+                        await ctx.send(f'**{member}** was kicked | `{reason}`')
+                        try:
+                            await member.send(f'You were kicked from server: **{guild.name}** | `{reason}`')
+                        except Exception:
+                            pass
+                        await member.kick(reason=f'{ctx.author}: {reason}')
+                        logEmbed = discord.Embed(title=f'Case: `kick`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                        logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                        logEmbed.add_field(name='User', value=member.mention)
+                        logEmbed.add_field(name='Reason', value=reason) 
+                        logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                        logChannel = bot.get_channel(config.Channels.logChannel)
+                        await logChannel.send(embed=logEmbed)       
+                    except Exception as e:
+                        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                        await ctx.reply(embed=errorEmbed, mention_author=False)
+                        await ctx.message.add_reaction(config.Emojis.noEntry)
+                        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                        description=f"""Error while using `kick` command:
+                            `[Content]` {ctx.message.content} 
+                            `[Error]` {e}"""
+                        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                        await logErrorsChannel.send(embed=logErrorsEmbed)
+                        return
             else:
-                embed = discord.Embed(description="I can't interact with bots.", colour=config.Colors.red)
+                embed = discord.Embed(description="**Error!** You don't have permissions to kick that member.", colour=config.Colors.red)
                 await ctx.send(embed=embed)
                 return
         else: 
@@ -1336,100 +1327,93 @@ async def mute(ctx, member: discord.Member=None, duration=None, *, reason=None):
     if mutedRole:
         if member != ctx.author:
             if member != ctx.me:
-                if not member.bot:
-                    if not member.guild_permissions.ban_members:
-                        if member.top_role > ctx.me.top_role:
-                            embed = discord.Embed(description="I cannot mute that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
-                            await ctx.send(embed=embed)
-                            return
-                        else:
-                            if not mutedRole in member.roles:
-                                if duration:
-                                    try:
-                                        await asyncio.sleep(0.5)
-                                        seconds = 0
-                                        if duration.lower().endswith("d"):
-                                            seconds += float(duration[:-1]) * 60 * 60 * 24
-                                            counter = f"{seconds // 60 // 60 // 24} days"
-                                        elif duration.lower().endswith("h"):
-                                            seconds += float(duration[:-1]) * 60 * 60
-                                            counter = f"{seconds // 60 // 60} hours"
-                                        elif duration.lower().endswith("m"):
-                                            seconds += float(duration[:-1]) * 60
-                                            counter = f"{seconds // 60} minutes"
-                                        elif duration.lower().endswith("s"):
-                                            seconds += float(duration[:-1])
-                                            counter = f"{seconds} seconds"
-                                        else:
-                                            embed = discord.Embed(description=f'**Error!** "{duration}" is not a valid duration.', colour=config.Colors.red)
-                                            await ctx.send(embed=embed)
-                                            return 
-                                        
-                                        await member.add_roles(mutedRole, reason=f'{ctx.author}: {reason}')
-                                        await ctx.send(f'**{member}** was muted for {counter} | `{reason}`')
-                                        try:                    
-                                            await member.send(f'You were muted in server: **{guild.name}** for {counter} | `{reason}`')
-                                        except Exception:
-                                            pass
-                                        print(f'User {ctx.author} muted {member} in server {guild.name} for {counter} | {reason}')
-                                        logEmbed = discord.Embed(title=f'Case: `mute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                                        logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                                        logEmbed.add_field(name='User', value=member.mention)   
-                                        logEmbed.add_field(name='Reason', value=reason) 
-                                        logEmbed.add_field(name='Duration', value=counter)
-                                        logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                                        logChannel=bot.get_channel(config.Channels.logChannel)
-                                        await logChannel.send(embed=logEmbed)   
-
-                                        await asyncio.sleep(seconds)
-                                        if mutedRole in member.roles:
-                                            await member.remove_roles(mutedRole, reason='Temporary mute completed!')
-                                        if not mutedRole in member.roles:
-                                            return
-                                        reason = 'Temporary mute completed!'
-                                        try:
-                                            await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
-                                        except Exception:
-                                            pass
-                                        print(f'User {member} was unmuted in server {guild.name} | {reason}')
-                                        logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                                        logEmbed.add_field(name='User', value=member.mention)
-                                        logEmbed.add_field(name='Reason', value=reason) 
-                                        logEmbed.set_footer(text=f'Guild: {guild}')
-                                        logChannel=bot.get_channel(config.Channels.logChannel)
-                                        await logChannel.send(embed=logEmbed)
-                                        return
-                                    except Exception as e:
-                                        if str(e).startswith("could not convert string to float"):
-                                            embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration.', colour=config.Colors.red)
-                                            await ctx.reply(embed=embed, mention_author=False)
-                                            return  
-                                        else:
-                                            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                                            await ctx.reply(embed=errorEmbed, mention_author=False)
-                                            await ctx.message.add_reaction(config.Emojis.noEntry)
-                                            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                                            description=f"""Error while using `mute` command:
-                                                `[Content]` {ctx.message.content} 
-                                                `[Error]` {e}"""
-                                            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                                            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                                            await logErrorsChannel.send(embed=logErrorsEmbed)
-                                            return
-                                else:
-                                    embed = discord.Embed(description='Please specify an amount of time to mute that member.', colour=config.Colors.red)
-                                    await ctx.send(embed=embed)
-                                    return
-                            else:
-                                embed = discord.Embed(description=f'**{member}** is already muted.', colour=config.Colors.red)
-                                await ctx.send(embed=embed)
-                                return
-                    else:
-                        embed = discord.Embed(description="**Error!** You don't have permissions to mute that member.", colour=config.Colors.red)
+                if not member.guild_permissions.ban_members:
+                    if member.top_role > ctx.me.top_role:
+                        embed = discord.Embed(description="I cannot mute that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
                         await ctx.send(embed=embed)
                         return
+                    else:
+                        if not mutedRole in member.roles:
+                            if duration:
+                                try:
+                                    await asyncio.sleep(0.5)
+                                    seconds = 0
+                                    if duration.lower().endswith("d"):
+                                        seconds += float(duration[:-1]) * 60 * 60 * 24
+                                        counter = f"{seconds // 60 // 60 // 24} days"
+                                    elif duration.lower().endswith("h"):
+                                        seconds += float(duration[:-1]) * 60 * 60
+                                        counter = f"{seconds // 60 // 60} hours"
+                                    elif duration.lower().endswith("m"):
+                                        seconds += float(duration[:-1]) * 60
+                                        counter = f"{seconds // 60} minutes"
+                                    elif duration.lower().endswith("s"):
+                                        seconds += float(duration[:-1])
+                                        counter = f"{seconds} seconds"
+                                    else:
+                                        embed = discord.Embed(description=f'**Error!** "{duration}" is not a valid duration.', colour=config.Colors.red)
+                                        await ctx.send(embed=embed)
+                                        return 
+                                    
+                                    await member.add_roles(mutedRole, reason=f'{ctx.author}: {reason}')
+                                    await ctx.send(f'**{member}** was muted for {counter} | `{reason}`')
+                                    try:                    
+                                        await member.send(f'You were muted in server: **{guild.name}** for {counter} | `{reason}`')
+                                    except Exception:
+                                        pass
+                                    logEmbed = discord.Embed(title=f'Case: `mute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                                    logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                                    logEmbed.add_field(name='User', value=member.mention)   
+                                    logEmbed.add_field(name='Reason', value=reason) 
+                                    logEmbed.add_field(name='Duration', value=counter)
+                                    logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                                    logChannel=bot.get_channel(config.Channels.logChannel)
+                                    await logChannel.send(embed=logEmbed)   
+
+                                    await asyncio.sleep(seconds)
+                                    if mutedRole in member.roles:
+                                        await member.remove_roles(mutedRole, reason='Temporary mute completed!')
+                                    if not mutedRole in member.roles:
+                                        return
+                                    reason = 'Temporary mute completed!'
+                                    try:
+                                        await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
+                                    except Exception:
+                                        pass
+                                    logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                                    logEmbed.add_field(name='User', value=member.mention)
+                                    logEmbed.add_field(name='Reason', value=reason) 
+                                    logEmbed.set_footer(text=f'Guild: {guild}')
+                                    logChannel=bot.get_channel(config.Channels.logChannel)
+                                    await logChannel.send(embed=logEmbed)
+                                    return
+                                except Exception as e:
+                                    if str(e).startswith("could not convert string to float"):
+                                        embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration.', colour=config.Colors.red)
+                                        await ctx.reply(embed=embed, mention_author=False)
+                                        return  
+                                    else:
+                                        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                                        await ctx.reply(embed=errorEmbed, mention_author=False)
+                                        await ctx.message.add_reaction(config.Emojis.noEntry)
+                                        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                                        description=f"""Error while using `mute` command:
+                                            `[Content]` {ctx.message.content} 
+                                            `[Error]` {e}"""
+                                        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                                        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                                        await logErrorsChannel.send(embed=logErrorsEmbed)
+                                        return
+                            else:
+                                embed = discord.Embed(description='Please specify an amount of time to mute that member.', colour=config.Colors.red)
+                                await ctx.send(embed=embed)
+                                return
+                        else:
+                            embed = discord.Embed(description=f'**{member}** is already muted.', colour=config.Colors.red)
+                            await ctx.send(embed=embed)
+                            return
                 else:
-                    embed = discord.Embed(description="I can't interact with bots.", colour=config.Colors.red)
+                    embed = discord.Embed(description="**Error!** You don't have permissions to mute that member.", colour=config.Colors.red)
                     await ctx.send(embed=embed)
                     return
             else:
@@ -1476,56 +1460,50 @@ async def pmute(ctx, member: discord.Member=None, *, reason=None):
     if mutedRole:
         if member != ctx.author:
             if member != ctx.me:
-                if not member.bot:
-                    if not member.guild_permissions.ban_members:
-                        if member.top_role > ctx.me.top_role:
-                            embed = discord.Embed(description="I cannot mute that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
-                            await ctx.send(embed=embed)
-                            return
-                        else:
-                            if not mutedRole in member.roles:
-                                try:
-                                    await asyncio.sleep(0.5)
-                                    await member.add_roles(mutedRole, reason=f'{ctx.author}: {reason}')
-                                    await ctx.send(f'**{member}** was permanently muted | `{reason}`')
-                                    try:
-                                        await member.send(f'You were permanently muted in server: **{guild.name}** | `{reason}`')
-                                    except Exception:
-                                        pass
-                                    print(f'User {ctx.author} permanently muted {member} in server {guild.name} | {reason}')
-                                    logEmbed = discord.Embed(title=f'Case: `mute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                                    logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                                    logEmbed.add_field(name='User', value=member.mention)
-                                    logEmbed.add_field(name='Reason', value=reason) 
-                                    logEmbed.add_field(name='Duration', value=f'Permanently')
-                                    logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                                    logChannel=bot.get_channel(config.Channels.logChannel)
-                                    await logChannel.send(embed=logEmbed)  
-                                    return
-
-                                except Exception as e:
-                                    errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                                    await ctx.reply(embed=errorEmbed, mention_author=False)
-                                    await ctx.message.add_reaction(config.Emojis.noEntry)
-                                    logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                                    description=f"""Error while using `pmute` command:
-                                        `[Content]` {ctx.message.content} 
-                                        `[Error]` {e}"""
-                                    logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                                    logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                                    await logErrorsChannel.send(embed=logErrorsEmbed)
-                                    return
-
-                            else:
-                                embed = discord.Embed(description=f'{member.mention} is already muted.', colour=config.Colors.red)
-                                await ctx.send(embed=embed)
-                                return 
-                    else:
-                        embed = discord.Embed(description=f"**Error!** You don't have permissions to mute that member!", colour=config.Colors.red)
+                if not member.guild_permissions.ban_members:
+                    if member.top_role > ctx.me.top_role:
+                        embed = discord.Embed(description="I cannot mute that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
                         await ctx.send(embed=embed)
                         return
+                    else:
+                        if not mutedRole in member.roles:
+                            try:
+                                await asyncio.sleep(0.5)
+                                await member.add_roles(mutedRole, reason=f'{ctx.author}: {reason}')
+                                await ctx.send(f'**{member}** was permanently muted | `{reason}`')
+                                try:
+                                    await member.send(f'You were permanently muted in server: **{guild.name}** | `{reason}`')
+                                except Exception:
+                                    pass
+                                logEmbed = discord.Embed(title=f'Case: `mute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                                logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                                logEmbed.add_field(name='User', value=member.mention)
+                                logEmbed.add_field(name='Reason', value=reason) 
+                                logEmbed.add_field(name='Duration', value=f'Permanently')
+                                logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                                logChannel=bot.get_channel(config.Channels.logChannel)
+                                await logChannel.send(embed=logEmbed)  
+                                return
+
+                            except Exception as e:
+                                errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                                await ctx.reply(embed=errorEmbed, mention_author=False)
+                                await ctx.message.add_reaction(config.Emojis.noEntry)
+                                logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                                description=f"""Error while using `pmute` command:
+                                    `[Content]` {ctx.message.content} 
+                                    `[Error]` {e}"""
+                                logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                                logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                                await logErrorsChannel.send(embed=logErrorsEmbed)
+                                return
+
+                        else:
+                            embed = discord.Embed(description=f'{member.mention} is already muted.', colour=config.Colors.red)
+                            await ctx.send(embed=embed)
+                            return 
                 else:
-                    embed = discord.Embed(description="I can't interact with bots.", colour=config.Colors.red)
+                    embed = discord.Embed(description=f"**Error!** You don't have permissions to mute that member!", colour=config.Colors.red)
                     await ctx.send(embed=embed)
                     return
             else:
@@ -1687,48 +1665,42 @@ async def softban(ctx, member:discord.Member=None, *, reason=None):
         reason = 'No reason provided.'
     if member != ctx.author:
         if member != ctx.me:
-            if not member.bot:
-                if not member.guild_permissions.ban_members:
-                    if member.top_role > ctx.me.top_role:
-                        embed = discord.Embed(description="I cannot softban that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
-                        await ctx.send(embed=embed)
-                        return
-                    else:
-                        try:
-                            await asyncio.sleep(0.5)
-                            await ctx.send(f'**{member}** was softbanned | `{reason}`')
-                            try:
-                                await member.send(f'You were softbanned in server: **{guild.name}** | `{reason}`')
-                            except Exception:
-                                pass
-                            await member.ban(reason=f'{ctx.author}: {reason}', delete_message_days=5)
-                            await member.unban(reason=f'{ctx.author}: softban')
-                            print(f'User {ctx.author} softbanned {member} in server {guild.name}| {reason}')
-                            logEmbed = discord.Embed(title=f'Case: `softban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                            logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                            logEmbed.add_field(name='User', value=member.mention)
-                            logEmbed.add_field(name='Reason', value=reason) 
-                            logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                            logChannel = bot.get_channel(config.Channels.logChannel)
-                            await logChannel.send(embed=logEmbed)       
-                        except Exception as e:
-                            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                            await ctx.reply(embed=errorEmbed, mention_author=False)
-                            await ctx.message.add_reaction(config.Emojis.noEntry)
-                            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                            description=f"""Error while using `softban` command:
-                                `[Content]` {ctx.message.content} 
-                                `[Error]` {e}"""
-                            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                            await logErrorsChannel.send(embed=logErrorsEmbed)
-                            return
-                else:
-                    embed = discord.Embed(description="**Error!** You don't have permissions to softban that member.", colour=config.Colors.red)
+            if not member.guild_permissions.ban_members:
+                if member.top_role > ctx.me.top_role:
+                    embed = discord.Embed(description="I cannot softban that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
                     await ctx.send(embed=embed)
                     return
+                else:
+                    try:
+                        await asyncio.sleep(0.5)
+                        await ctx.send(f'**{member}** was softbanned | `{reason}`')
+                        try:
+                            await member.send(f'You were softbanned in server: **{guild.name}** | `{reason}`')
+                        except Exception:
+                            pass
+                        await member.ban(reason=f'{ctx.author}: {reason}', delete_message_days=5)
+                        await member.unban(reason=f'{ctx.author}: softban')
+                        logEmbed = discord.Embed(title=f'Case: `softban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                        logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                        logEmbed.add_field(name='User', value=member.mention)
+                        logEmbed.add_field(name='Reason', value=reason) 
+                        logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                        logChannel = bot.get_channel(config.Channels.logChannel)
+                        await logChannel.send(embed=logEmbed)       
+                    except Exception as e:
+                        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                        await ctx.reply(embed=errorEmbed, mention_author=False)
+                        await ctx.message.add_reaction(config.Emojis.noEntry)
+                        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                        description=f"""Error while using `softban` command:
+                            `[Content]` {ctx.message.content} 
+                            `[Error]` {e}"""
+                        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                        await logErrorsChannel.send(embed=logErrorsEmbed)
+                        return
             else:
-                embed = discord.Embed(description="I can't interact with bots.", colour=config.Colors.red)
+                embed = discord.Embed(description="**Error!** You don't have permissions to softban that member.", colour=config.Colors.red)
                 await ctx.send(embed=embed)
                 return
         else: 
@@ -1761,43 +1733,37 @@ async def unban(ctx, UserID: int, *, reason=None):
     member = await bot.fetch_user(UserID)
     if member != ctx.author:
         if member != ctx.me:
-            if not member.bot:
+            try:
+                await ctx.guild.fetch_ban(discord.Object(id=member.id))
                 try:
-                    await ctx.guild.fetch_ban(discord.Object(id=member.id))
+                    await asyncio.sleep(0.5)
+                    await ctx.guild.unban(member, reason=f'{ctx.author}: {reason}')
+                    await ctx.send(f'**{member}** was unbanned | `{reason}`')
                     try:
-                        await asyncio.sleep(0.5)
-                        await ctx.guild.unban(member, reason=f'{ctx.author}: {reason}')
-                        await ctx.send(f'**{member}** was unbanned | `{reason}`')
-                        try:
-                            await member.send(f'You were unbanned in server: **{guild.name}** | `{reason}`')
-                        except Exception:
-                            pass
-                        print(f'User {ctx.author} unbanned {member} from {guild.name} | {reason}')
-                        logEmbed = discord.Embed(title=f'Case: `unban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                        logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                        logEmbed.add_field(name='User', value=member.mention)
-                        logEmbed.add_field(name='Reason', value=reason) 
-                        logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                        logChannel=bot.get_channel(config.Channels.logChannel)
-                        await logChannel.send(embed=logEmbed)     
-                    except Exception as e:
-                        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                        await ctx.reply(embed=errorEmbed, mention_author=False)
-                        await ctx.message.add_reaction(config.Emojis.noEntry)
-                        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                        description=f"""Error while using `unban` command:
-                            `[Content]` {ctx.message.content} 
-                            `[Error]` {e}"""
-                        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                        await logErrorsChannel.send(embed=logErrorsEmbed)
-                        return
-                except discord.NotFound:
-                    embed = discord.Embed(description='That user is not banned here.', colour=config.Colors.red)
-                    await ctx.send(embed=embed)
-                    return     
-            else:
-                embed = discord.Embed(description="I can't interact with bots.", colour=config.Colors.red)
+                        await member.send(f'You were unbanned in server: **{guild.name}** | `{reason}`')
+                    except Exception:
+                        pass
+                    logEmbed = discord.Embed(title=f'Case: `unban`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                    logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                    logEmbed.add_field(name='User', value=member.mention)
+                    logEmbed.add_field(name='Reason', value=reason) 
+                    logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                    logChannel=bot.get_channel(config.Channels.logChannel)
+                    await logChannel.send(embed=logEmbed)     
+                except Exception as e:
+                    errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                    await ctx.reply(embed=errorEmbed, mention_author=False)
+                    await ctx.message.add_reaction(config.Emojis.noEntry)
+                    logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                    description=f"""Error while using `unban` command:
+                        `[Content]` {ctx.message.content} 
+                        `[Error]` {e}"""
+                    logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                    logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                    await logErrorsChannel.send(embed=logErrorsEmbed)
+                    return
+            except discord.NotFound:
+                embed = discord.Embed(description='That user is not banned here.', colour=config.Colors.red)
                 await ctx.send(embed=embed)
                 return
         else:
@@ -1838,42 +1804,36 @@ async def unmute(ctx, member: discord.Member=None, *, reason=None):
     if mutedRole:
         if member != ctx.author:
             if member != ctx.me:
-                if not member.bot:
-                    if mutedRole in member.roles:
+                if mutedRole in member.roles:
+                    try:
+                        await asyncio.sleep(0.5)
+                        await member.remove_roles(mutedRole, reason=f'{ctx.author}: {reason}')
+                        await ctx.send(f'**{member}** was unmuted | `{reason}`')
                         try:
-                            await asyncio.sleep(0.5)
-                            await member.remove_roles(mutedRole, reason=f'{ctx.author}: {reason}')
-                            await ctx.send(f'**{member}** was unmuted | `{reason}`')
-                            try:
-                                await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
-                            except Exception:
-                                pass
-                            print(f'User {ctx.author} unmuted {member} in server {guild.name} | {reason}')
-                            logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
-                            logEmbed.add_field(name='Moderator', value=ctx.author.mention)
-                            logEmbed.add_field(name='User', value=member.mention)
-                            logEmbed.add_field(name='Reason', value=reason) 
-                            logEmbed.set_footer(text=f'Guild: {ctx.guild}')
-                            logChannel=bot.get_channel(config.Channels.logChannel)
-                            await logChannel.send(embed=logEmbed)     
-                        except Exception as e:
-                            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                            await ctx.reply(embed=errorEmbed, mention_author=False)
-                            await ctx.message.add_reaction(config.Emojis.noEntry)
-                            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                            description=f"""Error while using `unmute` command:
-                                `[Content]` {ctx.message.content} 
-                                `[Error]` {e}"""
-                            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                            await logErrorsChannel.send(embed=logErrorsEmbed)
-                            return
-                    else:
-                        embed = discord.Embed(description=f'{member.mention} is not muted.', colour=config.Colors.red)
-                        await ctx.send(embed=embed)
-                        return 
+                            await member.send(f'You were unmuted in server: **{guild.name}** | `{reason}`')
+                        except Exception:
+                            pass
+                        logEmbed = discord.Embed(title=f'Case: `unmute`', colour=config.Colors.red, timestamp=ctx.message.created_at)
+                        logEmbed.add_field(name='Moderator', value=ctx.author.mention)
+                        logEmbed.add_field(name='User', value=member.mention)
+                        logEmbed.add_field(name='Reason', value=reason) 
+                        logEmbed.set_footer(text=f'Guild: {ctx.guild}')
+                        logChannel=bot.get_channel(config.Channels.logChannel)
+                        await logChannel.send(embed=logEmbed)     
+                    except Exception as e:
+                        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                        await ctx.reply(embed=errorEmbed, mention_author=False)
+                        await ctx.message.add_reaction(config.Emojis.noEntry)
+                        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                        description=f"""Error while using `unmute` command:
+                            `[Content]` {ctx.message.content} 
+                            `[Error]` {e}"""
+                        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                        await logErrorsChannel.send(embed=logErrorsEmbed)
+                        return
                 else:
-                    embed = discord.Embed(description="I can't interact with bots.", colour=config.Colors.red)
+                    embed = discord.Embed(description=f'{member.mention} is not muted.', colour=config.Colors.red)
                     await ctx.send(embed=embed)
                     return
             else: 
