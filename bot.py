@@ -851,7 +851,11 @@ async def serverinfo(ctx):
         '''
         bots = []
         humans = []
-        bans = len(await guild.bans())
+        botperms = dict(ctx.me.guild_permissions)
+        if botperms["ban_members"] is True:
+            bans = len(await guild.bans())
+        if botperms["ban_members"] is False:
+            bans = "I need 'ban_members' permission."
         members = guild.members
         for member in members:
             if member.bot:
