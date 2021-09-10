@@ -150,7 +150,7 @@ async def about(ctx):
         embedI.add_field(name='Developed since', value='`21/10/2020`')
         embedI.add_field(name='Developed with', value='`Python`')
         embedI.add_field(name='Useful links', value=f'[GitHub]({config.General.githubURL}) | [Support Server]({config.General.supportServerURL}) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
-        embedI.add_field(name='Latest updates', value="`report` and `suggest` commands were updated.", inline=False)
+        embedI.add_field(name='Latest updates', value="You can now change the nickname of other members with command `nick`.", inline=False)
         embedI.set_thumbnail(url=ctx.me.avatar_url)
         embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=embedI, mention_author=False)
@@ -606,70 +606,68 @@ async def membercount(ctx):
 
 @bot.command(name='nick', aliases=['setnick'])
 @commands.guild_only()
-@commands.has_permissions(change_nickname=True)
+@commands.has_permissions(manage_nicknames=True)
 @commands.bot_has_permissions(manage_nicknames=True)
-async def nick(ctx, *, new_nick=None):
-    embed = discord.Embed(description=f'Updating nick {config.Emojis.loading}', colour=config.Colors.gray)
-    if new_nick:
-        botmsg = await ctx.reply(embed=embed, mention_author=False)
-        await asyncio.sleep(1)
-        if ctx.author.top_role.position >= ctx.guild.me.top_role.position:
-            embed = discord.Embed(description="I cannot change your nickname because you have the same role as me or your top role is above mine.", colour=config.Colors.red)
-            await botmsg.edit(embed=embed)
-            return   
-        else:      
-            try:   
-                if str(new_nick).lower() == 'reset':
-                    if ctx.author.nick == None:
-                        embedDesc = "You don't have a nickname!"
-                        color = config.Colors.red
-                    else:
-                        await ctx.author.edit(nick=ctx.author.name)
-                        embedDesc = f"{config.Emojis.whiteCheckMark} I've removed your nickname."
-                        color = config.Colors.green
-                    embed2 = discord.Embed(description=embedDesc, colour=color)
-                    await botmsg.edit(embed=embed2)
-                    return
-                if new_nick == ctx.author.nick:
-                    embed3 = discord.Embed(description="You already have that nickname, please select a different one!", colour=config.Colors.red)
-                    await botmsg.edit(embed=embed3)
-                    return
-                else:
-                    await ctx.author.edit(nick=new_nick)
-                    embed4 = discord.Embed(description=f'{config.Emojis.whiteCheckMark} Your new nickname is: {new_nick}', colour=config.Colors.green)
-                    await botmsg.edit(embed=embed4)
-                    return
-            except Exception as e:
-                if str(e) == "403 Forbidden (error code: 50013): Missing Permissions":
-                    errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions to change your nickname.", colour=config.Colors.red)
-                    await botmsg.edit(embed=errorEmbed)
-                    return
-                else:
-                    errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                    await botmsg.edit(embed=errorEmbed)
-                    await ctx.message.add_reaction(config.Emojis.noEntry)
-                    logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                    description=f"""Error while using `nick` command:
-                        `[Content]` {ctx.message.content} 
-                        `[Error]` {e}"""
-                    logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                    logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                    await logErrorsChannel.send(embed=logErrorsEmbed)
-                    return
-    else:
-        if ctx.author.nick == None:
-            desc = 'You don\'t have a current nickname.'
-            color = config.Colors.red
+async def nick(ctx, member:discord.Member=None, *, nickname=None):
+    embed = discord.Embed(description=f"Changing/Getting nickname {config.Emojis.loading}", colour=config.Colors.gray)
+    botmsg = await ctx.reply(embed=embed, mention_author=False)
+    try:
+        if member == None:
+            notMemberEmbed = discord.Embed(description="Please provide a member to change their nickname.", colour=config.Colors.red)
+            await botmsg.edit(embed=notMemberEmbed)
+            return
+        if str(nickname) == None:
+            gettingNickEmbed = discord.Embed(description=f"Getting {member.mention}'s nickname {config.Emojis.loading}", colour=config.Colors.gray)
+            await botmsg.edit(embed=gettingNickEmbed)
+            await asyncio.sleep(1)
+            if member.nick == None:
+                notNickEmbed = discord.Embed(description=f"{config.Emojis.x} **{member}** does not have a nickname.")
+                await botmsg.edit(embed=notNickEmbed)
+                return
+            else:
+                nickEmbed = discord.Embed(description=f"**{member}**'s nickname is: {member.nick}", colour=config.Colors.green)
+                await botmsg.edit(embed=nickEmbed)
+                return
+        if str(nickname) == member.nick:
+            sameNickEmbed = discord.Embed(description=f"{config.Emojis.x} That nickname is the same as **{member}**'s nickname.", colour=config.Colors.red)
+            await botmsg.edit(embed=sameNickEmbed)
+            return
+        if str(nickname).lower() == "remove":
+            if member.nick == None:
+                notNickEmbed2 = discord.Embed(description=f"{config.Emojis.x} **{member}** does not have a nickname. Therefore, I cannot remove it.", colour=config.Colors.red)
+                await botmsg.edit(embed=notNickEmbed2)
+                return
+            else:
+                await member.edit(nick=member.name)
+                removedNickEmbed = discord.Embed(description=f"{config.Emojis.whiteCheckMark} I've removed **{member}**'s nickname", colour=config.Colors.green)
+                await botmsg.edit(embed=removedNickEmbed)
+                return
         else:
-            desc = f'Your current nick is: {ctx.author.nick}'
-            color = config.Colors.orange
-        embed = discord.Embed(description=desc, colour=color)
-        await ctx.channel.send(embed=embed)
-        return  
+            await member.edit(nick=nickname)
+            updatedNickEmbed = discord.Embed(description=f"{config.Emojis.whiteCheckMark} I've changed **{member}**'s nickname to: {nickname}.", colour=config.Colors.green)
+            await botmsg.edit(embed=updatedNickEmbed)
+            return
+    except Exception as e:
+        if str(e) == "403 Forbidden (error code: 50013): Missing Permissions":
+            errorEmbed = discord.Embed(description=f"**Error!** It seems like I'm missing permissions to change **{member}**'s nickname.", colour=config.Colors.red)
+            await botmsg.edit(content="", embed=errorEmbed)
+            return
+        else:
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            await botmsg.edit(embed=errorEmbed)
+            await ctx.message.add_reaction(config.Emojis.noEntry)
+            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+            description=f"""Error while using `nick` command:
+                `[Content]` {ctx.message.content} 
+                `[Error]` {e}"""
+            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+            await logErrorsChannel.send(embed=logErrorsEmbed)
+            return 
 @nick.error
 async def nick_error(ctx, error):
     if isinstance(error, commands.errors.MissingPermissions):
-        embed = discord.Embed(description='**Error!** You need the permission `CHANGE NICKNAME` to run this command.', colour=config.Colors.red)
+        embed = discord.Embed(description='**Error!** You need the permission `MANAGE NICKNAMES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
     if isinstance(error, commands.BotMissingPermissions):

@@ -35,9 +35,9 @@ class InfoCommands:
     mathsq =            "Find the square of a number."
     mathsqrt =          "Find the square root of a number."
     membercount =       'Get how many members are in your server.'
-    msg =                'Send direct messages to users.'
+    msg =               'Send direct messages to users.'
     mute =              'Mute members so they cannot send messages or join VC channels. | Duration: seconds, minutes, hours or days.'
-    nick =              'Change your nickname on this guild.'
+    nick =              "Change or get a member's nickname on this guild."
     ping =              "Shows the bot's latency/ping."
     pm =                'Mute a member permanently.'
     pmute =             'Mute a member permanently.'
@@ -54,7 +54,7 @@ class InfoCommands:
     say =               'Send messages through the bot.'
     servericon =        'Show the server icon.'
     serverinfo =        'Get information about this server.'
-    setnick =           'Change your nickname on this guild.'
+    setnick =           "Change or get a member's nickname on this guild."
     si =                'Get information about this server.'
     softban =           'Ban and automatically unban a member.' 
     source =            "Get the bot's source code."
@@ -104,7 +104,7 @@ class UsageCommands:
     membercount =       '`a!membercount`'
     msg =               '`a!msg (member) (reason)`'
     mute =              '`a!mute (member) (duration) (reason)`'
-    nick =              '`a!nick (new nickname) | Use "reset" to reset your nickname`'
+    nick =              '`a!nick (member) (nickname/"remove") `'
     ping =              '`a!ping`'
     pm =                '`a!pm (member) (reason)`'
     pmute =             '`a!pmute (member) (reason)`'
@@ -121,7 +121,7 @@ class UsageCommands:
     say =               '`a!say (message)`'
     servericon =        '`a!servericon`'
     serverinfo =        '`a!serverinfo`'
-    setnick =           '`a!setnick (new nickname) | Use "reset" to reset your nickname`'
+    setnick =           '`a!setnick (member) (nickname/"remove")`'
     si =                '`a!si`'
     softban =           '`a!softban (member) (reason)`'
     source =            '`a!source`'
@@ -238,7 +238,7 @@ class RequiredPermissions:
     membercount =       'NO REQUIRED PERMISSION'
     msg =               "Bot's owner"
     mute =              'BAN MEMBERS'
-    nick =              'CHANGE NICKNAME'
+    nick =              'MANAGE NICKNAMES'
     ping =              'NO REQUIRED PERMISSION'
     pm =                'BAN MEMBERS'
     pmute =             'BAN MEMBERS'
@@ -255,7 +255,7 @@ class RequiredPermissions:
     say =               'NO REQUIRED PERMISSION'
     servericon =        'NO REQUIRED PERMISSION'
     serverinfo =        'NO REQUIRED PERMISSION'
-    setnick =           'CHANGE NICKNAME'
+    setnick =           'MANAGE NICKNAMES'
     si =                'NO REQUIRED PERMISSION'
     softban =           'BAN MEMBERS'
     source =            'NO REQUIRED PERMISSION'
