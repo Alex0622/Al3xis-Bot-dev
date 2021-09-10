@@ -616,7 +616,7 @@ async def nick(ctx, member:discord.Member=None, *, nickname=None):
             notMemberEmbed = discord.Embed(description="Please provide a member to change their nickname.", colour=config.Colors.red)
             await botmsg.edit(embed=notMemberEmbed)
             return
-        if str(nickname) == None:
+        if nickname == None:
             gettingNickEmbed = discord.Embed(description=f"Getting {member.mention}'s nickname {config.Emojis.loading}", colour=config.Colors.gray)
             await botmsg.edit(embed=gettingNickEmbed)
             await asyncio.sleep(1)
