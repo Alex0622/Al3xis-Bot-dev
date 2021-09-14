@@ -1879,50 +1879,53 @@ async def unmute_error(ctx, error):
 ####################################################################################################
 ####################################################################################################
 ##Owner commands
-
 @bot.command(name='DM', aliases=['dm', 'msg'])
 @commands.guild_only()
 @commands.is_owner()
-async def DM(ctx, member: discord.Member=None, *, msg=None):
-    if member != None:
-        if msg != None:
-            botMsg = await ctx.send(f'DMing user {config.Emojis.loading}')
-            await asyncio.sleep(2)
-            embed = discord.Embed(description=msg, colour=config.Colors.orange)
-            embed.set_footer(text=f'Sent by {ctx.author}', icon_url=ctx.author.avatar_url)
-            try:
-                await member.send(embed=embed)
-                logEmbed = discord.Embed(title=f'{ctx.author.name} has sent a DM to {member.name}', description=msg, colour=config.Colors.orange, timestamp=ctx.message.created_at)
-                logEmbed.set_footer(text=member, icon_url=member.avatar_url)
-                DMs_channel = bot.get_channel(config.Channels.DMsChannel)
-                await DMs_channel.send(embed=logEmbed)
-                await botMsg.edit(content=f'DM sent successfully! {config.Emojis.whiteCheckMark}')
-            except Exception as e:
-                if "'ClientUser' object has no attribute 'create_dm'" in str(e):
-                    embed = discord.Embed(description="I can't DM myself.", colour=config.Colors.red)
-                    await botMsg.edit(embed=embed)
-                    return
-                else:
-                    errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                    await botMsg.edit(embed=errorEmbed)
-                    await ctx.message.add_reaction(config.Emojis.noEntry)
-                    logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                    description=f"""Error while using `DM` command:
-                        `[Content]` {ctx.message.content} 
-                        `[Error]` {e}"""
-                    logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                    logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                    await logErrorsChannel.send(embed=logErrorsEmbed)
-                    return
-        
-        else:
-            embed = discord.Embed(description='Please provide a description for your embed.', colour=config.Colors.red)
-            await ctx.send(embed=embed)
-            return
-    else:
-        embed = discord.Embed(description='Please specify a member to DM.', colour=config.Colors.red)
-        await ctx.send(embed=embed)
+async def DM(ctx, memberID=None, *, message=None):
+    if not memberID:
+        notMemberID = discord.Embed(description="Please provide the ID of the member.", colour=config.Colors.red)
+        await ctx.reply(embed=notMemberID, mention_author=False)
         return
+    if not message:
+        notmessage = discord.Embed(description="Please provide the message to send.", colour=config.Colors.red)
+        await ctx.reply(embed=notmessage, mention_author=False)
+        return
+    try:
+        botMsg = await ctx.reply(f'DMing user {config.Emojis.loading}', mention_author=False)
+        member = await bot.fetch_user(memberID)
+        await asyncio.sleep(2)
+        embed = discord.Embed(description=message, colour=config.Colors.orange)
+        embed.set_footer(text=f'Sent by {ctx.author}', icon_url=ctx.author.avatar_url)
+        await member.send(embed=embed)
+        logEmbed = discord.Embed(title=f'{ctx.author.name} has sent a DM to {member.name}', description=message, colour=config.Colors.orange, timestamp=ctx.message.created_at)
+        logEmbed.set_footer(text=member, icon_url=member.avatar_url)
+        DMs_channel = bot.get_channel(config.Channels.DMsChannel)
+        await DMs_channel.send(embed=logEmbed)
+        await botMsg.edit(content=f'DM sent successfully! {config.Emojis.whiteCheckMark}')
+        await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
+    except Exception as e:
+        if "'ClientUser' object has no attribute 'create_dm'" in str(e):
+            embed = discord.Embed(description="I can't DM myself.", colour=config.Colors.red)
+            await botMsg.edit(embed=embed)
+            return
+        else:
+            if "Unknown User" in str(e):
+                embed = discord.Embed(description="That's not a valid user.", colour=config.Colors.red)
+                await botMsg.edit(embed=embed)
+                return
+            else:
+                errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                await botMsg.edit(embed=errorEmbed)
+                await ctx.message.add_reaction(config.Emojis.noEntry)
+                logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                description=f"""Error while using `DM` command:
+                    `[Content]` {ctx.message.content} 
+                    `[Error]` {e}"""
+                logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                await logErrorsChannel.send(embed=logErrorsEmbed)
+                return
 
 @bot.command(name="logout")
 @commands.is_owner()
