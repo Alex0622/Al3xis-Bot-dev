@@ -174,7 +174,7 @@ async def help(ctx, arg = None):
             helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
             helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `report`, `source`, `suggest`, `vote`', inline=True)
             helpEmbed.add_field(name='Math', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`', inline=True)
-            helpEmbed.add_field(name='Moderation', value='`addrole`, `ban`, `kick`, `mute`, `pmute`, `purge`, `removerole`, `unban`, `unmute`', inline=True)
+            helpEmbed.add_field(name='Moderation', value='`addrole`, `ban`, `bans`, `kick`, `mute`, `pmute`, `purge`, `removerole`, `unban`, `unmute`', inline=True)
             helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `embed`, `id`, `membercount`, `nick`, `reminder`, `roleinfo`, `say`, `servericon`, `serverinfo`, `userinfo`', inline=False)
             helpEmbed.add_field(name='Owner', value='`DM`, `logout`, `save`, `updatereport`, `updatesuggestion`', inline=True)
             helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
@@ -230,6 +230,7 @@ async def help(ctx, arg = None):
             descEmbed = f'''
             `addrole` - {config.InfoCommands.addrole} 
             `ban` - {config.InfoCommands.ban}
+            `bans` - {config.InfoCommands.bans}
             `kick`- {config.InfoCommands.kick}
             `mute` - {config.InfoCommands.mute}
             `pmute` - {config.InfoCommands.pmute}
@@ -821,6 +822,7 @@ async def servericon(ctx):
     try:
         embed = discord.Embed(title = f'Icon of {ctx.guild}', colour=config.Colors.green, timestamp=ctx.message.created_at)
         embed.set_image(url='{}'.format(ctx.guild.icon_url))
+        embed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
     except Exception as e:
         errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
@@ -1208,17 +1210,22 @@ async def ban(ctx, member:discord.Member=None, *, reason=None):
                         logChannel=bot.get_channel(config.Channels.logChannel)
                         await logChannel.send(embed=logEmbed)     
                     except Exception as e:
-                        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                        await ctx.reply(embed=errorEmbed, mention_author=False)
-                        await ctx.message.add_reaction(config.Emojis.noEntry)
-                        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                        description=f"""Error while using `ban` command:
-                            `[Content]` {ctx.message.content} 
-                            `[Error]` {e}"""
-                        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                        await logErrorsChannel.send(embed=logErrorsEmbed)
-                        return
+                        if "Missing Permissions" in str(e):
+                            errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions ban that user.", colour=config.Colors.red)
+                            await ctx.reply(embed=errorEmbed, mention_author=False)
+                            return
+                        else:
+                            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                            await ctx.reply(embed=errorEmbed, mention_author=False)
+                            await ctx.message.add_reaction(config.Emojis.noEntry)
+                            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                            description=f"""Error while using `ban` command:
+                                `[Content]` {ctx.message.content} 
+                                `[Error]` {e}"""
+                            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                            await logErrorsChannel.send(embed=logErrorsEmbed)
+                            return
             else:
                 embed = discord.Embed(description="**Error!** You don't have permissions to ban that member.", colour=config.Colors.red)
                 await ctx.send(embed=embed)
@@ -1231,8 +1238,45 @@ async def ban(ctx, member:discord.Member=None, *, reason=None):
         embed = discord.Embed(description="You can't ban yourself.", colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
-@ban.error
+@ban.error    
 async def ban_error(ctx, error):
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
+        await ctx.send(embed=embed)
+        return
+
+@bot.command(name="bans")
+@commands.has_permissions(ban_members=True)
+@commands.bot_has_permissions(ban_members=True)
+async def bans(ctx):
+    try:
+        desc = []
+        guild = ctx.guild
+        bans = await guild.bans()
+        for ban in bans:
+            desc.append(f"{ban.user.name} `|` {ban.reason} `|` {ban.user.id}")
+        bansEmbed = discord.Embed(title=f"Server bans of {guild}", description=desc, timestamp=ctx.message.created_at, colour=config.Colors.blue)
+        bansEmbed.set_author(name=f"{len(bans)} bans")
+        bansEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.reply(embed=bansEmbed, mention_author=False)
+    except Exception as e:
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        await ctx.reply(embed=errorEmbed, mention_author=False)
+        await ctx.message.add_reaction(config.Emojis.noEntry)
+        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+        description=f"""Error while using `bans` command:
+            `[Content]` {ctx.message.content} 
+            `[Error]` {e}"""
+        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await logErrorsChannel.send(embed=logErrorsEmbed)
+        return
+@bans.error
+async def bans_error(ctx, error):
     if isinstance(error, commands.errors.MissingPermissions):
         embed = discord.Embed(description='**Error!** You need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
@@ -1278,17 +1322,22 @@ async def kick(ctx, member : discord.Member=None, *, reason=None):
                         logChannel = bot.get_channel(config.Channels.logChannel)
                         await logChannel.send(embed=logEmbed)       
                     except Exception as e:
-                        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                        await ctx.reply(embed=errorEmbed, mention_author=False)
-                        await ctx.message.add_reaction(config.Emojis.noEntry)
-                        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                        description=f"""Error while using `kick` command:
-                            `[Content]` {ctx.message.content} 
-                            `[Error]` {e}"""
-                        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                        await logErrorsChannel.send(embed=logErrorsEmbed)
-                        return
+                        if "Missing Permissions" in str(e):
+                            errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions kick that user.", colour=config.Colors.red)
+                            await ctx.reply(embed=errorEmbed, mention_author=False)
+                            return
+                        else:
+                            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                            await ctx.reply(embed=errorEmbed, mention_author=False)
+                            await ctx.message.add_reaction(config.Emojis.noEntry)
+                            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                            description=f"""Error while using `kick` command:
+                                `[Content]` {ctx.message.content} 
+                                `[Error]` {e}"""
+                            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                            await logErrorsChannel.send(embed=logErrorsEmbed)
+                            return
             else:
                 embed = discord.Embed(description="**Error!** You don't have permissions to kick that member.", colour=config.Colors.red)
                 await ctx.send(embed=embed)
@@ -1609,8 +1658,8 @@ async def purge_error(ctx, error):
 async def removerole(ctx, role:discord.Role=None, *, member:discord.Member=None):
     if role == None:
         notRoleEmbed = discord.Embed(description="Please provided a Discord role.", colour=config.Colors.red)
-        return
         await ctx.reply(embed=notRoleEmbed, mention_author=False)
+        return
     if member == None:
         notMembersEmbed = discord.Embed(description="Please provide a member to remove their role.", colour=config.Colors.red)
         await ctx.reply(embed=notMembersEmbed, mention_author=False)
@@ -1700,17 +1749,22 @@ async def softban(ctx, member:discord.Member=None, *, reason=None):
                         logChannel = bot.get_channel(config.Channels.logChannel)
                         await logChannel.send(embed=logEmbed)       
                     except Exception as e:
-                        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                        await ctx.reply(embed=errorEmbed, mention_author=False)
-                        await ctx.message.add_reaction(config.Emojis.noEntry)
-                        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                        description=f"""Error while using `softban` command:
-                            `[Content]` {ctx.message.content} 
-                            `[Error]` {e}"""
-                        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                        await logErrorsChannel.send(embed=logErrorsEmbed)
-                        return
+                        if "Missing Permissions" in str(e):
+                            errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions softban that user.", colour=config.Colors.red)
+                            await ctx.reply(embed=errorEmbed, mention_author=False)
+                            return
+                        else:
+                            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                            await ctx.reply(embed=errorEmbed, mention_author=False)
+                            await ctx.message.add_reaction(config.Emojis.noEntry)
+                            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                            description=f"""Error while using `softban` command:
+                                `[Content]` {ctx.message.content} 
+                                `[Error]` {e}"""
+                            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                            await logErrorsChannel.send(embed=logErrorsEmbed)
+                            return
             else:
                 embed = discord.Embed(description="**Error!** You don't have permissions to softban that member.", colour=config.Colors.red)
                 await ctx.send(embed=embed)
@@ -1763,17 +1817,22 @@ async def unban(ctx, UserID: int, *, reason=None):
                     logChannel=bot.get_channel(config.Channels.logChannel)
                     await logChannel.send(embed=logEmbed)     
                 except Exception as e:
-                    errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                    await ctx.reply(embed=errorEmbed, mention_author=False)
-                    await ctx.message.add_reaction(config.Emojis.noEntry)
-                    logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                    description=f"""Error while using `unban` command:
-                        `[Content]` {ctx.message.content} 
-                        `[Error]` {e}"""
-                    logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                    logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                    await logErrorsChannel.send(embed=logErrorsEmbed)
-                    return
+                    if "Missing Permissions" in str(e):
+                        errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions unban that user.", colour=config.Colors.red)
+                        await ctx.reply(embed=errorEmbed, mention_author=False)
+                        return
+                    else:
+                        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                        await ctx.reply(embed=errorEmbed, mention_author=False)
+                        await ctx.message.add_reaction(config.Emojis.noEntry)
+                        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                        description=f"""Error while using `unban` command:
+                            `[Content]` {ctx.message.content} 
+                            `[Error]` {e}"""
+                        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                        await logErrorsChannel.send(embed=logErrorsEmbed)
+                        return
             except discord.NotFound:
                 embed = discord.Embed(description='That user is not banned here.', colour=config.Colors.red)
                 await ctx.send(embed=embed)
