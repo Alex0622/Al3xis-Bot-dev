@@ -1257,6 +1257,10 @@ async def bans(ctx):
         desc = []
         guild = ctx.guild
         bans = await guild.bans()
+        if len(bans) == 0:
+            noBansEmbed = discord.Embed(description="This server has no banned members.", colour=config.Colors.red)
+            await ctx.reply(embed=noBansEmbed, mention_author=False)
+            return
         for ban in bans:
             desc.append(f"{ban.user.name} `|` {ban.reason} `|` {ban.user.id}")
         bansEmbed = discord.Embed(title=f"Server bans of {guild}", description=desc, timestamp=ctx.message.created_at, colour=config.Colors.blue)
