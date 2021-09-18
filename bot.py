@@ -1972,23 +1972,26 @@ async def DM(ctx, memberID=None, *, message=None):
             embed = discord.Embed(description="I can't DM myself.", colour=config.Colors.red)
             await botMsg.edit(embed=embed)
             return
+        if "Cannot send messages" in str(e):
+            embed = discord.Embed(description="I was unable to send a DM to that user.", colour=config.Colors.red)
+            await botMsg.edit(embed=embed)
+            return
+        if "Unknown User" in str(e):
+            embed = discord.Embed(description="That's not a valid user.", colour=config.Colors.red)
+            await botMsg.edit(embed=embed)
+            return
         else:
-            if "Unknown User" in str(e):
-                embed = discord.Embed(description="That's not a valid user.", colour=config.Colors.red)
-                await botMsg.edit(embed=embed)
-                return
-            else:
-                errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                await botMsg.edit(embed=errorEmbed)
-                await ctx.message.add_reaction(config.Emojis.noEntry)
-                logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                description=f"""Error while using `DM` command:
-                    `[Content]` {ctx.message.content} 
-                    `[Error]` {e}"""
-                logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                await logErrorsChannel.send(embed=logErrorsEmbed)
-                return
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            await botMsg.edit(embed=errorEmbed)
+            await ctx.message.add_reaction(config.Emojis.noEntry)
+            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+            description=f"""Error while using `DM` command:
+                `[Content]` {ctx.message.content} 
+                `[Error]` {e}"""
+            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+            await logErrorsChannel.send(embed=logErrorsEmbed)
+            return
 
 @bot.command(name="logout")
 @commands.is_owner()
