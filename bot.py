@@ -1444,7 +1444,7 @@ async def mute(ctx, member: discord.Member=None, duration=None, *, reason=None):
                                     return
                                 except Exception as e:
                                     if str(e).startswith("could not convert string to float"):
-                                        embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration.', colour=config.Colors.red)
+                                        embed = discord.Embed(description=f'**Error!** "{duration}" is not a valid duration.', colour=config.Colors.red)
                                         await ctx.reply(embed=embed, mention_author=False)
                                         return  
                                     if str(e) == "403 Forbidden (error code: 50013): Missing Permissions":
