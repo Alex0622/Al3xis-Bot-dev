@@ -1297,7 +1297,7 @@ async def kick(ctx, member:discord.Member=None, *, reason=None):
             embed = discord.Embed(description="I cannot kick that user because they have the same role as me or their top role is above mine.", colour=config.Colors.red)
             await ctx.reply(embed=embed, mention_author=False)
             return
-        await member.ban(reason=f'{ctx.author}: {reason}')
+        await member.kick(reason=f'{ctx.author}: {reason}')
         await ctx.reply(f'{config.Emojis.ballotBoxWithCheck} **{member}** was kicked | `{reason}`', mention_author=False) 
     except Exception as e:
         if "Missing Permissions" in str(e):
