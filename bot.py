@@ -2098,7 +2098,7 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
                 user = await bot.fetch_user(embed.footer.text)
                 desc = f'''Hello {user}
                 This message was sent to you because the status of your suggestion was updated.
-                Your suggestion:{embed.description}
+                Your suggestion: {embed.description}
                 Status: **Accepted**
                 Comment: {reason}
                 Commented by: {ctx.author}'''
@@ -2127,7 +2127,7 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
                 user = await bot.fetch_user(embed.footer.text)
                 desc = f'''Hello {user}
                 This message was sent to you because the status of your suggestion was updated.
-                Your suggestion:{embed.description}
+                Your suggestion: {embed.description}
                 Status: **Denied**
                 Comment: {reason}
                 Commented by: {ctx.author}'''
@@ -2156,7 +2156,7 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
                 user = await bot.fetch_user(embed.footer.text)
                 desc = f'''Hello {user}
                 This message was sent to you because the status of your suggestion was updated.
-                Your suggestion:{embed.description}
+                Your suggestion: {embed.description}
                 Status: **Pending**
                 Commented by: {ctx.author}'''
                 updatedSuggestionDeniedEmbed = discord.Embed(description=desc, colour=config.Colors.green, timestamp=ctx.message.created_at)
