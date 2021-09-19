@@ -1,7 +1,7 @@
 
 class General:
     botAvatarURL =          "https://i.imgur.com/8PqN7yq.jpg"
-    botInviteURL =          "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=134556758"
+    botInviteURL =          "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=474311750"
     botInviteURLAdmin =     "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot&permissions=8"
     supportServerURL =      "https://discord.com/invite/AAJPHqNXUy"
     githubURL =             "https://github.com/Alex0622/Al3xis-Bot-dev"
@@ -37,7 +37,7 @@ class InfoCommands:
     mathsqrt =          "Find the square root of a number."
     membercount =       'Get how many members are in your server.'
     msg =               'Send direct messages to users.'
-    mute =              'Mute members so they cannot send messages or join VC channels. | Duration: seconds, minutes, hours or days.'
+    mute =              'Mute members. | Duration: seconds, minutes, hours or days.'
     nick =              "Change or get a member's nickname on this guild."
     ping =              "Shows the bot's latency/ping."
     pm =                'Mute a member permanently.'
@@ -70,9 +70,9 @@ class InfoCommands:
     us =                'Update the status of a suggestion.'
     user =              'Get information about a member.'
     userinfo =          'Get information about a member.'
+    voicemute =         'Mute a member in voice channels.'
+    voiceunmute =       'Unmute a member in voice channels.'
     vote =              'Vote Al3xis on Discord bot lists!'
-
-
 
 class UsageCommands:
     about =             '`a!about`'
@@ -138,9 +138,9 @@ class UsageCommands:
     us =                '`a!us (message ID) (accept/deny/pending) (reason)`'
     user =              '`a!user (member)`'
     userinfo =          '`a!userinfo (member)`'
-    vote =              '`a!vote`'
-    
-    
+    voicemute =         '`a!voicemute (member) (reason)`'
+    voiceunmute =       '`a!voiceunmute (member) (reason)`'
+    vote =              '`a!vote`'    
     
 class AliasesCommands:
     about =             'info'
@@ -206,9 +206,9 @@ class AliasesCommands:
     us =                'updatesuggestion'
     user =              'ui, userinfo'
     userinfo =          'ui, user'
+    voicemute =         'No aliases'
+    voiceunmute =       'No aliases'
     vote =              'No aliases'
-
-
 
 class RequiredPermissions:
     about =             'NO REQUIRED PERMISSION'
@@ -274,10 +274,10 @@ class RequiredPermissions:
     us =                "Bot's owner"
     user =              'NO REQUIRED PERMISSION'
     userinfo =          'NO REQUIRED PERMISSION'
+    voicemute =         'NO REQUIRED PERMISSION'
+    voiceunmute =       'NO REQUIRED PERMISSION'
     vote =              'NO REQUIRED PERMISSION'
 
-
-    
 class Channels:
     suggestionsChannel =    793989328602791946
     chatChannel =           821782500375265281
@@ -291,8 +291,6 @@ class Channels:
     DMsChannel =            830496524530221067
     logErrorsChannel =      857408961837924383
 
-
-
 class Colors:
     red =               0xde0707
     lightBlue =         0x32d9cb
@@ -304,8 +302,6 @@ class Colors:
     darkGreen =         0x156109
     gray =              0x678188
 
-
-
 class Emojis:
     ballotBoxWithCheck =        '☑️'
     x =                         '❌'
@@ -316,6 +312,5 @@ class Emojis:
     eyes =                      '👀'
     wave =                      '👋'
     loading =                   '<a:loading:882124504451653652>'
-
 
 BadWords = ["bitch","fuck","nigg","shit"]
