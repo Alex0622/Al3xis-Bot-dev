@@ -1298,7 +1298,7 @@ async def kick(ctx, member:discord.Member=None, *, reason=None):
             await ctx.reply(embed=embed, mention_author=False)
             return
         await member.ban(reason=f'{ctx.author}: {reason}')
-        await ctx.reply(f'{config.Emojis.ballotBoxWithCheck}**{member}** was kicked | `{reason}`', mention_author=False) 
+        await ctx.reply(f'{config.Emojis.ballotBoxWithCheck} **{member}** was kicked | `{reason}`', mention_author=False) 
     except Exception as e:
         if "Missing Permissions" in str(e):
             errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions to kick that user.", colour=config.Colors.red)
@@ -1382,7 +1382,7 @@ async def mute(ctx, member: discord.Member=None, duration=None, *, reason=None):
             await ctx.reply(embed=embed, mention_author=False)
             return 
         await member.add_roles(mutedRole, reason=f"{ctx.author}: {reason}")
-        await ctx.reply(f'{config.Emojis.ballotBoxWithCheck}**{member}** was muted for {counter} | `{reason}`', mention_author=False)
+        await ctx.reply(f'{config.Emojis.ballotBoxWithCheck} **{member}** was muted for {counter} | `{reason}`', mention_author=False)
         await asyncio.sleep(seconds)
         if mutedRole in member.roles:
             await member.remove_roles(mutedRole, reason="Temporary mute completed.")
@@ -1459,7 +1459,7 @@ async def pmute(ctx, member: discord.Member=None, *, reason=None):
             await ctx.reply(embed=embed, mention_author=False)
             return
         await member.add_roles(mutedRole, reason=f"{ctx.author}: {reason}")
-        await ctx.reply(f'{config.Emojis.ballotBoxWithCheck}**{member}** was permanently muted | `{reason}`', mention_author=False)
+        await ctx.reply(f'{config.Emojis.ballotBoxWithCheck} **{member}** was permanently muted | `{reason}`', mention_author=False)
     except Exception as e:
         if "Missing Permissions" in str(e):
             errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions to mute that user.", colour=config.Colors.red)
@@ -1629,7 +1629,7 @@ async def softban(ctx, member:discord.Member=None, *, reason=None):
             return
         await member.ban(reason=f'{ctx.author}: {reason}', delete_message_days=5)
         await member.unban(reason=f'{ctx.author}: softban')
-        await ctx.reply(f'{config.Emojis.ballotBoxWithCheck}**{member}** was softbanned | `{reason}`', mention_author=False)
+        await ctx.reply(f'{config.Emojis.ballotBoxWithCheck} **{member}** was softbanned | `{reason}`', mention_author=False)
     except Exception as e:
         if "Missing Permissions" in str(e):
             errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions to softban that user.", colour=config.Colors.red)
@@ -1807,7 +1807,7 @@ async def voicemute(ctx, member: discord.Member = None, *, reason=None):
             await ctx.reply(embed=embed, mention_author=False)
             return
         await member.edit(mute=True, reason=f"{ctx.author}: {reason}")
-        await ctx.send(f'**{member}** was voice muted | `{reason}`')
+        await ctx.send(f'{config.Emojis.ballotBoxWithCheck} **{member}** was voice muted | `{reason}`')
     except Exception as e:
         if "Missing Permissions" in str(e):
             errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions to voice mute that user.", colour=config.Colors.red)
@@ -1861,7 +1861,7 @@ async def voiceunmute(ctx, member: discord.Member = None, *, reason=None):
             await ctx.reply(embed=embed, mention_author=False)
             return
         await member.edit(mute=False, reason=f"{ctx.author}: {reason}")
-        await ctx.send(f'**{member}** was voice unmuted | `{reason}`')
+        await ctx.send(f'{config.Emojis.ballotBoxWithCheck} **{member}** was voice unmuted | `{reason}`')
     except Exception as e:
         if "Missing Permissions" in str(e):
             errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions to voice unmute that user.", colour=config.Colors.red)
