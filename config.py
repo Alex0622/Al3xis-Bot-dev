@@ -18,7 +18,7 @@ class InfoCommands:
     bans =              "Fetch the bans of this server."
     calc =              'Basic calculator (add, subtract, multiply and divide two values).'
     calculator =        'Basic calculator (add, subtract, multiply and divide two values).'
-    clear =             'Delete an amount of messages. | Limit of messages deleted per command: `500`.'
+    clear =             'Delete messsages. | Max messages per command: `500`.'
     dm =                'Send direct messages to users (usually to reply to their reports).'
     DM =                'Send direct messages to users (usually to reply to their reports).'
     embed =             'Send messages in embeds.'
@@ -43,7 +43,7 @@ class InfoCommands:
     pm =                'Mute a member permanently.'
     pmute =             'Mute a member permanently.'
     pong =              "Shows the bot's latency/ping."
-    purge =             'Delete an amount of messages. | Limit of messages deleted per command: `500`.'
+    purge =             'Delete messsages. | Max messages per command: `500`.'
     remind =            'Set a reminder. | Duration: seconds, minutes, hours or days.'
     reminder =          'Set a reminder. | Duration: seconds, minutes, hours or days.'
     removerole =        'Remove a role from a member.'
