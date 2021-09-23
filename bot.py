@@ -326,6 +326,37 @@ async def ping(ctx):
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
 
+@bot.command(name="privacy")
+@commands.guild_only()
+@commands.cooldown(1, 60, type=commands.BucketType.user)
+async def privacy(ctx):
+    try:
+        desc = f"""
+        __What data do we store and why?__
+        When you find an unknown error using some of commands, the bot will automatically send the report of that error to its developers with the message content and your Discord username.
+        When you use our `report` command, the bot sends your report to our Discord server to wait for an Administrator to check your report. When an Administrator updates your report, you will receive a Direct Message explaining what happened to your report.
+        When you use our `suggest` command, the bot sends your suggestion to our Discord server to wait for approval. If your suggestion gets accepted or denied, you will receive a Direct Message mentioning that your suggestion was accepted or denied.
+        When you invite the bot to your server and when you remove it from it, the bot sends that report to our Discord server just for general reasons, we only do this to know how many users invite the bot to their servers. Only the owner of the bot has access to this data.
+        We only log command usages to know how many commands where used in a certain period of time. Only the owner of the bot has access to this data.
+        When you send a Direct Message to the bot, it will save your message and send it to our Discord server. Only the owner of the bot has access to this data.
+        **If you want us to delete your data, you have the right to send a Direct Messsage to our bot or directly to the owner of the bot.**
+        """
+        privacyEmbed = discord.Embed(title=f"__{ctx.me.name}'s privacy policy.__",description=desc, colour=config.Colors.blue)
+        privacyEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.reply(embed=privacyEmbed, mention_author=False)
+    except Exception as e:
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        await ctx.reply(embed=errorEmbed, mention_author=False)
+        await ctx.message.add_reaction(config.Emojis.noEntry)
+        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+        description=f"""Error while using `privacy` command:
+            `[Content]` {ctx.message.content} 
+            `[Error]` {e}"""
+        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await logErrorsChannel.send(embed=logErrorsEmbed)
+        return 
+        
 @bot.command(name='report')
 @commands.cooldown(1, 600, type=commands.BucketType.user)
 async def report(ctx, *, msg=None):
