@@ -187,6 +187,7 @@ async def help(ctx, arg = None):
             `help` - {config.InfoCommands.help}
             `invite` - {config.InfoCommands.invite}
             `ping` - {config.InfoCommands.ping}
+            `privacy` - {config.InfoCommands.privacy}
             `report` - {config.InfoCommands.report}
             `source` - {config.InfoCommands.source}
             `suggest` - {config.InfoCommands.suggest}
