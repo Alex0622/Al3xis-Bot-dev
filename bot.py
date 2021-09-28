@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands 
 import datetime
 import asyncio
-import config, os
+import config, os, util
 import time, random, math
     
 #Bot (our bot)
@@ -172,7 +172,7 @@ async def help(ctx, arg = None):
     try:
         if arg == None:
             helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-            helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `report`, `source`, `suggest`, `vote`', inline=True)
+            helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `privacy`, `report`, `source`, `suggest`, `vote`', inline=True)
             helpEmbed.add_field(name='Math', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`', inline=True)
             helpEmbed.add_field(name='Moderation', value='`addrole`, `ban`, `bans`, `kick`, `mute`, `pmute`, `purge`, `removerole`, `unban`, `unmute`, `voicemute`, `voiceunmute`', inline=True)
             helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `embed`, `id`, `membercount`, `nick`, `reminder`, `roleinfo`, `say`, `servericon`, `serverinfo`, `userinfo`', inline=False)
@@ -356,8 +356,8 @@ async def privacy(ctx):
         logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
-        return 
-        
+        return
+
 @bot.command(name='report')
 @commands.cooldown(1, 600, type=commands.BucketType.user)
 async def report(ctx, *, msg=None):
@@ -941,7 +941,8 @@ async def userinfo(ctx, *, member: discord.Member=None):
         for role in member.roles:
             if role.name != "@everyone":
                 mentions.append(role.mention)
-        roleS = ", ".join(mentions)
+        s = mentions
+        roleS = util.listToStringComma(s)
 
         if roleS == '':
             ROLES = f'No roles to show here {config.Emojis.eyes}'
@@ -974,20 +975,7 @@ async def userinfo(ctx, *, member: discord.Member=None):
 ####################################################################################################
 #Math commands
 
-def add(x:float, y:float):
-    return x + y
-def sub(x:float, y:float):
-    return x - y
-def mult(x:float, y:float):
-    return x * y
-def div(x:float, y:float):
-    return x / y
-def rando(x:int, y:int):
-    return random.randint(x, y)
-def sqrt(x:float):
-    return math.sqrt(x)
-def sq(x:float):
-    return x * x
+
 
 @bot.command(name='calc', aliases=['calculator'])
 async def calc(ctx, x:float=None, arg=None, y:float=None):
@@ -996,19 +984,19 @@ async def calc(ctx, x:float=None, arg=None, y:float=None):
             if y != None:
                 try:
                     if arg == '+':
-                        result = add(x, y)
+                        result = util.add(x, y)
                         await ctx.reply(result, mention_author=False)
                         return
                     if arg == '-':
-                        result = sub(x, y)
+                        result = util.sub(x, y)
                         await ctx.reply(result, mention_author=False)
                         return
                     if arg == '*':
-                        result = mult(x, y)
+                        result = util.mult(x, y)
                         await ctx.reply(result, mention_author=False)
                         return
                     if arg == '/':
-                        result = div(x, y)
+                        result = util.div(x, y)
                         await ctx.reply(result, mention_author=False)
                         return
                     else:
@@ -1062,7 +1050,7 @@ async def mathrandom(ctx, x=None, y=None):
             return
         x = int(x)
         y = int(y)
-        result = rando(x, y)
+        result = util.rando(x, y)
         await ctx.reply(result, mention_author=False) 
     except Exception as e:
         if "invalid literal" in str(e):
@@ -1095,7 +1083,7 @@ async def mathsq(ctx, x=None):
     else:
         try:  
             x = float(x)
-            result = sq(x)
+            result = util.sq(x)
             await ctx.reply(result, mention_author=False)
         except Exception as e:
             if "could not convert string to float" in str(e):
@@ -1124,7 +1112,7 @@ async def mathsqrt(ctx, x=None):
     else:     
         try:    
             x = float(x)
-            result = sqrt(x)
+            result = util.sqrt(x)
             await ctx.reply(result, mention_author=False)
         except Exception as e:
             if "could not convert string to float" in str(e):
@@ -1277,23 +1265,33 @@ async def bans(ctx):
             await ctx.reply(embed=noBansEmbed, mention_author=False)
             return
         for ban in bans:
-            desc.append(f"{ban.user.name} `|` {ban.reason} `|` {ban.user.id}")
+            desc.append(f"{ban.user}({ban.user.id}): {ban.reason}")
+        s = desc
+        desc = util.listToStringSpace(s)
         bansEmbed = discord.Embed(title=f"Server bans of {guild}", description=desc, timestamp=ctx.message.created_at, colour=config.Colors.blue)
         bansEmbed.set_author(name=f"{len(bans)} bans")
         bansEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=bansEmbed, mention_author=False)
-    except Exception as e:
-        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-        await ctx.reply(embed=errorEmbed, mention_author=False)
-        await ctx.message.add_reaction(config.Emojis.noEntry)
-        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-        description=f"""Error while using `bans` command:
-            `[Content]` {ctx.message.content} 
-            `[Error]` {e}"""
-        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-        await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+    except Exception as e:
+        if "or fewer in length" in str(e):
+            tooLongBansEmbed = discord.Embed(description="The bans of this server are too long. Therefore I was unable to send an embed with the bans.", timestamp=ctx.message.created_at, colour=config.Colors.blue)
+            tooLongBansEmbed.set_author(name=f"{len(bans)} bans")
+            tooLongBansEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+            await ctx.reply(embed=tooLongBansEmbed, mention_author=False)
+            return
+        else:
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            await ctx.reply(embed=errorEmbed, mention_author=False)
+            await ctx.message.add_reaction(config.Emojis.noEntry)
+            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+            description=f"""Error while using `bans` command:
+                `[Content]` {ctx.message.content} 
+                `[Error]` {e}"""
+            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+            await logErrorsChannel.send(embed=logErrorsEmbed)
+            return
 @bans.error
 async def bans_error(ctx, error):
     if isinstance(error, commands.errors.MissingPermissions):
