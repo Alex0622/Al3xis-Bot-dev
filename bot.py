@@ -887,25 +887,40 @@ async def serverinfo(ctx):
         bots = []
         humans = []
         botperms = dict(ctx.me.guild_permissions)
+        userperms = dict(ctx.author.guild_permissions)
         if botperms["ban_members"] is True:
-            bans = len(await guild.bans())
+            if userperms["ban_members"] is True:
+                permsAllowed = True
+                bans = len(await guild.bans())
+            if userperms["ban_members"] is False:
+                permsAllowed = False
         if botperms["ban_members"] is False:
-            bans = "I need 'ban_members' permission."
+            permsAllowed = False
         members = guild.members
         for member in members:
             if member.bot:
                 bots.append('bot')
             if not member.bot:
                 humans.append('human')
-        statistics = f'''  
-        **Boosts:** `{guild.premium_subscription_count}`
-        **Banned users:** `{bans}`
-        **Total members:** `{guild.member_count}`
-            `{len(humans)}` Humans | `{len(bots)}` Bots
-        **Roles:** `{len(guild.roles)}`
-        **Channels:** 
-            `{len(guild.text_channels)}` Text channels | `{len(guild.voice_channels)}` Voice channels
-        '''
+        if permsAllowed is True:
+            statistics = f'''  
+            **Boosts:** `{guild.premium_subscription_count}`
+            **Banned users:** `{bans}`
+            **Total members:** `{guild.member_count}`
+                `{len(humans)}` Humans | `{len(bots)}` Bots
+            **Roles:** `{len(guild.roles)}`
+            **Channels:** 
+                `{len(guild.text_channels)}` Text channels | `{len(guild.voice_channels)}` Voice channels
+            '''
+        if permsAllowed is False:
+            statistics = f'''  
+            **Boosts:** `{guild.premium_subscription_count}`
+            **Total members:** `{guild.member_count}`
+                `{len(humans)}` Humans | `{len(bots)}` Bots
+            **Roles:** `{len(guild.roles)}`
+            **Channels:** 
+                `{len(guild.text_channels)}` Text channels | `{len(guild.voice_channels)}` Voice channels
+            '''
         serverinfoEmbed = discord.Embed(title=f"{guild}'s information", colour=config.Colors.blue, timestamp=ctx.message.created_at)
         if ctx.guild.description != None:
             serverinfoEmbed.description = ctx.guild.description
