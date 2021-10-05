@@ -462,6 +462,7 @@ async def vote(ctx):
         1. [Top.gg](https://top.gg/bot/768309916112650321)
         2. [Discord Bot List](https://discordbotlist.com/bots/al3xis)
         3. [Discord Boats](https://discord.boats/bot/768309916112650321)
+        4. [Discord Extreme List](https://discordextremelist.xyz/en-US/bots/768309916112650321)
         ''', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
         voteEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=voteEmbed, mention_author=False)
@@ -1949,6 +1950,10 @@ async def DM(ctx, memberID=None, *, message=None):
         await botMsg.edit(content=f'DM sent successfully! {config.Emojis.whiteCheckMark}')
         await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
     except Exception as e:
+        if "is not snowflake" and "user_id" in str(e):
+            embed = discord.Embed(description="That is not a valid user ID.", colour=config.Colors.red)
+            await botMsg.edit(embed=embed)
+            return
         if "'ClientUser' object has no attribute 'create_dm'" in str(e):
             embed = discord.Embed(description="I can't DM myself.", colour=config.Colors.red)
             await botMsg.edit(embed=embed)
