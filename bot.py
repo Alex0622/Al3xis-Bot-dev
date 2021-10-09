@@ -182,77 +182,35 @@ async def help(ctx, arg = None):
             return
         if str(arg).lower() == 'info':
             titleEmbed = 'Info commands'
-            descEmbed = f'''
-            `about` - {config.InfoCommands.about}
-            `help` - {config.InfoCommands.help}
-            `invite` - {config.InfoCommands.invite}
-            `ping` - {config.InfoCommands.ping}
-            `privacy` - {config.InfoCommands.privacy}
-            `report` - {config.InfoCommands.report}
-            `source` - {config.InfoCommands.source}
-            `suggest` - {config.InfoCommands.suggest}
-            `vote` - {config.InfoCommands.vote}'''
+            descEmbed = f'''`about` - {config.InfoCommands.about} \n`help` - {config.InfoCommands.help} \n`invite` - {config.InfoCommands.invite} \n`ping` - {config.InfoCommands.ping} \n`privacy` - {config.InfoCommands.privacy} \n`report` - {config.InfoCommands.report} \n`source` - {config.InfoCommands.source} \n`suggest` - {config.InfoCommands.suggest} \n`vote` - {config.InfoCommands.vote}'''
             infoEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
             infoEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
             await ctx.reply(embed=infoEmbed, mention_author=False)
             return
         if str(arg).lower() == 'utility':
             titleEmbed = 'Utility commands'
-            descEmbed = f'''
-            `announce` - {config.InfoCommands.announce}
-            `avatar` - {config.InfoCommands.avatar}
-            `embed` - {config.InfoCommands.embed}
-            `id` - {config.InfoCommands.id}
-            `membercount` - {config.InfoCommands.membercount}
-            `nick` - {config.InfoCommands.nick}
-            `reminder` - {config.InfoCommands.reminder}
-            `roleinfo` - {config.InfoCommands.roleinfo} 
-            `say` - {config.InfoCommands.say}
-            `servericon` - {config.InfoCommands.servericon}
-            `serverinfo` - {config.InfoCommands.serverinfo}
-            `userinfo`- {config.InfoCommands.userinfo}'''
+            descEmbed = f'''`announce` - {config.InfoCommands.announce} \n`avatar` - {config.InfoCommands.avatar} \n`embed` - {config.InfoCommands.embed} \n`id` - {config.InfoCommands.id} \n`membercount` - {config.InfoCommands.membercount} \n`nick` - {config.InfoCommands.nick} \n`reminder` - {config.InfoCommands.reminder} \n`roleinfo` - {config.InfoCommands.roleinfo} \n`say` - {config.InfoCommands.say} \n`servericon` - {config.InfoCommands.servericon} \n`serverinfo` - {config.InfoCommands.serverinfo} \n`userinfo`- {config.InfoCommands.userinfo}'''
             utilityEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
             utilityEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
             await ctx.reply(embed=utilityEmbed, mention_author=False)
             return
         if str(arg).lower() == 'math':
             titleEmbed = 'Math commands'
-            descEmbed = f'''
-            `calc` - {config.InfoCommands.calc}
-            `mathrandom` - {config.InfoCommands.mathrandom}
-            `mathsq` - {config.InfoCommands.mathsq}
-            `mathsqrt` - {config.InfoCommands.mathsqrt}'''
+            descEmbed = f'''`calc` - {config.InfoCommands.calc} \n`mathrandom` - {config.InfoCommands.mathrandom} \n`mathsq` - {config.InfoCommands.mathsq} \n`mathsqrt` - {config.InfoCommands.mathsqrt}'''
             mathEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
             mathEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
             await ctx.reply(embed=mathEmbed, mention_author=False)
             return
         if str(arg).lower() == 'moderation':
             titleEmbed = 'Moderation commands'
-            descEmbed = f'''
-            `addrole` - {config.InfoCommands.addrole} 
-            `ban` - {config.InfoCommands.ban}
-            `bans` - {config.InfoCommands.bans}
-            `kick`- {config.InfoCommands.kick}
-            `mute` - {config.InfoCommands.mute}
-            `pmute` - {config.InfoCommands.pmute}
-            `purge` - {config.InfoCommands.purge}
-            `removerole` - {config.InfoCommands.removerole}
-            `unban` - {config.InfoCommands.unban}
-            `unmute` - {config.InfoCommands.unmute}
-            `voicemute` - {config.InfoCommands.voicemute}
-            `voiceunmute` - {config.InfoCommands.voiceunmute}'''
+            descEmbed = f'''`addrole` - {config.InfoCommands.addrole} \n`ban` - {config.InfoCommands.ban} \n`bans` - {config.InfoCommands.bans} \n`kick`- {config.InfoCommands.kick} \n`mute` - {config.InfoCommands.mute} \n`pmute` - {config.InfoCommands.pmute} \n`purge` - {config.InfoCommands.purge} \n`removerole` - {config.InfoCommands.removerole} \n`unban` - {config.InfoCommands.unban} \n`unmute` - {config.InfoCommands.unmute} \n`voicemute` - {config.InfoCommands.voicemute} \n`voiceunmute` - {config.InfoCommands.voiceunmute}'''
             moderationEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
             moderationEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
             await ctx.reply(embed=moderationEmbed, mention_author=False)
             return
         if str(arg).lower() == 'owner':
             titleEmbed = 'Bot\'s owner commands'
-            descEmbed = f'''
-            `DM` - {config.InfoCommands.DM}
-            `logout` - {config.InfoCommands.logout}
-            `save` - {config.InfoCommands.save}
-            `updatereport` - {config.InfoCommands.updatereport}
-            `updatesuggestion` - {config.InfoCommands.updatesuggestion}'''
+            descEmbed = f'''`DM` - {config.InfoCommands.DM} \n`logout` - {config.InfoCommands.logout} \n`save` - {config.InfoCommands.save} \n`updatereport` - {config.InfoCommands.updatereport} \n`updatesuggestion` - {config.InfoCommands.updatesuggestion}'''
             ownerEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
             ownerEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
             await ctx.reply(embed=ownerEmbed, mention_author=False)
@@ -332,16 +290,7 @@ async def ping(ctx):
 @commands.cooldown(1, 60, type=commands.BucketType.user)
 async def privacy(ctx):
     try:
-        desc = f"""
-        __What data do we store and why?__
-        When you find an unknown error using some of commands, the bot will automatically send the report of that error to its developers with the message content and your Discord username.
-        When you use our `report` command, the bot sends your report to our Discord server to wait for an Administrator to check your report. When an Administrator updates your report, you will receive a Direct Message explaining what happened to your report.
-        When you use our `suggest` command, the bot sends your suggestion to our Discord server to wait for approval. If your suggestion gets accepted or denied, you will receive a Direct Message mentioning that your suggestion was accepted or denied.
-        When you invite the bot to your server and when you remove it from it, the bot sends that report to our Discord server just for general reasons, we only do this to know how many users invite the bot to their servers. Only the owner of the bot has access to this data.
-        We only log command usages to know how many commands where used in a certain period of time. Only the owner of the bot has access to this data.
-        When you send a Direct Message to the bot, it will save your message and send it to our Discord server. Only the owner of the bot has access to this data.
-        **If you want us to delete your data, you have the right to send a Direct Messsage to our bot or directly to the owner of the bot.**
-        """
+        desc = f"""__What data do we store and why?__ \nWhen you find an unknown error using some of commands, the bot will automatically send the report of that error to its developers with the message content and your Discord username. \nWhen you use our `report` command, the bot sends your report to our Discord server to wait for an Administrator to check your report. When an Administrator updates your report, you will receive a Direct Message explaining what happened to your report. \nWhen you use our `suggest` command, the bot sends your suggestion to our Discord server to wait for approval. If your suggestion gets accepted or denied, you will receive a Direct Message mentioning that your suggestion was accepted or denied. \nWhen you invite the bot to your server and when you remove it from it, the bot sends that report to our Discord server just for general reasons, we only do this to know how many users invite the bot to their servers. Only the owner of the bot has access to this data. \nWe only log command usages to know how many commands where used in a certain period of time. Only the owner of the bot has access to this data. \nWhen you send a Direct Message to the bot, it will save your message and send it to our Discord server. Only the owner of the bot has access to this data. \n**If you want us to delete your data, you have the right to send a Direct Messsage to our bot or directly to the owner of the bot.**"""
         privacyEmbed = discord.Embed(title=f"__{ctx.me.name}'s privacy policy.__",description=desc, colour=config.Colors.blue)
         privacyEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=privacyEmbed, mention_author=False)
@@ -367,22 +316,12 @@ async def report(ctx, *, msg=None):
             botMsg = await ctx.reply(embed=botEmbed, mention_author=False)
             await asyncio.sleep(2)
             reportsChannel = bot.get_channel(config.Channels.reportsChannel)
-            lastMessageID = reportsChannel.last_message_id
-            latestMessage = await reportsChannel.fetch_message(lastMessageID)
-            embeds = latestMessage.embeds
-            for embed in embeds:
-                reportID = embed.author.name[-1:]
             embed = discord.Embed(title=f'Report made by {ctx.author}', description=msg, colour=config.Colors.purple, timestamp=ctx.message.created_at)
-            embed.set_author(name=f"Report #{int(reportID)+1}")
             embed.set_footer(text=ctx.author.id, icon_url=ctx.author.avatar_url)
             await reportsChannel.send(content='',embed=embed)
             await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
-            desc = '''Thanks for your report!
-            An Admin will review your report as soon as possible.
-            You will get a respoonse in DMs when your report's status gets updated.
-            '''
+            desc = '''Thanks for your report! \nAn Admin will review your report as soon as possible. \nYou will get a respoonse in DMs when your report's status gets updated.'''
             reportedEmbed = discord.Embed(description=desc, colour=config.Colors.green)
-            reportedEmbed.set_author(name=f"Report #{int(reportID)+1}")
             await botMsg.edit(embed=reportedEmbed)
         except Exception as e:
             errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
@@ -435,9 +374,7 @@ async def suggest(ctx, *, new_suggestion=None):
         message = await suggestions_channel.send(f'Status: **Pending** {config.Emojis.loading}', embed=embed)
         await message.add_reaction(config.Emojis.ballotBoxWithCheck)
         await message.add_reaction(config.Emojis.x)
-        desc = f'''Thanks for your suggestion **{ctx.author}**!
-        Your suggestion is currently waiting for approval, make sure to join our [support server]({config.General.supportServerURL}) to know when it gets approved or denied (*You will also receive a DM when your suggestion's status gets updated.*)
-        `[Suggestion:]` {new_suggestion}'''
+        desc = f'''Thanks for your suggestion **{ctx.author}**! \nYour suggestion is currently waiting for approval, make sure to join our [support server]({config.General.supportServerURL}) to know when it gets approved or denied (*You will also receive a DM when your suggestion's status gets updated.*) \n`[Suggestion:]` {new_suggestion}'''
         embed2 = discord.Embed(description=desc, colour=config.Colors.green, timestamp=ctx.message.created_at)
         embed2.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await ctx.message.add_reaction(config.Emojis.whiteCheckMark)
@@ -794,15 +731,7 @@ async def roleinfo(ctx, role:discord.Role=None):
         members = []
         for member in role.members:
             members.append("member")
-        roleinfoDesc = f'''
-        **Role name:** {role.name} ({role.id})
-        **Created on** {role.created_at.strftime("%A %d %B %Y, %H:%M")}
-        **Position:** {len(guild.roles)-role.position}
-        **Is managed?** {role.managed}
-        **Is hoisted?** {role.hoist}
-        **Color:** {role.color}
-        **Members:** {len(members)}
-        **Permissions:** {', '.join(perms)}'''
+        roleinfoDesc = f'''**Role name:** {role.name} ({role.id}) \n**Created on** {role.created_at.strftime("%A %d %B %Y, %H:%M")} \n**Position:** {len(guild.roles)-role.position} \n**Is managed?** {role.managed} \n**Is hoisted?** {role.hoist} \n**Color:** {role.color} \n**Members:** {len(members)} \n**Permissions:** {', '.join(perms)}'''
         roleinfoEmbed = discord.Embed(title=roleinfoTitle, description=roleinfoDesc, colour=role.color)
         await ctx.reply(embed=roleinfoEmbed, mention_author=False)
     except Exception as e:
@@ -878,12 +807,7 @@ async def serverinfo(ctx):
     try:
         guild = ctx.guild
         owner = await bot.fetch_user(guild.owner.id)
-        general = f'''
-        **Owner:** {owner}
-        **Owner ID:** {owner.id}
-        **Guild ID:** {guild.id}
-        **Created:** {guild.created_at.strftime("%d %B %Y, %H:%M")}
-        '''
+        general = f'''**Owner:** {owner} \n**Owner ID:** {owner.id} \n**Guild ID:** {guild.id} \n**Created:** {guild.created_at.strftime("%d %B %Y, %H:%M")}'''
         bots = []
         humans = []
         botperms = dict(ctx.me.guild_permissions)
@@ -903,22 +827,13 @@ async def serverinfo(ctx):
             if not member.bot:
                 humans.append('human')
         if permsAllowed is True:
-            statistics = f'''  
-            **Boosts:** `{guild.premium_subscription_count}`
-            **Banned users:** `{bans}`
-            **Total members:** `{guild.member_count}`
-                `{len(humans)}` Humans | `{len(bots)}` Bots
-            **Roles:** `{len(guild.roles)}`
-            **Channels:** 
+            statistics = f'''**Boosts:** `{guild.premium_subscription_count}` \n**Banned users:** `{bans}` \n**Total members:** `{guild.member_count}` 
+                `{len(humans)}` Humans | `{len(bots)}` Bots \n**Roles:** `{len(guild.roles)}` \n**Channels:** 
                 `{len(guild.text_channels)}` Text channels | `{len(guild.voice_channels)}` Voice channels
             '''
         if permsAllowed is False:
-            statistics = f'''  
-            **Boosts:** `{guild.premium_subscription_count}`
-            **Total members:** `{guild.member_count}`
-                `{len(humans)}` Humans | `{len(bots)}` Bots
-            **Roles:** `{len(guild.roles)}`
-            **Channels:** 
+            statistics = f'''**Boosts:** `{guild.premium_subscription_count}` \n**Total members:** `{guild.member_count}`
+                `{len(humans)}` Humans | `{len(bots)}` Bots \n**Roles:** `{len(guild.roles)}` \n**Channels:** 
                 `{len(guild.text_channels)}` Text channels | `{len(guild.voice_channels)}` Voice channels
             '''
         serverinfoEmbed = discord.Embed(title=f"{guild}'s information", colour=config.Colors.blue, timestamp=ctx.message.created_at)
@@ -2069,12 +1984,7 @@ async def updatereport(ctx, messageID=None, *, comment=None):
         embeds = reportMsg.embeds
         for embed in embeds:
             user = await bot.fetch_user(embed.footer.text)
-            desc = f'''Hello {user}
-            This message was sent to you because the status of your report was updated.
-            Report ID: #{embed.author.name[-1:]}
-            Report message: {embed.description}
-            Comment: {comment}
-            Commented by: {ctx.author}'''
+            desc = f'''Hello {user} \nThis message was sent to you because the status of your report was updated. \nReport message: {embed.description} \nComment: {comment} \nCommented by: {ctx.author}'''
             updatedReportEmbed = discord.Embed(description=desc, colour=config.Colors.purple, timestamp=ctx.message.created_at)
             try:
                 await user.send(embed=updatedReportEmbed)
@@ -2146,12 +2056,7 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
             embeds = msg.embeds
             for embed in embeds:
                 user = await bot.fetch_user(embed.footer.text)
-                desc = f'''Hello {user}
-                This message was sent to you because the status of your suggestion was updated.
-                Your suggestion: {embed.description}
-                Status: **Accepted**
-                Comment: {reason}
-                Commented by: {ctx.author}'''
+                desc = f'''Hello {user} \nThis message was sent to you because the status of your suggestion was updated. \nYour suggestion: {embed.description} \nStatus: **Accepted** \nComment: {reason} \nCommented by: {ctx.author}'''
                 updatedSuggestionAcceptedEmbed = discord.Embed(description=desc, colour=config.Colors.green, timestamp=ctx.message.created_at)
                 try:
                     await user.send(embed=updatedSuggestionAcceptedEmbed)
@@ -2175,12 +2080,7 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
             embeds = msg.embeds
             for embed in embeds:
                 user = await bot.fetch_user(embed.footer.text)
-                desc = f'''Hello {user}
-                This message was sent to you because the status of your suggestion was updated.
-                Your suggestion: {embed.description}
-                Status: **Denied**
-                Comment: {reason}
-                Commented by: {ctx.author}'''
+                desc = f'''Hello {user} \nThis message was sent to you because the status of your suggestion was updated. \nYour suggestion: {embed.description} \nStatus: **Denied** \nComment: {reason} \nCommented by: {ctx.author}'''
                 updatedSuggestionDeniedEmbed = discord.Embed(description=desc, colour=config.Colors.green, timestamp=ctx.message.created_at)
                 try:
                     await user.send(embed=updatedSuggestionDeniedEmbed)
@@ -2204,11 +2104,7 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
             embeds = msg.embeds
             for embed in embeds:
                 user = await bot.fetch_user(embed.footer.text)
-                desc = f'''Hello {user}
-                This message was sent to you because the status of your suggestion was updated.
-                Your suggestion: {embed.description}
-                Status: **Pending**
-                Commented by: {ctx.author}'''
+                desc = f'''Hello {user} \nThis message was sent to you because the status of your suggestion was updated. \nYour suggestion: {embed.description} \nStatus: **Pending** \nCommented by: {ctx.author}'''
                 updatedSuggestionDeniedEmbed = discord.Embed(description=desc, colour=config.Colors.green, timestamp=ctx.message.created_at)
                 try:
                     await user.send(embed=updatedSuggestionDeniedEmbed)
