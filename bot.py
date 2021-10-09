@@ -404,7 +404,7 @@ async def report(ctx, *, msg=None):
 @bot.command(name='source')
 async def source(ctx):
     try:
-        embed = discord.Embed(title=f"{ctx.me.name}'s source", description='Hi!, you can find my source code [here](https://github.com/Alex0622/Al3xis-Bot-dev/).', colour=config.Colors.yellow)
+        embed = discord.Embed(title=f"{ctx.me.name}'s source", description=f'Hi!, you can find my source code [here]({config.General.githubURL}).', colour=config.Colors.yellow)
         await ctx.reply(embed=embed, mention_author=False)
     except Exception as e:
         errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
@@ -436,7 +436,7 @@ async def suggest(ctx, *, new_suggestion=None):
         await message.add_reaction(config.Emojis.ballotBoxWithCheck)
         await message.add_reaction(config.Emojis.x)
         desc = f'''Thanks for your suggestion **{ctx.author}**!
-        Your suggestion is currently waiting for approval, make sure to join our [support server](https://discord.com/invite/AAJPHqNXUy) to know when it gets approved or denied (*You will also receive a DM when your suggestion's status gets updated.*)
+        Your suggestion is currently waiting for approval, make sure to join our [support server]({config.General.supportServerURL}) to know when it gets approved or denied (*You will also receive a DM when your suggestion's status gets updated.*)
         `[Suggestion:]` {new_suggestion}'''
         embed2 = discord.Embed(description=desc, colour=config.Colors.green, timestamp=ctx.message.created_at)
         embed2.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
