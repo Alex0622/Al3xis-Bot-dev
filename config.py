@@ -1,7 +1,7 @@
 
 class General:
     botAvatarURL =          "https://i.imgur.com/8PqN7yq.jpg"
-    botInviteURL =          "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot%20applications.commands&permissions=474311750"
+    botInviteURL =          "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot%20applications.commands&permissions=2622876758"
     botInviteURLAdmin =     "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot%20applications.commands&permissions=8"
     supportServerURL =      "https://discord.com/invite/AAJPHqNXUy"
     githubURL =             "https://github.com/Alex0622/Al3xis-Bot-dev"
@@ -58,6 +58,7 @@ class InfoCommands:
     serverinfo =        'Get information about this server.'
     setnick =           "Change or get a member's nickname on this guild."
     si =                'Get information about this server.'
+    slowmode =          'Change the slowmode of the channel.'
     softban =           'Ban and automatically unban a member.' 
     source =            "Get the bot's source code."
     sug =               'Make a new suggestion for the bot.'
@@ -127,6 +128,7 @@ class UsageCommands:
     serverinfo =        '`a!serverinfo`'
     setnick =           '`a!setnick (member) (nickname/"remove")`'
     si =                '`a!si`'
+    slowmode =          '`a!slowmode (time in seconds)`'
     softban =           '`a!softban (member) (reason)`'
     source =            '`a!source`'
     sug =               '`a!sug (suggestion)`' 
@@ -196,6 +198,7 @@ class AliasesCommands:
     serverinfo =        'si'
     setnick =           'nick'
     si =                'serverinfo'
+    slowmode =          'No aliases'
     softban =           'No aliases'
     source =            'No aliases'
     sug =               'suggest'
@@ -265,6 +268,7 @@ class RequiredPermissions:
     serverinfo =        'NO REQUIRED PERMISSION'
     setnick =           'MANAGE NICKNAMES'
     si =                'NO REQUIRED PERMISSION'
+    slowmode =          'MANAGE CHANNELS'
     softban =           'BAN MEMBERS'
     source =            'NO REQUIRED PERMISSION'
     sug =               'NO REQUIRED PERMISSION'

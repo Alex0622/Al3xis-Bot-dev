@@ -14,4 +14,4 @@ You can invite the Al3xis to your server using any of the following links:
 
 Administrator permission: [click here](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot%20applications.commands&permissions=8)
 
-Required permissions: [click here](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot%20applications.commands&permissions=474311750)
+Required permissions: [click here](https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot%20applications.commands&permissions=2622876758)

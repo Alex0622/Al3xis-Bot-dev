@@ -150,7 +150,7 @@ async def about(ctx):
         embedI.add_field(name='Developed since', value='`21/10/2020`')
         embedI.add_field(name='Developed with', value='`Python`')
         embedI.add_field(name='Useful links', value=f'[GitHub]({config.General.githubURL}) | [Support Server]({config.General.supportServerURL}) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
-        embedI.add_field(name='Latest updates', value="All moderation commands have been updated and added commands `voicemute` and `voiceunmute`.", inline=False)
+        embedI.add_field(name='Latest updates', value="All moderation commands have been updated and added commands `voicemute`, `voiceunmute` and `slowmode`.", inline=False)
         embedI.set_thumbnail(url=ctx.me.avatar_url)
         embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=embedI, mention_author=False)
@@ -174,7 +174,7 @@ async def help(ctx, arg = None):
             helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
             helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `privacy`, `report`, `source`, `suggest`, `vote`', inline=True)
             helpEmbed.add_field(name='Math', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`', inline=True)
-            helpEmbed.add_field(name='Moderation', value='`addrole`, `ban`, `bans`, `kick`, `mute`, `pmute`, `purge`, `removerole`, `unban`, `unmute`, `voicemute`, `voiceunmute`', inline=True)
+            helpEmbed.add_field(name='Moderation', value='`addrole`, `ban`, `bans`, `kick`, `mute`, `pmute`, `purge`, `removerole` `slowmode`, `softban`, `unban`, `unmute`, `voicemute`, `voiceunmute`', inline=True)
             helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `embed`, `id`, `membercount`, `nick`, `reminder`, `roleinfo`, `say`, `servericon`, `serverinfo`, `userinfo`', inline=False)
             helpEmbed.add_field(name='Owner', value='`DM`, `logout`, `save`, `updatereport`, `updatesuggestion`', inline=True)
             helpEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
@@ -189,7 +189,7 @@ async def help(ctx, arg = None):
             return
         if str(arg).lower() == 'utility':
             titleEmbed = 'Utility commands'
-            descEmbed = f'''`announce` - {config.InfoCommands.announce} \n`avatar` - {config.InfoCommands.avatar} \n`embed` - {config.InfoCommands.embed} \n`id` - {config.InfoCommands.id} \n`membercount` - {config.InfoCommands.membercount} \n`nick` - {config.InfoCommands.nick} \n`reminder` - {config.InfoCommands.reminder} \n`roleinfo` - {config.InfoCommands.roleinfo} \n`say` - {config.InfoCommands.say} \n`servericon` - {config.InfoCommands.servericon} \n`serverinfo` - {config.InfoCommands.serverinfo} \n`userinfo`- {config.InfoCommands.userinfo}'''
+            descEmbed = f'''`announce` - {config.InfoCommands.announce} \n`avatar` - {config.InfoCommands.avatar} \n`embed` - {config.InfoCommands.embed} \n`id` - {config.InfoCommands.id} \n`membercount` - {config.InfoCommands.membercount} \n`nick` - {config.InfoCommands.nick} \n`reminder` - {config.InfoCommands.reminder} \n`roleinfo` - {config.InfoCommands.roleinfo} \n`say` - {config.InfoCommands.say} \n`servericon` - {config.InfoCommands.servericon} \n`serverinfo` - {config.InfoCommands.serverinfo} \n`userinfo` - {config.InfoCommands.userinfo}'''
             utilityEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
             utilityEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
             await ctx.reply(embed=utilityEmbed, mention_author=False)
@@ -203,7 +203,7 @@ async def help(ctx, arg = None):
             return
         if str(arg).lower() == 'moderation':
             titleEmbed = 'Moderation commands'
-            descEmbed = f'''`addrole` - {config.InfoCommands.addrole} \n`ban` - {config.InfoCommands.ban} \n`bans` - {config.InfoCommands.bans} \n`kick`- {config.InfoCommands.kick} \n`mute` - {config.InfoCommands.mute} \n`pmute` - {config.InfoCommands.pmute} \n`purge` - {config.InfoCommands.purge} \n`removerole` - {config.InfoCommands.removerole} \n`unban` - {config.InfoCommands.unban} \n`unmute` - {config.InfoCommands.unmute} \n`voicemute` - {config.InfoCommands.voicemute} \n`voiceunmute` - {config.InfoCommands.voiceunmute}'''
+            descEmbed = f'''`addrole` - {config.InfoCommands.addrole} \n`ban` - {config.InfoCommands.ban} \n`bans` - {config.InfoCommands.bans} \n`kick`- {config.InfoCommands.kick} \n`mute` - {config.InfoCommands.mute} \n`pmute` - {config.InfoCommands.pmute} \n`purge` - {config.InfoCommands.purge} \n`removerole` - {config.InfoCommands.removerole} \n`slowmode` - {config.InfoCommands.slowmode} \n`softban` - {config.InfoCommands.softban} \n`unban` - {config.InfoCommands.unban} \n`unmute` - {config.InfoCommands.unmute} \n`voicemute` - {config.InfoCommands.voicemute} \n`voiceunmute` - {config.InfoCommands.voiceunmute}'''
             moderationEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
             moderationEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
             await ctx.reply(embed=moderationEmbed, mention_author=False)
@@ -1549,6 +1549,62 @@ async def removerole(ctx, role:discord.Role=None, *, member:discord.Member=None)
             return
 @removerole.error
 async def removerole_error(ctx, error):
+    if isinstance(error, commands.errors.MissingPermissions):
+        embed = discord.Embed(description='**Error!** You need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
+        await ctx.reply(embed=embed, mention_author=False)
+        return
+    if isinstance(error, commands.BotMissingPermissions):
+        embed = discord.Embed(description='**Error!** I need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
+        await ctx.reply(embed=embed, mention_author=False)
+        return
+
+@bot.command(name="slowmode")
+@commands.has_permissions(manage_channels=True)
+@commands.bot_has_permissions(manage_channels=True)
+@commands.cooldown(1, 30, type=commands.BucketType.user)
+async def slowmode(ctx, time=None):
+    try:
+        if not time:
+            embed = discord.Embed(description="Please provide the seconds.", colour=config.Colors.red)
+            await ctx.reply(embed=embed, mention_author=False)
+            return
+        seconds = int(time)
+        await ctx.channel.edit(slowmode_delay=seconds, reason=f"{ctx.author} used `slowmode`")
+        if seconds == 0:
+            await ctx.reply(f"{ctx.channel.mention}'s slowmode is now disabled.", mention_author=False)
+            return
+        else:
+            await ctx.reply(f"{ctx.channel.mention}'s slowmode is now set to **{seconds} seconds**.", mention_author=False)
+    except Exception as e:
+        if "invalid literal for int" in str(e):
+            errorEmbed = discord.Embed(description="**Error!** Please only provide numbers for the time (in seconds). \nExample: `a!slowmode 5`", colour=config.Colors.red)
+            await ctx.reply(embed=errorEmbed, mention_author=False)
+            return
+        if "or equal to 0" in str(e):
+            errorEmbed = discord.Embed(description="**Error!** Value should be greater than or equal to 0.", colour=config.Colors.red)
+            await ctx.reply(embed=errorEmbed, mention_author=False)
+            return
+        if "or equal to 21600." in str(e):
+            errorEmbed = discord.Embed(description="**Error!** Value should be less than or equal to 21600", colour=config.Colors.red)
+            await ctx.reply(embed=errorEmbed, mention_author=False)
+            return
+        if "Missing Permissions" in str(e):
+            errorEmbed = discord.Embed(description="**Error!** It seems like I'm missing permissions to execute that command.", colour=config.Colors.red)
+            await ctx.reply(embed=errorEmbed, mention_author=False)
+            return   
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        await ctx.reply(embed=errorEmbed, mention_author=False)
+        await ctx.message.add_reaction(config.Emojis.noEntry)
+        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+        description=f"""Error while using `slowmode` command:
+            `[Content]` {ctx.message.content} 
+            `[Error]` {e}"""
+        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await logErrorsChannel.send(embed=logErrorsEmbed)
+        return
+@slowmode.error
+async def slowmode_error(ctx, error):
     if isinstance(error, commands.errors.MissingPermissions):
         embed = discord.Embed(description='**Error!** You need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
         await ctx.reply(embed=embed, mention_author=False)
