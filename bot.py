@@ -1606,11 +1606,11 @@ async def slowmode(ctx, time=None):
 @slowmode.error
 async def slowmode_error(ctx, error):
     if isinstance(error, commands.errors.MissingPermissions):
-        embed = discord.Embed(description='**Error!** You need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
+        embed = discord.Embed(description='**Error!** You need the permission `MANAGE CHANNELS` to run this command.', colour=config.Colors.red)
         await ctx.reply(embed=embed, mention_author=False)
         return
     if isinstance(error, commands.BotMissingPermissions):
-        embed = discord.Embed(description='**Error!** I need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
+        embed = discord.Embed(description='**Error!** I need the permission `MANAGE CHANNELS` to run this command.', colour=config.Colors.red)
         await ctx.reply(embed=embed, mention_author=False)
         return
 
