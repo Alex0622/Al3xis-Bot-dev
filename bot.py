@@ -290,8 +290,8 @@ async def ping(ctx):
 @commands.cooldown(1, 60, type=commands.BucketType.user)
 async def privacy(ctx):
     try:
-        desc = f"""__What data do we store and why?__ \nWhen you find an unknown error using some of commands, the bot will automatically send the report of that error to its developers with the message content and your Discord username. \nWhen you use our `report` command, the bot sends your report to our Discord server to wait for an Administrator to check your report. When an Administrator updates your report, you will receive a Direct Message explaining what happened to your report. \nWhen you use our `suggest` command, the bot sends your suggestion to our Discord server to wait for approval. If your suggestion gets accepted or denied, you will receive a Direct Message mentioning that your suggestion was accepted or denied. \nWhen you invite the bot to your server and when you remove it from it, the bot sends that report to our Discord server just for general reasons, we only do this to know how many users invite the bot to their servers. Only the owner of the bot has access to this data. \nWe only log command usages to know how many commands where used in a certain period of time. Only the owner of the bot has access to this data. \nWhen you send a Direct Message to the bot, it will save your message and send it to our Discord server. Only the owner of the bot has access to this data. \n**If you want us to delete your data, you have the right to send a Direct Messsage to our bot or directly to the owner of the bot.**"""
-        privacyEmbed = discord.Embed(title=f"__{ctx.me.name}'s privacy policy.__",description=desc, colour=config.Colors.blue)
+        desc = "Read our Privacy Policy [here](https://alex0622.github.io/DiscordBots/Al3xis/PrivacyPolicy/index.html)."
+        privacyEmbed = discord.Embed(description=desc, colour=config.Colors.blue)
         privacyEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=privacyEmbed, mention_author=False)
     except Exception as e:
@@ -899,9 +899,6 @@ async def userinfo(ctx, *, member: discord.Member=None):
 ####################################################################################################
 ####################################################################################################
 #Math commands
-
-
-
 @bot.command(name='calc', aliases=['calculator'])
 async def calc(ctx, x:float=None, arg=None, y:float=None):
     if arg != None:
