@@ -149,8 +149,8 @@ async def about(ctx):
         embedI.add_field(name='Prefix', value='`a!`, `A!`')
         embedI.add_field(name='Developed since', value='`21/10/2020`')
         embedI.add_field(name='Developed with', value='`Python`')
-        embedI.add_field(name='Useful links', value=f'[GitHub]({config.General.githubURL}) | [Support Server]({config.General.supportServerURL}) | [Top.gg](https://top.gg/bot/768309916112650321) | [Discord Bot List](https://discord.ly/al3xis)')
-        embedI.add_field(name='Latest updates', value="All moderation commands have been updated and added commands `voicemute`, `voiceunmute` and `slowmode`.", inline=False)
+        embedI.add_field(name='Useful links', value=f'[GitHub]({config.General.githubURL}) | [Support Server]({config.General.supportServerURL}) | [Privacy Policy]({config.General.privacyPolicyURL}) | [Terms of Use]({config.General.termsOfUseURL})')
+        embedI.add_field(name='Latest updates', value=f"Added [Privacy Policy]({config.General.privacyPolicyURL}) and [Terms of Use]({config.General.termsOfUseURL})", inline=False)
         embedI.set_thumbnail(url=ctx.me.avatar_url)
         embedI.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=embedI, mention_author=False)
@@ -172,7 +172,7 @@ async def help(ctx, arg = None):
     try:
         if arg == None:
             helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-            helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `privacy`, `report`, `source`, `suggest`, `vote`', inline=True)
+            helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `privacy`, `report`, `source`, `suggest, `terms`, `vote`', inline=True)
             helpEmbed.add_field(name='Math', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`', inline=True)
             helpEmbed.add_field(name='Moderation', value='`addrole`, `ban`, `bans`, `kick`, `mute`, `pmute`, `purge`, `removerole` `slowmode`, `softban`, `unban`, `unmute`, `voicemute`, `voiceunmute`', inline=True)
             helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `embed`, `id`, `membercount`, `nick`, `reminder`, `roleinfo`, `say`, `servericon`, `serverinfo`, `userinfo`', inline=False)
@@ -182,7 +182,7 @@ async def help(ctx, arg = None):
             return
         if str(arg).lower() == 'info':
             titleEmbed = 'Info commands'
-            descEmbed = f'''`about` - {config.InfoCommands.about} \n`help` - {config.InfoCommands.help} \n`invite` - {config.InfoCommands.invite} \n`ping` - {config.InfoCommands.ping} \n`privacy` - {config.InfoCommands.privacy} \n`report` - {config.InfoCommands.report} \n`source` - {config.InfoCommands.source} \n`suggest` - {config.InfoCommands.suggest} \n`vote` - {config.InfoCommands.vote}'''
+            descEmbed = f'''`about` - {config.InfoCommands.about} \n`help` - {config.InfoCommands.help} \n`invite` - {config.InfoCommands.invite} \n`ping` - {config.InfoCommands.ping} \n`privacy` - {config.InfoCommands.privacy} \n`report` - {config.InfoCommands.report} \n`source` - {config.InfoCommands.source} \n`suggest` - {config.InfoCommands.suggest} \n`terms` - {config.InfoCommands.terms} \n`vote` - {config.InfoCommands.vote}'''
             infoEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
             infoEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
             await ctx.reply(embed=infoEmbed, mention_author=False)
@@ -243,6 +243,7 @@ async def help(ctx, arg = None):
             return
         
 @bot.command(name='invite', aliases=['inv'])
+@commands.cooldown(1, 15, type=commands.BucketType.user)
 async def invite(ctx):
     try:
         embed = discord.Embed(title='Links', colour=config.Colors.darkGreen, timestamp=ctx.message.created_at)
@@ -287,10 +288,10 @@ async def ping(ctx):
 
 @bot.command(name="privacy")
 @commands.guild_only()
-@commands.cooldown(1, 60, type=commands.BucketType.user)
+@commands.cooldown(1, 20, type=commands.BucketType.user)
 async def privacy(ctx):
     try:
-        desc = "Read our Privacy Policy [here](https://alex0622.github.io/DiscordBots/Al3xis/PrivacyPolicy/index.html)."
+        desc = f"Read our Privacy Policy [here]({config.General.privacyPolicyURL})."
         privacyEmbed = discord.Embed(description=desc, colour=config.Colors.blue)
         privacyEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=privacyEmbed, mention_author=False)
@@ -341,6 +342,7 @@ async def report(ctx, *, msg=None):
         return
 
 @bot.command(name='source')
+@commands.cooldown(1, 20, type=commands.BucketType.user)
 async def source(ctx):
     try:
         embed = discord.Embed(title=f"{ctx.me.name}'s source", description=f'Hi!, you can find my source code [here]({config.General.githubURL}).', colour=config.Colors.yellow)
@@ -392,7 +394,29 @@ async def suggest(ctx, *, new_suggestion=None):
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
 
+@bot.command(name="terms")
+@commands.cooldown(1, 20, type=commands.BucketType.user)
+async def terms(ctx):
+    try:
+        desc = f"Read our Terms of Use [here]({config.General.termsOfUseURL})."
+        termsEmbed = discord.Embed(description=desc, colour=config.Colors.blue)
+        termsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.reply(embed=termsEmbed, mention_author=False)
+    except Exception as e:
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        await ctx.reply(embed=errorEmbed, mention_author=False)
+        await ctx.message.add_reaction(config.Emojis.noEntry)
+        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+        description=f"""Error while using `terms` command:
+            `[Content]` {ctx.message.content} 
+            `[Error]` {e}"""
+        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await logErrorsChannel.send(embed=logErrorsEmbed)
+        return
+
 @bot.command(name='vote')
+@commands.cooldown(1, 20, type=commands.BucketType.user)
 async def vote(ctx):
     try:
         voteEmbed = discord.Embed(description='''Hi, you can vote me on the following websites:
@@ -899,6 +923,7 @@ async def userinfo(ctx, *, member: discord.Member=None):
 ####################################################################################################
 ####################################################################################################
 #Math commands
+
 @bot.command(name='calc', aliases=['calculator'])
 async def calc(ctx, x:float=None, arg=None, y:float=None):
     if arg != None:

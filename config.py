@@ -5,6 +5,8 @@ class General:
     botInviteURLAdmin =     "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot%20applications.commands&permissions=8"
     supportServerURL =      "https://discord.com/invite/AAJPHqNXUy"
     githubURL =             "https://github.com/Alex0622/Al3xis-Bot-dev"
+    privacyPolicyURL =      "https://alex0622.github.io/DiscordBots/Al3xis/privacy/index.html"
+    termsOfUseURL =         "https://alex0622.github.io/DiscordBots/Al3xis/terms/index.html"
 
 class InfoCommands:
     about =             'Get information about the bot.'
@@ -63,6 +65,7 @@ class InfoCommands:
     source =            "Get the bot's source code."
     sug =               'Make a new suggestion for the bot.'
     suggest =           'Make a new suggestion for the bot.'
+    terms =             "Get the Bot's Terms of Use."
     ui =                'Get information about a member.'
     unban =             'Remove ban from member.'
     unmute =            'Remove `Muted` role from member.'
@@ -133,6 +136,7 @@ class UsageCommands:
     source =            '`a!source`'
     sug =               '`a!sug (suggestion)`' 
     suggest =           '`a!suggest (suggestion)`'
+    terms =             '`a!terms`'
     ui =                '`a!ui (member)`'
     unban =             '`a!unban ID (reason)`'
     unmute =            '`a!unmute (member) (reason)`'
@@ -203,6 +207,7 @@ class AliasesCommands:
     source =            'No aliases'
     sug =               'suggest'
     suggest =           'sug'
+    terms =             'No aliases'
     ui =                'user, userinfo'
     unban =             'No aliases'
     unmute =            'No aliases'
@@ -273,6 +278,7 @@ class RequiredPermissions:
     source =            'NO REQUIRED PERMISSION'
     sug =               'NO REQUIRED PERMISSION'
     suggest =           'NO REQUIRED PERMISSION'
+    terms =             'NO REQUIRED PERMISSION'
     ui =                'NO REQUIRED PERMISSION'
     unban =             'BAN MEMBERS'
     unmute =            'BAN MEMBERS'
