@@ -851,9 +851,9 @@ async def serverinfo(ctx):
             if not member.bot:
                 humans.append('human')
         if permsAllowed is True:
-            statistics = f'''**Boosts:** `{guild.premium_subscription_count}` \n**Banned users:** `{bans}` \n**Total members:** `{guild.member_count}` \n`{len(humans)}` Humans | `{len(bots)}` Bots \n**Roles:** `{len(guild.roles)}` \n**Channels:** \n`{len(guild.text_channels)}` Text channels | `{len(guild.voice_channels)}` Voice channels'''
+            statistics = f'''**Boosts:** `{guild.premium_subscription_count}` \n**Banned users:** `{bans}` \n**Total members:** `{guild.member_count}` \n`{len(humans)}` Humans | `{len(bots)}` Bots \n**Roles:** `{len(guild.roles)}` \n**Emojis:** `{len(guild.emojis)}` \n**Channels:** \n`{len(guild.text_channels)}` Text channels | `{len(guild.voice_channels)}` Voice channels'''
         if permsAllowed is False:
-            statistics = f'''**Boosts:** `{guild.premium_subscription_count}` \n**Total members:** `{guild.member_count}` \n`{len(humans)}` Humans | `{len(bots)}` Bots \n**Roles:** `{len(guild.roles)}` \n**Channels:** \n`{len(guild.text_channels)}` Text channels | `{len(guild.voice_channels)}` Voice channels'''
+            statistics = f'''**Boosts:** `{guild.premium_subscription_count}` \n**Total members:** `{guild.member_count}` \n`{len(humans)}` Humans | `{len(bots)}` Bots \n**Roles:** `{len(guild.roles)}` \n**Emojis:** `{len(guild.emojis)}` \n**Channels:** \n`{len(guild.text_channels)}` Text channels | `{len(guild.voice_channels)}` Voice channels'''
         serverinfoEmbed = discord.Embed(title=f"{guild}'s information", colour=config.Colors.blue, timestamp=ctx.message.created_at)
         if ctx.guild.description != None:
             serverinfoEmbed.description = ctx.guild.description
