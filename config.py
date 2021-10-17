@@ -131,7 +131,7 @@ class UsageCommands:
     serverinfo =        '`a!serverinfo`'
     setnick =           '`a!setnick (member) (nickname/"remove")`'
     si =                '`a!si`'
-    slowmode =          '`a!slowmode (time in seconds)`'
+    slowmode =          '`a!slowmode (time)`'
     softban =           '`a!softban (member) (reason)`'
     source =            '`a!source`'
     sug =               '`a!sug (suggestion)`' 

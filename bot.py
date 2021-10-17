@@ -692,8 +692,8 @@ async def reminder(ctx, time=None, *, msg=None):
                     seconds += float(time[:-1])
                     counter = f"{seconds} seconds"
                 else:
-                    embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration.', colour=config.Colors.red)
-                    await ctx.send(embed=embed)
+                    embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration. \n*Try: `s`, `m`, `h` or `d`.*', colour=config.Colors.red)
+                    await ctx.reply(embed=embed, mention_author=False)
                     return  
 
                 await ctx.reply(f"I've set a reminder of {counter}: {msg}", mention_author=False, allowed_mentions=discord.AllowedMentions.none())
@@ -701,9 +701,9 @@ async def reminder(ctx, time=None, *, msg=None):
                 await ctx.reply(f'Hey! {msg}', mention_author=True, allowed_mentions=discord.AllowedMentions.none())
             except Exception as e:
                 if str(e).startswith("could not convert string to float"):
-                    embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration.', colour=config.Colors.red)
+                    embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration. \n*Try: `s`, `m`, `h` or `d`.*', colour=config.Colors.red)
                     await ctx.reply(embed=embed, mention_author=False)
-                    return  
+                    return 
                 else:
                     errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
                     await ctx.reply(embed=errorEmbed, mention_author=False)
@@ -1355,9 +1355,9 @@ async def mute(ctx, member: discord.Member=None, duration=None, *, reason=None):
             seconds += float(duration[:-1])
             counter = f"{seconds} seconds"
         else:
-            embed = discord.Embed(description=f'**Error!** `{duration}` is not a valid duration.', colour=config.Colors.red)
+            embed = discord.Embed(description=f'**Error!** "{duration}" is not a valid duration. \n*Try: `s`, `m`, `h` or `d`.*', colour=config.Colors.red)
             await ctx.reply(embed=embed, mention_author=False)
-            return 
+            return  
         await member.add_roles(mutedRole, reason=f"{ctx.author}: {reason}")
         await ctx.reply(f'{config.Emojis.ballotBoxWithCheck} **{member}** was muted for {counter} | `{reason}`', mention_author=False)
         await asyncio.sleep(seconds)
@@ -1367,7 +1367,7 @@ async def mute(ctx, member: discord.Member=None, duration=None, *, reason=None):
             return
     except Exception as e:
         if str(e).startswith("could not convert string to float"):
-            embed = discord.Embed(description=f'**Error!** "{duration}" is not a valid duration.', colour=config.Colors.red)
+            embed = discord.Embed(description=f'**Error!** "{duration}" is not a valid duration. \n*Try: `s`, `m`, `h` or `d`.*', colour=config.Colors.red)
             await ctx.reply(embed=embed, mention_author=False)
             return  
         if "Missing Permissions" in str(e):
@@ -1583,31 +1583,48 @@ async def removerole_error(ctx, error):
 @bot.command(name="slowmode")
 @commands.has_permissions(manage_channels=True)
 @commands.bot_has_permissions(manage_channels=True)
-@commands.cooldown(1, 30, type=commands.BucketType.user)
+@commands.cooldown(1, 20, type=commands.BucketType.channel)
 async def slowmode(ctx, time=None):
     try:
         if not time:
             embed = discord.Embed(description="Please provide the seconds.", colour=config.Colors.red)
             await ctx.reply(embed=embed, mention_author=False)
             return
-        seconds = int(time)
+        seconds = 0
+        if time.lower().endswith("h"):
+            seconds += float(time[:-1]) * 60 * 60
+            counter = f"{seconds // 60 // 60} hours"
+        elif time.lower().endswith("m"):
+            seconds += float(time[:-1]) * 60
+            counter = f"{seconds // 60} minutes"
+        elif time.lower().endswith("s"):
+            seconds += float(time[:-1])
+            counter = f"{seconds} seconds"
+        elif time.lower() == "disable":
+            seconds = 0
+        elif time.lower() == "0":
+            seconds = 0
+        else:
+            embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration. \n*Try: `s`, `m`, `h` or `disable`.*', colour=config.Colors.red)
+            await ctx.reply(embed=embed, mention_author=False)
+            return 
         await ctx.channel.edit(slowmode_delay=seconds, reason=f"{ctx.author} used `slowmode`")
         if seconds == 0:
             await ctx.reply(f"{ctx.channel.mention}'s slowmode is now disabled.", mention_author=False)
             return
         else:
-            await ctx.reply(f"{ctx.channel.mention}'s slowmode is now set to **{seconds} seconds**.", mention_author=False)
+            await ctx.reply(f"{ctx.channel.mention}'s slowmode is now set to **{counter}**.", mention_author=False)
     except Exception as e:
         if "invalid literal for int" in str(e):
             errorEmbed = discord.Embed(description="**Error!** Please only provide numbers for the time (in seconds). \nExample: `a!slowmode 5`", colour=config.Colors.red)
             await ctx.reply(embed=errorEmbed, mention_author=False)
             return
         if "or equal to 0" in str(e):
-            errorEmbed = discord.Embed(description="**Error!** Value should be greater than or equal to 0.", colour=config.Colors.red)
+            errorEmbed = discord.Embed(description="**Error!** Value should be greater than or equal to 0 seconds.", colour=config.Colors.red)
             await ctx.reply(embed=errorEmbed, mention_author=False)
             return
         if "or equal to 21600." in str(e):
-            errorEmbed = discord.Embed(description="**Error!** Value should be less than or equal to 21600", colour=config.Colors.red)
+            errorEmbed = discord.Embed(description="**Error!** Value should be less than or equal to 21600 seconds.", colour=config.Colors.red)
             await ctx.reply(embed=errorEmbed, mention_author=False)
             return
         if "Missing Permissions" in str(e):
