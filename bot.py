@@ -172,7 +172,7 @@ async def help(ctx, arg = None):
     try:
         if arg == None:
             helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-            helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `privacy`, `report`, `source`, `suggest, `terms`, `vote`', inline=True)
+            helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `privacy`, `report`, `source`, `suggest`, `terms`, `vote`', inline=True)
             helpEmbed.add_field(name='Math', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`', inline=True)
             helpEmbed.add_field(name='Moderation', value='`addrole`, `ban`, `bans`, `kick`, `mute`, `pmute`, `purge`, `removerole` `slowmode`, `softban`, `unban`, `unmute`, `voicemute`, `voiceunmute`', inline=True)
             helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `embed`, `id`, `membercount`, `nick`, `reminder`, `roleinfo`, `say`, `servericon`, `serverinfo`, `userinfo`', inline=False)
