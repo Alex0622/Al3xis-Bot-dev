@@ -96,7 +96,7 @@ async def on_message_delete(message):
 @bot.event
 async def on_guild_join(guild):
     channel = bot.get_channel(config.Channels.joinsleavesChannel)
-    embed = discord.Embed(title='Al3xis was added to a guild.', description=f'Guild name: {guild.name} \n Guild ID: {guild.id} \n Member count: {guild.member_count}', colour=config.Colors.green)
+    embed = discord.Embed(title='Al3xis was added to a guild.', description=f'Guild name: {guild.name} \n Guild ID: {guild.id} \n Member count: {len(guild.members)}', colour=config.Colors.green)
     embed.set_footer(text=f'{len(bot.guilds)} guilds now', icon_url=guild.icon_url)
     await channel.send(embed=embed)
     await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'{len(bot.guilds)} servers | a!help', emoji=None, type=discord.ActivityType.listening))
@@ -104,7 +104,7 @@ async def on_guild_join(guild):
 @bot.event
 async def on_guild_remove(guild):
     channel = bot.get_channel(config.Channels.joinsleavesChannel)
-    embed = discord.Embed(title='Al3xis was removed from a guild.', description=f'Guild name: {guild.name} \n Guild ID: {guild.id} \n Member count: {guild.member_count}', colour=config.Colors.green)
+    embed = discord.Embed(title='Al3xis was removed from a guild.', description=f'Guild name: {guild.name} \n Guild ID: {guild.id} \n Member count: {len(guild.members)}', colour=config.Colors.green)
     embed.set_footer(text=f'{len(bot.guilds)} guilds now', icon_url=guild.icon_url)
     await channel.send(embed=embed)
     await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'{len(bot.guilds)} servers | a!help', emoji=None, type=discord.ActivityType.listening))
