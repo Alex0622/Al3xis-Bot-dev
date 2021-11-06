@@ -172,7 +172,7 @@ async def help(ctx, arg = None):
     try:
         if arg == None:
             helpEmbed = discord.Embed(title = 'Help | Prefix: `a!`, `A!`', colour=config.Colors.yellow, timestamp=ctx.message.created_at)
-            helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `privacy`, `report`, `source`, `suggest`, `terms`, `vote`', inline=True)
+            helpEmbed.add_field(name='Info', value='`about`, `help`, `invite`, `ping`, `privacy`, `report`, `source`, `suggest`, `support`, `terms`, `vote`', inline=True)
             helpEmbed.add_field(name='Math', value='`calc`, `mathrandom`, `mathsq`, `mathsqrt`', inline=True)
             helpEmbed.add_field(name='Moderation', value='`addrole`, `ban`, `bans`, `kick`, `mute`, `pmute`, `purge`, `removerole` `slowmode`, `softban`, `unban`, `unmute`, `voicemute`, `voiceunmute`', inline=True)
             helpEmbed.add_field(name='Utility', value='`announce`, `avatar`, `embed`, `id`, `membercount`, `nick`, `reminder`, `roleinfo`, `say`, `servericon`, `serverinfo`, `userinfo`', inline=False)
@@ -182,7 +182,7 @@ async def help(ctx, arg = None):
             return
         if str(arg).lower() == 'info':
             titleEmbed = 'Info commands'
-            descEmbed = f'''`about` - {config.InfoCommands.about} \n`help` - {config.InfoCommands.help} \n`invite` - {config.InfoCommands.invite} \n`ping` - {config.InfoCommands.ping} \n`privacy` - {config.InfoCommands.privacy} \n`report` - {config.InfoCommands.report} \n`source` - {config.InfoCommands.source} \n`suggest` - {config.InfoCommands.suggest} \n`terms` - {config.InfoCommands.terms} \n`vote` - {config.InfoCommands.vote}'''
+            descEmbed = f'''`about` - {config.InfoCommands.about} \n`help` - {config.InfoCommands.help} \n`invite` - {config.InfoCommands.invite} \n`ping` - {config.InfoCommands.ping} \n`privacy` - {config.InfoCommands.privacy} \n`report` - {config.InfoCommands.report} \n`source` - {config.InfoCommands.source} \n`suggest` - {config.InfoCommands.suggest} \n`support` - {config.InfoCommands.support} \n`terms` - {config.InfoCommands.terms} \n`vote` - {config.InfoCommands.vote}'''
             infoEmbed = discord.Embed(title=titleEmbed, description=descEmbed, colour=config.Colors.yellow, timestamp=ctx.message.created_at)
             infoEmbed.set_footer(text=f'{ctx.author.name}#{ctx.author.discriminator}', icon_url=ctx.author.avatar_url)
             await ctx.send(embed=infoEmbed)
@@ -387,6 +387,25 @@ async def suggest(ctx, *, new_suggestion=None):
         await ctx.message.add_reaction(config.Emojis.noEntry)
         logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
         description=f"""Error while using `suggest` command:
+            `[Content]` {ctx.message.content} 
+            `[Error]` {e}"""
+        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await logErrorsChannel.send(embed=logErrorsEmbed)
+        return
+
+@bot.command(name="support")
+@commands.cooldown(1, 20, type=commands.BucketType.user)
+async def support(ctx):
+    try:
+        supportEmbed = discord.Embed(description=f"Need help with Al3xis? join our support server [here]({config.General.supportServerURL})!", colour=config.Colors.gray)
+        await ctx.send(embed=supportEmbed)
+    except Exception as e:
+        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+        await ctx.send(embed=errorEmbed)
+        await ctx.message.add_reaction(config.Emojis.noEntry)
+        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+        description=f"""Error while using `support` command:
             `[Content]` {ctx.message.content} 
             `[Error]` {e}"""
         logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)

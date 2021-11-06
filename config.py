@@ -65,6 +65,7 @@ class InfoCommands:
     source =            "Get the bot's source code."
     sug =               'Make a new suggestion for the bot.'
     suggest =           'Make a new suggestion for the bot.'
+    support =           "Get support with Al3xis."
     terms =             "Get the Bot's Terms of Use."
     ui =                'Get information about a member.'
     unban =             'Remove ban from member.'
@@ -136,6 +137,7 @@ class UsageCommands:
     source =            '`a!source`'
     sug =               '`a!sug (suggestion)`' 
     suggest =           '`a!suggest (suggestion)`'
+    support =           '`a!support`'
     terms =             '`a!terms`'
     ui =                '`a!ui (member)`'
     unban =             '`a!unban ID (reason)`'
@@ -207,6 +209,7 @@ class AliasesCommands:
     source =            'No aliases'
     sug =               'suggest'
     suggest =           'sug'
+    support =           'No aliases'
     terms =             'No aliases'
     ui =                'user, userinfo'
     unban =             'No aliases'
@@ -278,6 +281,7 @@ class RequiredPermissions:
     source =            'NO REQUIRED PERMISSION'
     sug =               'NO REQUIRED PERMISSION'
     suggest =           'NO REQUIRED PERMISSION'
+    support =           'NO REQUIRED PERMISSION'
     terms =             'NO REQUIRED PERMISSION'
     ui =                'NO REQUIRED PERMISSION'
     unban =             'BAN MEMBERS'
