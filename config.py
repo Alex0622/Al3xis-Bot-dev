@@ -7,6 +7,7 @@ class General:
     githubURL =             "https://github.com/Alex0622/Al3xis-Bot-dev"
     privacyPolicyURL =      "https://alex0622.github.io/DiscordBots/Al3xis/privacy/index.html#privacy"
     termsOfUseURL =         "https://alex0622.github.io/DiscordBots/Al3xis/terms/index.html#terms"
+    blacklistedUsers =      []
 
 class InfoCommands:
     about =             'Get information about the bot.'

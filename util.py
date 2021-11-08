@@ -1,5 +1,6 @@
 import math
 import random
+import config
 
 def listToStringSpace(s):
     str1 = " \n"
@@ -33,3 +34,6 @@ def sqrt(x:float):
 
 def sq(x:float):
     return x * x
+
+async def isNotBlacklisted(ctx):
+    return ctx.author.id not in config.General.blacklistedUsers

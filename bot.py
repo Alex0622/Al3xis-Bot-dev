@@ -11,6 +11,8 @@ intents.members=True
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('a!', 'A!'), intents=intents) #Set the prefix of the bot and removes the default help command.
 bot.remove_command(name='help')
 
+#Global Blacklist check
+@bot.check(util.isNotBlacklisted)
 
 @bot.event
 async def on_ready():
@@ -35,7 +37,7 @@ async def on_command_error(ctx, error):
         embed = discord.Embed(description=f'**Error!** I cannot find that role.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
-    if isinstance(error, commands.errors.MissingPermissions) or isinstance(error, commands.errors.BadArgument) or isinstance(error, commands.errors.BotMissingPermissions) or isinstance(error, commands.errors.CommandNotFound) or isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.CommandInvokeError):
+    if isinstance(error, commands.errors.MissingPermissions) or isinstance(error, commands.errors.BadArgument) or isinstance(error, commands.errors.BotMissingPermissions) or isinstance(error, commands.errors.CommandNotFound) or isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.CommandInvokeError) or isinstance(error, commands.errors.CheckFailure):
         pass  
     else:
         embed = discord.Embed(description='**Error!** '+str(error), colour=config.Colors.red)
@@ -166,6 +168,12 @@ async def about(ctx):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@about.error
+async def about_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='help', aliases=['h'])
 async def help(ctx, arg = None):
@@ -241,6 +249,12 @@ async def help(ctx, arg = None):
             logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
             await logErrorsChannel.send(embed=logErrorsEmbed)
             return
+@help.error
+async def help_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
         
 @bot.command(name='invite', aliases=['inv'])
 @commands.cooldown(1, 15, type=commands.BucketType.user)
@@ -263,6 +277,12 @@ async def invite(ctx):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@invite.error
+async def invite_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='ping', aliases=['pong', 'latency'])
 async def ping(ctx):
@@ -285,6 +305,12 @@ async def ping(ctx):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@ping.error
+async def ping_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name="privacy")
 @commands.guild_only()
@@ -307,6 +333,12 @@ async def privacy(ctx):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@privacy.error
+async def privacy_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='report')
 @commands.cooldown(1, 600, type=commands.BucketType.user)
@@ -340,6 +372,12 @@ async def report(ctx, *, msg=None):
         embed = discord.Embed(description="Please provide a description for your report.", colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+@report.error
+async def report_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='source')
 @commands.cooldown(1, 20, type=commands.BucketType.user)
@@ -359,6 +397,12 @@ async def source(ctx):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@source.error
+async def source_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='suggest', aliases=['sug'])
 @commands.cooldown(1, 600, type=commands.BucketType.user)
@@ -393,6 +437,12 @@ async def suggest(ctx, *, new_suggestion=None):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@suggest.error
+async def suggest_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name="support")
 @commands.cooldown(1, 20, type=commands.BucketType.user)
@@ -412,6 +462,12 @@ async def support(ctx):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@support.error
+async def support_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name="terms")
 @commands.cooldown(1, 20, type=commands.BucketType.user)
@@ -433,6 +489,12 @@ async def terms(ctx):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@terms.error
+async def terms_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='vote')
 @commands.cooldown(1, 20, type=commands.BucketType.user)
@@ -458,6 +520,12 @@ async def vote(ctx):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@vote.error
+async def vote_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 ####################################################################################################
 ####################################################################################################
@@ -526,7 +594,11 @@ async def announce_error(ctx, error):
         embed = discord.Embed(description='**Error!** Only administrators of this server can use that command!', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
-
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
+    
 @bot.command(name='avatar', aliases=['av'])
 @commands.guild_only()
 async def avatar(ctx, *, member: discord.Member = None):
@@ -549,6 +621,12 @@ async def avatar(ctx, *, member: discord.Member = None):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@avatar.error 
+async def avatar_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='embed')
 @commands.cooldown(1, 10, commands.BucketType.user)
@@ -580,6 +658,12 @@ async def embed(ctx, *, embedMsg=None):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@embed.error
+async def embed_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='id', aliases=['ID'])
 @commands.guild_only()
@@ -600,6 +684,12 @@ async def id(ctx, *, member: discord.Member = None):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@id.error
+async def id_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='membercount')
 @commands.guild_only()
@@ -619,6 +709,12 @@ async def membercount(ctx):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@membercount.error
+async def membercount_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='nick', aliases=['setnick'])
 @commands.guild_only()
@@ -690,6 +786,10 @@ async def nick_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `MANAGE NICKNAMES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='reminder', aliases=['remind'])
 async def reminder(ctx, time=None, *, msg=None):
@@ -754,6 +854,10 @@ async def reminder_error(ctx, error):
             embed = discord.Embed(description=f'**Error!** Your message does not include a valid duration.', colour=config.Colors.red)
             await ctx.send(embed=embed)
             return 
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command('roleinfo', aliases=['ri', 'role'])
 @commands.guild_only()
@@ -796,6 +900,12 @@ async def roleinfo(ctx, role:discord.Role=None):
             logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
             await logErrorsChannel.send(embed=logErrorsEmbed)
             return
+@roleinfo.error
+async def roleinfo_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='say')
 @commands.guild_only()
@@ -823,6 +933,12 @@ async def say(ctx, *, sayMsg=None):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@say.error
+async def say_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='servericon')
 @commands.guild_only()
@@ -844,6 +960,12 @@ async def servericon(ctx):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@servericon.error
+async def servericon_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='serverinfo', aliases=['si'])
 @commands.guild_only()
@@ -899,6 +1021,12 @@ async def serverinfo(ctx):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@serverinfo.error
+async def serverinfo_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='userinfo', aliases=['user', 'ui'])
 @commands.guild_only()
@@ -939,6 +1067,12 @@ async def userinfo(ctx, *, member: discord.Member=None):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@userinfo.error
+async def userinfo_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 ####################################################################################################
 ####################################################################################################
@@ -1003,6 +1137,10 @@ async def calc_error(ctx, error):
         embed = discord.Embed(description=f'Please provide a valid math equation. \nNote: Rememeber to add spaces between arguments. (e.g. `a!calc 1 + 1`)', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return 
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='mathrandom')
 async def mathrandom(ctx, x=None, y=None):
@@ -1040,6 +1178,12 @@ async def mathrandom(ctx, x=None, y=None):
             logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
             await logErrorsChannel.send(embed=logErrorsEmbed)
             return
+@mathrandom.error
+async def mathrandom_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='mathsq')
 async def mathsq(ctx, x=None):
@@ -1068,7 +1212,13 @@ async def mathsq(ctx, x=None):
                 logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
                 logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
                 await logErrorsChannel.send(embed=logErrorsEmbed)
-                return 
+                return
+@mathsq.error
+async def mathsq_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='mathsqrt')
 async def mathsqrt(ctx, x=None):
@@ -1098,6 +1248,12 @@ async def mathsqrt(ctx, x=None):
                 logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
                 await logErrorsChannel.send(embed=logErrorsEmbed)
                 return 
+@mathsqrt.error
+async def mathsqrt_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 ####################################################################################################
 ####################################################################################################
@@ -1162,6 +1318,10 @@ async def addrole_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='ban')
 @commands.guild_only()
@@ -1217,6 +1377,10 @@ async def ban_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name="bans")
 @commands.has_permissions(ban_members=True)
@@ -1269,6 +1433,10 @@ async def bans_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='kick', pass_context=True)
 @commands.guild_only()
@@ -1323,6 +1491,10 @@ async def kick_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `KICK MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='mute')
 @commands.guild_only()
@@ -1421,6 +1593,10 @@ async def mute_error(ctx, error):
             embed = discord.Embed(description=f'**Error!** Your message does not include a valid duration.', colour=config.Colors.red)
             await ctx.send(embed=embed)
             return 
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='pmute', aliases= ['pm'])
 @commands.guild_only()
@@ -1484,6 +1660,10 @@ async def pmute_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='purge', aliases=['clear'])
 @commands.guild_only()
@@ -1539,6 +1719,10 @@ async def purge_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `MANAGE MESSAGES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='removerole')
 @commands.has_permissions(manage_roles=True)
@@ -1599,6 +1783,10 @@ async def removerole_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name="slowmode")
 @commands.has_permissions(manage_channels=True)
@@ -1672,6 +1860,10 @@ async def slowmode_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `MANAGE CHANNELS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='softban')
 @commands.guild_only()
@@ -1727,6 +1919,10 @@ async def softban_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='unban')
 @commands.guild_only()
@@ -1788,6 +1984,10 @@ async def unban_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `BAN MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='unmute')
 @commands.guild_only()
@@ -1851,6 +2051,10 @@ async def unmute_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `MANAGE ROLES` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name="voicemute")
 @commands.guild_only()
@@ -1905,6 +2109,10 @@ async def voicemute_error(ctx, error):
         embed = discord.Embed(description='**Error!** I need the permission `MUTE MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
         return
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name="voiceunmute")
 @commands.guild_only()
@@ -1958,7 +2166,11 @@ async def voiceunmute_error(ctx, error):
     if isinstance(error, commands.BotMissingPermissions):
         embed = discord.Embed(description='**Error!** I need the permission `MUTE MEMBERS` to run this command.', colour=config.Colors.red)
         await ctx.send(embed=embed)
-        return  
+        return 
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 ####################################################################################################
 ####################################################################################################
@@ -2017,6 +2229,12 @@ async def DM(ctx, memberID=None, *, message=None):
             logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
             await logErrorsChannel.send(embed=logErrorsEmbed)
             return
+@DM.error 
+async def DM_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name="logout")
 @commands.is_owner()
@@ -2037,6 +2255,12 @@ async def logout(ctx):
         logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
         await logErrorsChannel.send(embed=logErrorsEmbed)
         return
+@logout.error
+async def logout_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='save')
 @commands.guild_only()
@@ -2071,6 +2295,12 @@ async def save(ctx,*, saveMsg=None):
             logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
             await logErrorsChannel.send(embed=logErrorsEmbed)
             return
+@save.error
+async def save_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name="updatereport", aliases=["ur"])
 @commands.guild_only()
@@ -2129,6 +2359,12 @@ async def updatereport(ctx, messageID=None, *, comment=None):
             logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
             await logErrorsChannel.send(embed=logErrorsEmbed)
             return
+@updatereport.error
+async def updatereport_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 
 @bot.command(name='us', aliases=['updatesuggestion'])
 @commands.guild_only()
@@ -2256,6 +2492,12 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
             logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
             await logErrorsChannel.send(embed=logErrorsEmbed)
             return
+@us.error
+async def us_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        blacklistedEmbed = discord.Embed(description=f"You are trying to execute one of our awesome commands; unfortunately, you are blacklisted from using our commands. If you want more information about why we blacklisted you and if it's possible to get unblacklisted send a direct message to the bot to open a support ticket.", colour=config.Colors.red)
+        blacklistedEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+        await ctx.send(f"Hello, {ctx.author.mention}", embed=blacklistedEmbed)
 ################################
 ####################################################################################################
 ####################################################################################################
