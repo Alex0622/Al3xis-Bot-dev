@@ -2214,9 +2214,9 @@ async def us(ctx, msgID:int=None, type=None, *, reason=None):
             for embed in embeds:
                 user = await bot.fetch_user(embed.footer.text)
                 desc = f'''Hello {user} \nThis message was sent to you because the status of your suggestion was updated. \nYour suggestion: {embed.description} \nStatus: **Pending** \nCommented by: {ctx.author}'''
-                updatedSuggestionDeniedEmbed = discord.Embed(description=desc, colour=config.Colors.green, timestamp=ctx.message.created_at)
+                updatedSuggestionEmbed = discord.Embed(description=desc, colour=config.Colors.green, timestamp=ctx.message.created_at)
                 try:
-                    await user.send(embed=updatedSuggestionDeniedEmbed)
+                    await user.send(embed=updatedSuggestionEmbed)
                 except Exception:
                     pass
                 updatedSuggestion = discord.Embed(description=f"The status of that suggestion was successfully updated {config.Emojis.whiteCheckMark}", colour=config.Colors.green)
