@@ -4,9 +4,9 @@ class General:
     botInviteURL =          "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot%20applications.commands&permissions=2622876758"
     botInviteURLAdmin =     "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot%20applications.commands&permissions=8"
     supportServerURL =      "https://discord.com/invite/AAJPHqNXUy"
-    githubURL =             "https://github.com/Alex0622/Al3xis-Bot-dev"
-    privacyPolicyURL =      "https://alex0622.github.io/DiscordBots/Al3xis/#privacy"
-    termsOfUseURL =         "https://alex0622.github.io/DiscordBots/Al3xis/#terms"
+    githubURL =             "https://github.com/Alex22-SV/Al3xis-Bot-dev"
+    privacyPolicyURL =      "https://alex22-sv.github.io/DiscordBots/Al3xis/#privacy"
+    termsOfUseURL =         "https://alex22-sv.github.io/DiscordBots/Al3xis/#terms"
     blacklistedUsers =      []
 
 class InfoCommands:
