@@ -67,16 +67,19 @@ async def on_message(message):
         return
     if message.guild == bot.get_guild(793987455149408309):
         for word in config.BadWords:
-            if word in message.content.lower():
-                embed = discord.Embed(description=f"{config.Emojis.noEntry} {message.author.mention} your message includes words that are not allowed here. {config.Emojis.noEntry}", colour=config.Colors.red)
-                await message.delete()
-                botMsg = await message.channel.send(embed=embed)
-                logEmbed = discord.Embed(title=f'Message in #{message.channel} was deleted.', description=f'{message.content}\n __**Reason**: Message includes words that are not allowed here.__', colour=config.Colors.red, timestamp=message.created_at)
-                logEmbed.set_footer(text=message.author.id, icon_url=message.author.avatar_url)
-                logChannel = bot.get_channel(config.Channels.logChannel)
-                await logChannel.send(embed=logEmbed)
-                await asyncio.sleep(4)
-                await botMsg.delete()
+            if message.author.id in config.General.whitelistedUsers:
+                return
+            else:
+                if word in message.content.lower():
+                    embed = discord.Embed(description=f"{config.Emojis.noEntry} {message.author.mention} your message includes words that are not allowed here. {config.Emojis.noEntry}", colour=config.Colors.red)
+                    await message.delete()
+                    botMsg = await message.channel.send(embed=embed)
+                    logEmbed = discord.Embed(title=f'Message in #{message.channel} was deleted.', description=f'{message.content}\n __**Reason**: Message includes words that are not allowed here.__', colour=config.Colors.red, timestamp=message.created_at)
+                    logEmbed.set_footer(text=message.author.id, icon_url=message.author.avatar_url)
+                    logChannel = bot.get_channel(config.Channels.logChannel)
+                    await logChannel.send(embed=logEmbed)
+                    await asyncio.sleep(4)
+                    await botMsg.delete()
 
     if isinstance(message.channel, discord.channel.DMChannel):
         if not message.author.bot:                

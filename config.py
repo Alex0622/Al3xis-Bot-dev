@@ -8,6 +8,7 @@ class General:
     privacyPolicyURL =      "https://alex22-sv.github.io/DiscordBots/Al3xis/#privacy"
     termsOfUseURL =         "https://alex22-sv.github.io/DiscordBots/Al3xis/#terms"
     blacklistedUsers =      []
+    whitelistedUsers =      [435534715831975938]
 
 class InfoCommands:
     about =             'Get information about the bot.'
