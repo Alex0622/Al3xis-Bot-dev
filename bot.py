@@ -821,7 +821,7 @@ async def reminder(ctx, time=None, *, msg=None):
 
         await ctx.send(f"I've set a reminder of {counter}: {msg}", allowed_mentions=discord.AllowedMentions.none())
         await asyncio.sleep(seconds)
-        desc = f'''`Reminder:` {msg} \nJump to message: [click here]({ctx.message.jump_url})'''
+        desc = f'''`Reminder:` {msg} \n`Jump to message:` [click here]({ctx.message.jump_url})'''
         reminderEmbed = discord.Embed(description=desc, colour=config.Colors.green)
         await ctx.channel.send(f'Hey {ctx.author.mention}!', embed=reminderEmbed)
     except Exception as e:
