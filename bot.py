@@ -822,7 +822,7 @@ async def reminder(ctx, time=None, *, msg=None):
         await ctx.send(f"I've set a reminder of {counter}: {msg}", allowed_mentions=discord.AllowedMentions.none())
         await asyncio.sleep(seconds)
         reminderEmbed = discord.Embed(description=msg, colour=config.Colors.green)
-        await ctx.reply(f'Hey {ctx.author.mention}!', embed=reminderEmbed)
+        await ctx.message.reply(f'Hey {ctx.author.mention}!', embed=reminderEmbed)
     except Exception as e:
         if str(e).startswith("could not convert string to float"):
             embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration. \n*Try: `s`, `m`, `h` or `d`.*', colour=config.Colors.red)
