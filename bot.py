@@ -793,57 +793,53 @@ async def nick_error(ctx, error):
 
 @bot.command(name='reminder', aliases=['remind'])
 async def reminder(ctx, time=None, *, msg=None):
-    if time != None:
-        if msg != None:
-            try:
-                await asyncio.sleep(0.5)
-                seconds = 0
-                if time.lower().endswith("d"):
-                    seconds += float(time[:-1]) * 60 * 60 * 24
-                    counter = f"{seconds // 60 // 60 // 24} days"
-                elif time.lower().endswith("h"):
-                    seconds += float(time[:-1]) * 60 * 60
-                    counter = f"{seconds // 60 // 60} hours"
-                elif time.lower().endswith("m"):
-                    seconds += float(time[:-1]) * 60
-                    counter = f"{seconds // 60} minutes"
-                elif time.lower().endswith("s"):
-                    seconds += float(time[:-1])
-                    counter = f"{seconds} seconds"
-                else:
-                    embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration. \n*Try: `s`, `m`, `h` or `d`.*', colour=config.Colors.red)
-                    await ctx.send(embed=embed)
-                    return  
-
-                await ctx.send(f"I've set a reminder of {counter}: {msg}", allowed_mentions=discord.AllowedMentions.none())
-                await asyncio.sleep(seconds)
-                reminderEmbed = discord.Embed(description=msg, colour=config.Colors.green)
-                await ctx.channel.send(f'Hey {ctx.author.mention}!', embed=reminderEmbed)
-            except Exception as e:
-                if str(e).startswith("could not convert string to float"):
-                    embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration. \n*Try: `s`, `m`, `h` or `d`.*', colour=config.Colors.red)
-                    await ctx.send(embed=embed)
-                    return 
-                else:
-                    errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                    await ctx.send(embed=errorEmbed)
-                    await ctx.message.add_reaction(config.Emojis.noEntry)
-                    logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                    description=f"""Error while using `reminder` command:
-                        `[Content]` {ctx.message.content} 
-                        `[Error]` {e}"""
-                    logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                    logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                    await logErrorsChannel.send(embed=logErrorsEmbed)
-                    return
-        else: 
-            embed = discord.Embed(description="Please provide a message for your reminder.", colour=config.Colors.red)
-            await ctx.send(embed=embed)
-            return
-    else:
+    if not time: 
         embed = discord.Embed(description="Please provide a period of time for your reminder.", colour=config.Colors.red)
-        await ctx.send(embed=embed)
-        return
+        return await ctx.send(embed=embed)
+        
+    if not msg:
+        msg = "..."
+    try:
+        await asyncio.sleep(0.5)
+        seconds = 0
+        if time.lower().endswith("d"):
+            seconds += float(time[:-1]) * 60 * 60 * 24
+            counter = f"{seconds // 60 // 60 // 24} days"
+        elif time.lower().endswith("h"):
+            seconds += float(time[:-1]) * 60 * 60
+            counter = f"{seconds // 60 // 60} hours"
+        elif time.lower().endswith("m"):
+            seconds += float(time[:-1]) * 60
+            counter = f"{seconds // 60} minutes"
+        elif time.lower().endswith("s"):
+            seconds += float(time[:-1])
+            counter = f"{seconds} seconds"
+        else:
+            embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration. \n*Try: `s`, `m`, `h` or `d`.*', colour=config.Colors.red)
+            await ctx.send(embed=embed)
+            return  
+
+        await ctx.send(f"I've set a reminder of {counter}: {msg}", allowed_mentions=discord.AllowedMentions.none())
+        await asyncio.sleep(seconds)
+        reminderEmbed = discord.Embed(description=msg, colour=config.Colors.green)
+        await ctx.channel.send(f'Hey {ctx.author.mention}!', embed=reminderEmbed)
+    except Exception as e:
+        if str(e).startswith("could not convert string to float"):
+            embed = discord.Embed(description=f'**Error!** "{time}" is not a valid duration. \n*Try: `s`, `m`, `h` or `d`.*', colour=config.Colors.red)
+            await ctx.send(embed=embed)
+            return 
+        else:
+            errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+            await ctx.send(embed=errorEmbed)
+            await ctx.message.add_reaction(config.Emojis.noEntry)
+            logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+            description=f"""Error while using `reminder` command:
+                `[Content]` {ctx.message.content} 
+                `[Error]` {e}"""
+            logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+            logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+            await logErrorsChannel.send(embed=logErrorsEmbed)
+            return
 @reminder.error
 async def reminder_error(ctx, error):
     if isinstance(error, commands.errors.CommandInvokeError):
