@@ -67,10 +67,10 @@ async def on_message(message):
         return
     if message.guild == bot.get_guild(793987455149408309):
         for word in config.BadWords:
-            if message.author.id in config.General.whitelistedUsers:
-                return
-            else:
-                if word in message.content.lower():
+            if word in message.content.lower():
+                if message.author.id in config.General.whitelistedUsers:
+                    return
+                else:
                     embed = discord.Embed(description=f"{config.Emojis.noEntry} {message.author.mention} your message includes words that are not allowed here. {config.Emojis.noEntry}", colour=config.Colors.red)
                     await message.delete()
                     botMsg = await message.channel.send(embed=embed)
