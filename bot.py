@@ -1105,17 +1105,22 @@ async def calc(ctx, x:float=None, arg=None, y:float=None):
                         await ctx.send(embed=embed)
                         return   
                 except Exception as e:
-                    errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
-                    await ctx.send(embed=errorEmbed)
-                    await ctx.message.add_reaction(config.Emojis.noEntry)
-                    logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
-                    description=f"""Error while using `calc` command:
-                        `[Content]` {ctx.message.content} 
-                        `[Error]` {e}"""
-                    logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
-                    logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
-                    await logErrorsChannel.send(embed=logErrorsEmbed)
-                    return
+                    if "division by zero" in str(e):
+                        errorEmbed = discord.Embed(description=f'The second value cannot be 0.', colour=config.Colors.red)
+                        await ctx.send(embed=errorEmbed)
+                        return
+                    else:
+                        errorEmbed = discord.Embed(description=f'An error occurred while running that command: {e}', colour=config.Colors.red)
+                        await ctx.send(embed=errorEmbed)
+                        await ctx.message.add_reaction(config.Emojis.noEntry)
+                        logErrorsChannel = bot.get_channel(config.Channels.logErrorsChannel)
+                        description=f"""Error while using `calc` command:
+                            `[Content]` {ctx.message.content} 
+                            `[Error]` {e}"""
+                        logErrorsEmbed = discord.Embed(description=description, colour=config.Colors.red, timestamp=ctx.message.created_at)
+                        logErrorsEmbed.set_footer(text=ctx.author, icon_url=ctx.author.avatar_url)
+                        await logErrorsChannel.send(embed=logErrorsEmbed)
+                        return
             else:
                 embed = discord.Embed(description='You are missing the argument "y".', colour=config.Colors.red)
                 await ctx.send(embed=embed)
