@@ -5,8 +5,8 @@ class General:
     botInviteURLAdmin =     "https://discord.com/oauth2/authorize?client_id=768309916112650321&scope=bot%20applications.commands&permissions=8"
     supportServerURL =      "https://discord.com/invite/AAJPHqNXUy"
     githubURL =             "https://github.com/Alex22-SV/Al3xis-Bot-dev"
-    privacyPolicyURL =      "https://www.alex22-sv.tk/bots/Al3xis/#privacy"
-    termsOfUseURL =         "https://www.alex22-sv.tk/bots/Al3xis/#terms"
+    privacyPolicyURL =      "https://www.alex22-sv.tk/en/bots/Al3xis/#privacy"
+    termsOfUseURL =         "https://www.alex22-sv.tk/en/bots/Al3xis/#terms"
     blacklistedUsers =      []
     whitelistedUsers =      [435534715831975938]
 
