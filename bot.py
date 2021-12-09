@@ -94,7 +94,8 @@ async def on_message_delete(message):
     if message.guild == bot.get_guild(793987455149408309):
         if not message.author.bot:
             logEmbed = discord.Embed(title=f'Message in #{message.channel} was deleted.', description=f'{message.content}', colour=config.Colors.red, timestamp=message.created_at)
-            logEmbed.set_footer(text=message.author.id, icon_url=message.author.avatar_url)
+            logEmbed.set_footer(text=message.author, icon_url=message.author.avatar_url)
+            logEmbed.set_footer(text=message.author.id)
             logChannel = bot.get_channel(config.Channels.logChannel)
             await logChannel.send(embed=logEmbed)
 
